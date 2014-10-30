@@ -1,5 +1,7 @@
 package org.cse.visiri.communication.eventserver.server;
 
+import org.cse.visiri.util.Event;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -88,7 +90,11 @@ public class EventServer {
                                     }
                                 }
 
-                                streamCallback.receive(streamId,event);
+                                Event eventStream=new Event();
+                                eventStream.setStreamId(streamId);
+                                eventStream.setData(event);
+
+                                streamCallback.receive(eventStream);
                             }
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
