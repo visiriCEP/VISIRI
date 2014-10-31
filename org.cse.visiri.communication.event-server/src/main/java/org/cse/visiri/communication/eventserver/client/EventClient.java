@@ -2,7 +2,7 @@ package org.cse.visiri.communication.eventserver.client;
 
 
 import org.cse.visiri.communication.eventserver.server.EventServerUtils;
-import org.cse.visiri.communication.eventserver.server.StreamDefinition;
+import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.communication.eventserver.server.StreamRuntimeInfo;
 import org.cse.visiri.util.Event;
 
