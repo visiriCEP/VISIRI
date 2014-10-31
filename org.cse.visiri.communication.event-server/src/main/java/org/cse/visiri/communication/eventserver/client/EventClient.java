@@ -4,12 +4,14 @@ package org.cse.visiri.communication.eventserver.client;
 import org.cse.visiri.communication.eventserver.server.EventServerUtils;
 import org.cse.visiri.communication.eventserver.server.StreamDefinition;
 import org.cse.visiri.communication.eventserver.server.StreamRuntimeInfo;
+import org.cse.visiri.util.Event;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -20,16 +22,23 @@ import java.util.Random;
 public class EventClient {
 
     private final String hostUrl;
-    private final StreamDefinition streamDefinition;
-    private final StreamRuntimeInfo streamRuntimeInfo;
+    private final StreamDefinition[] streamDefinitions;
+    //private final StreamRuntimeInfo streamRuntimeInfo;
+    private final HashMap<String,StreamRuntimeInfo> streamRuntimeInfoHashMap;
     private OutputStream outputStream;
     private Socket clientSocket;
 
 
-    public EventClient(String hostUrl, StreamDefinition streamDefinition) throws Exception {
+    public EventClient(String hostUrl, StreamDefinition[] streamDefinitions) throws Exception {
         this.hostUrl = hostUrl;
-        this.streamDefinition = streamDefinition;
-        this.streamRuntimeInfo = EventServerUtils.createStreamRuntimeInfo(streamDefinition);
+        this.streamDefinitions = streamDefinitions;
+        //this.streamRuntimeInfo = EventServerUtils.createStreamRuntimeInfo(streamDefinition);
+
+        streamRuntimeInfoHashMap=new HashMap<String, StreamRuntimeInfo>();
+        for(int i=0;i<streamDefinitions.length;i++){
+            // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
+            streamRuntimeInfoHashMap.put(streamDefinitions[i].getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]));
+        }
 
         System.out.println("Sending to " + hostUrl);
         String[] hp = hostUrl.split(":");
@@ -51,7 +60,10 @@ public class EventClient {
     }
 
 
-    public void sendEvent(Object[] event) throws IOException {
+    public void sendEvent(Event eventStream) throws IOException {
+        StreamRuntimeInfo streamRuntimeInfo=streamRuntimeInfoHashMap.get(eventStream.getStreamId());
+        Object[] event=eventStream.getData();
+
         outputStream.write((byte) streamRuntimeInfo.getStreamId().length());
         outputStream.write((streamRuntimeInfo.getStreamId()).getBytes("UTF-8"));
 
@@ -110,13 +122,13 @@ public class EventClient {
         def2.addAttribute("weight", StreamDefinition.Type.FLOAT);
 
         //SimpleEventHandler client = new SimpleEventHandler("localhost:7612");
-        EventClient client1=new EventClient("localhost:5180",streamDefinition1);
-        EventClient client2=new EventClient("localhost:5180",def2);
-
-        for (int i = 0; i < 10000; i++) {
-            //client.sendEvent(new Object[]{random.nextInt(), random.nextFloat(), "Abcdefghijklmnop" + random.nextLong(), random.nextInt()}, streamRuntimeInfo;
-            client1.sendEvent(new Object[]{random.nextInt(), random.nextFloat()});
-            client2.sendEvent(new Object[]{random.nextInt(),random.nextFloat()});
-        }
+//        EventClient client1=new EventClient("localhost:5180",streamDefinition1);
+//        EventClient client2=new EventClient("localhost:5180",def2);
+//
+//        for (int i = 0; i < 10000; i++) {
+//            //client.sendEvent(new Object[]{random.nextInt(), random.nextFloat(), "Abcdefghijklmnop" + random.nextLong(), random.nextInt()}, streamRuntimeInfo;
+//            client1.sendEvent(new Object[]{random.nextInt(), random.nextFloat()});
+//            client2.sendEvent(new Object[]{random.nextInt(),random.nextFloat()});
+//        }
     }
 }

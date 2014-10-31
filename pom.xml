@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <module>org.cse.visiri.communication.event-server</module>
         <module>org.cse.visiri.util</module>
         <module>org.cse.visiri.engine</module>
     </modules>
