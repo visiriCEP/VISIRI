@@ -1,10 +1,15 @@
+import org.cse.visiri.util.Query;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
  */
 public class EngineHandler {
     private Map<Query,CEPEngine> queryEngineMap;
-    private Map<string,List<CEPEngine>> eventEngineMap;
-    private OutputEventReciever sink;
+    private Map<String,List<CEPEngine>> eventEngineMap;
+   // private OutputEventReciever sink;
 
     public void addQuery(Query q){}
     public void removeQuery(int queryID){}
@@ -17,19 +22,19 @@ public class EngineHandler {
         this.queryEngineMap = queryEngineMap;
     }
 
-    public Map<string, List<CEPEngine>> getEventEngineMap() {
+    public Map<String, List<CEPEngine>> getEventEngineMap() {
         return eventEngineMap;
     }
 
-    public void setEventEngineMap(Map<string, List<CEPEngine>> eventEngineMap) {
+    public void setEventEngineMap(Map<String, List<CEPEngine>> eventEngineMap) {
         this.eventEngineMap = eventEngineMap;
     }
 
-    public OutputEventReciever getSink() {
-        return sink;
-    }
+   // public OutputEventReciever getSink() {
+    //    return sink;
+    //}
 
-    public void setSink(OutputEventReciever sink) {
-        this.sink = sink;
-    }
+//    public void setSink(OutputEventReciever sink) {
+//        this.sink = sink;
+//    }
 }
