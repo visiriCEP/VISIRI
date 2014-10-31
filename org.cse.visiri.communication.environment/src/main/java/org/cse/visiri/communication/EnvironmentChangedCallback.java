@@ -1,4 +1,4 @@
-package main.java.org.cse.visiri.communications;
+package org.cse.visiri.communication;
 
 /**
  * Created by Geeth on 2014-10-31.
