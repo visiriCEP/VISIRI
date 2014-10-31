@@ -1,4 +1,4 @@
-package org.cse.visiri.communication.eventserver.server;
+package org.cse.visiri.util;
 
 import java.util.ArrayList;
 import java.util.List;

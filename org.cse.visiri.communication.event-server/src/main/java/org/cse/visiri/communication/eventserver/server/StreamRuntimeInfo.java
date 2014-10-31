@@ -1,5 +1,7 @@
 package org.cse.visiri.communication.eventserver.server;
 
+import org.cse.visiri.util.StreamDefinition;
+
 /**
  * Created by visiri on 10/28/14.
  */

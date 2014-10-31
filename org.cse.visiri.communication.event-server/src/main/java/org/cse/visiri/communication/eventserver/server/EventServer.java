@@ -1,6 +1,7 @@
 package org.cse.visiri.communication.eventserver.server;
 
 import org.cse.visiri.util.Event;
+import org.cse.visiri.util.StreamDefinition;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

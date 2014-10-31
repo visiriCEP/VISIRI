@@ -1,7 +1,5 @@
 package org.cse.visiri.util;
 
-import org.cse.visiri.communication.eventserver.server.StreamDefinition;
-
 import java.util.LinkedList;
 
 /**

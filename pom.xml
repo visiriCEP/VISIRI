@@ -11,6 +11,8 @@
     <modules>
         <module>org.cse.visiri.communication.event-server</module>
         <module>org.cse.visiri.util</module>
+        <module>org.cse.visiri.communications.environment</module>
+        <module>org.cse.visiri.algo</module>
         <module>org.cse.visiri.engine</module>
     </modules>
 
