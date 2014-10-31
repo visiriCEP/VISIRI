@@ -5,19 +5,17 @@ import org.cse.visiri.util.Event;
  */
 
 public abstract class CEPEngine {
-    private int ENGINE_TYPE;
+
+    public final int ENGINE_TYPE_DIRECT=0;
+    public final int ENGINE_TYPE_SIDDHI=1;
+
     public void start(){}
     public  void stop(){}
     public Object saveState(){
+
         return new UnsupportedOperationException();
     }
     public void sendEvent(Event e){}
 
-    public int getENGINE_TYPE() {
-        return ENGINE_TYPE;
-    }
 
-    public void setENGINE_TYPE(int ENGINE_TYPE) {
-        this.ENGINE_TYPE = ENGINE_TYPE;
-    }
 }

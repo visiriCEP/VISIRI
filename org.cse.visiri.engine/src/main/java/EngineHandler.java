@@ -9,7 +9,7 @@ import java.util.Map;
 public class EngineHandler {
     private Map<Query,CEPEngine> queryEngineMap;
     private Map<String,List<CEPEngine>> eventEngineMap;
-   // private OutputEventReciever sink;
+    private OutputEventReceiver sink;
 
     public void addQuery(Query q){}
     public void removeQuery(int queryID){}
@@ -30,11 +30,11 @@ public class EngineHandler {
         this.eventEngineMap = eventEngineMap;
     }
 
-   // public OutputEventReciever getSink() {
-    //    return sink;
-    //}
+   public OutputEventReceiver getSink() {
+        return sink;
+    }
 
-//    public void setSink(OutputEventReciever sink) {
-//        this.sink = sink;
-//    }
+    public void setSink(OutputEventReceiver sink) {
+        this.sink = sink;
+    }
 }
