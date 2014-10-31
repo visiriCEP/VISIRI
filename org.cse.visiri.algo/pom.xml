@@ -12,4 +12,12 @@
     <artifactId>org.cse.visiri.algo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.cse.visiri</groupId>
+            <artifactId>org.cse.visiri.util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
