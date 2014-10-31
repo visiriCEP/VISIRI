@@ -6,8 +6,8 @@ import org.cse.visiri.util.Event;
 
 public abstract class CEPEngine {
 
-    public final int ENGINE_TYPE_DIRECT=0;
-    public final int ENGINE_TYPE_SIDDHI=1;
+    public final static int ENGINE_TYPE_DIRECT=0;
+    public final static int ENGINE_TYPE_SIDDHI=1;
 
     public void start(){}
     public  void stop(){}
