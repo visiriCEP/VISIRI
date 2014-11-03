@@ -10,15 +10,15 @@ public class Query {
     private String query;
     private List<StreamDefinition> inputStreamDefinitionsList;
     private StreamDefinition outputStreamDefinition;
-    private int queryId;
-    private int engingId;
+    private String queryId;
+    private int engineId;
 
-    public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,int queryId,int engingId){
+    public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
         this.setInputStreamDefinitionsList(inputStreamDefinitionList);
         this.setOutputStreamDefinition(outputStreamDefinition);
         this.setQueryId(queryId);
-        this.setEngingId(engingId);
+        this.setEngineId(engineId);
     }
 
 
@@ -50,19 +50,19 @@ public class Query {
         this.outputStreamDefinition = outputStreamDefinition;
     }
 
-    public int getQueryId() {
+    public String getQueryId() {
         return queryId;
     }
 
-    public void setQueryId(int queryId) {
+    public void setQueryId(String queryId) {
         this.queryId = queryId;
     }
 
-    public int getEngingId() {
-        return engingId;
+    public int getEngineId() {
+        return engineId;
     }
 
-    public void setEngingId(int engingId) {
-        this.engingId = engingId;
+    public void setEngineId(int engineId) {
+        this.engineId = engineId;
     }
 }
