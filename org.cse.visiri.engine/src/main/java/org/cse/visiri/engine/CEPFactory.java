@@ -7,7 +7,11 @@ import org.cse.visiri.util.Query;
  */
 public class CEPFactory {
     public CEPFactory(){}
-    public CEPEngine createEngine(int  type,Query q){
+    public static CEPEngine createEngine(int  type,Query q){
+
+        if(type==CEPEngine.ENGINE_TYPE_SIDDHI){
+            return new SiddhiCEPEngine(q);
+        }
         throw new UnsupportedOperationException();
     }
     public CEPEngine restoreEngine(){
