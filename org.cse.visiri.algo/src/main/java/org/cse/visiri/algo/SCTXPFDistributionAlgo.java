@@ -3,6 +3,7 @@ package org.cse.visiri.algo;
 import org.cse.visiri.algo.util.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.util.*;
@@ -136,7 +137,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             // update calculated tables for allocation of next queries
             nodeQueryTable.get(targetNode).add(q);
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
-            costs.put(targetNode,costs.get(targetNode) + costCal.calculateCost(q) );
+            costs.put(targetNode, costs.get(targetNode) + costCal.calculateCost(q));
         }
 
         return null;

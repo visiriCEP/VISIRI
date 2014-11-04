@@ -1,6 +1,7 @@
 package org.cse.visiri.algo;
 
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.QueryDistribution;
 
 import java.util.List;
 
