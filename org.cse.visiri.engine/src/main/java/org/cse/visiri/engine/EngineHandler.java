@@ -19,6 +19,7 @@ public class EngineHandler {
     private Map<String,StreamDefinition> streamDefinitionMap;
     private EventServerConfig eventServerConfig;
 
+
     public EngineHandler(){
 
         this.queryEngineMap=new HashMap<String, CEPEngine>();
