@@ -1,5 +1,8 @@
 package org.cse.visiri.communication;
 
+import com.hazelcast.config.Config;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import org.cse.visiri.util.Query;
 
 import java.util.List;
@@ -10,12 +13,19 @@ import java.util.Map;
  */
 public class Environment {
 
-    EnvironmentChangedCallback changedCallback;
+    private static Environment environment;
+    private EnvironmentChangedCallback changedCallback;
+    private Map<String,Boolean> nodeUpdatedLatestChanges;
+    private HazelcastInstance hzInstance;
 
-    public Environment(EnvironmentChangedCallback callback)
-    {
-        changedCallback = callback;
-        throw new UnsupportedOperationException();
+
+
+    //private Environment(EnvironmentChangedCallback callback)
+    private Environment()
+    {                                                //To be modified
+       // changedCallback = callback;
+        Config cfg = new Config();
+        hzInstance = Hazelcast.newHazelcastInstance(cfg);
     }
 
     public Map<Query,List<Query>> getOriginalToDeployedQueriesMapping()
@@ -24,9 +34,16 @@ public class Environment {
     }
 
 
-    String getNodeId()
+    public String getNodeId()
     {
-
-        throw new UnsupportedOperationException();
+       return hzInstance.getCluster().getLocalMember().getInetSocketAddress().toString();
     }
+
+
+
+    public static void main(String args[]){
+
+      //  System.out.println("My "+Environment.getInstance().getNodeId());
+    }
+
 }
