@@ -31,12 +31,13 @@ public class EngineHandler {
     public void start() throws Exception {
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
-        streamDefinitionMap.keySet().toArray();
+        Set set=streamDefinitionMap.keySet();
 
-        ///streamDefinitionMap
         for(int i=0;i<streamDefinitionMap.size();i++){
-           // streamDefinitionList.add()
+            String streamId= (String) set.iterator().next();
+            streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
+
         EventServer eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
             @Override
             public void receive(Event event) {

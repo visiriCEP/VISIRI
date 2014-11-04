@@ -20,6 +20,7 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     public SiddhiCEPEngine(Query query){
         this.query=query;
+        this.start();
 
     }
 
