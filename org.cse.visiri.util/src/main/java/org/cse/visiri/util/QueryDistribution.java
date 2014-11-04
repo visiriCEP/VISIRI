@@ -1,7 +1,4 @@
-package org.cse.visiri.algo;
-
-import org.cse.visiri.util.Query;
-
+package org.cse.visiri.util;
 
 import java.util.HashMap;
 import java.util.List;
