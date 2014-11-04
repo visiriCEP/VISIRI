@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -22,22 +23,22 @@ import java.util.Random;
 public class EventClient {
 
     private final String hostUrl;
-    private final StreamDefinition[] streamDefinitions;
+    private final List<StreamDefinition> streamDefinitionsList;
     //private final StreamRuntimeInfo streamRuntimeInfo;
     private final HashMap<String,StreamRuntimeInfo> streamRuntimeInfoHashMap;
     private OutputStream outputStream;
     private Socket clientSocket;
 
 
-    public EventClient(String hostUrl, StreamDefinition[] streamDefinitions) throws Exception {
+    public EventClient(String hostUrl, List<StreamDefinition> streamDefinitions) throws Exception {
         this.hostUrl = hostUrl;
-        this.streamDefinitions = streamDefinitions;
+        this.streamDefinitionsList = streamDefinitions;
         //this.streamRuntimeInfo = EventServerUtils.createStreamRuntimeInfo(streamDefinition);
 
         streamRuntimeInfoHashMap=new HashMap<String, StreamRuntimeInfo>();
-        for(int i=0;i<streamDefinitions.length;i++){
+        for(int i=0;i<streamDefinitions.size();i++){
             // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
-            streamRuntimeInfoHashMap.put(streamDefinitions[i].getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]));
+            streamRuntimeInfoHashMap.put(streamDefinitions.get(i).getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions.get(i)));
         }
 
         System.out.println("Sending to " + hostUrl);
@@ -101,6 +102,16 @@ public class EventClient {
             outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
         }
         outputStream.flush();
+
+    }
+
+    public List<StreamDefinition> getStreamDefinitionsList(){
+        return streamDefinitionsList;
+    }
+
+    public void addStreamDefinition(StreamDefinition streamDefinition){
+        this.streamDefinitionsList.add(streamDefinition);
+        streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinition));
 
     }
 

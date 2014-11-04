@@ -11,7 +11,6 @@ import org.wso2.siddhi.query.api.definition.Attribute;
 import java.util.List;
 
 
-
 /**
  * Created by visiri on 11/3/14.
  */
