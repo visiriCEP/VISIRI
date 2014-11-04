@@ -8,6 +8,7 @@ import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.query.api.definition.Attribute;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,11 +19,13 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     private SiddhiManager siddhiManager;
     private Query query;
+    private OutputEventReceiver outputEventReceiver;
 
 
-    public SiddhiCEPEngine(Query query){
+    public SiddhiCEPEngine(Query query,OutputEventReceiver outputEventReceiver){
         this.query=query;
         this.start();
+        this.outputEventReceiver=outputEventReceiver;
 
     }
 
@@ -72,6 +75,17 @@ public class SiddhiCEPEngine extends CEPEngine {
             @Override
             public void receive(org.wso2.siddhi.core.event.Event[] events) {
                 //to do with output stream
+
+                for(int i=0;i<events.length;i++){
+                    Event event=new Event();
+                    event.setStreamId(events[i].getStreamId());
+                    event.setData(events[i].getData());
+                    try {
+                        outputEventReceiver.sendEvents(event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
             }
         });

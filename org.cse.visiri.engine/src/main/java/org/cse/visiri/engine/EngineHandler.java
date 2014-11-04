@@ -27,6 +27,9 @@ public class EngineHandler {
         this.outputEventReceiver=new OutputEventReceiver();
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
+        this.outputEventReceiver=new OutputEventReceiver();
+
+        //have to implement outputEventReceiver updating
     }
 
     public void start() throws Exception {
@@ -64,7 +67,7 @@ public class EngineHandler {
 
     public void addQuery(Query query){
 
-       CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query);
+       CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
        queryEngineMap.put(query.getQueryId(),cepEngine);
 
        List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();

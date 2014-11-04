@@ -9,10 +9,10 @@ public class CEPFactory {
 
     public CEPFactory(){}
 
-    public static CEPEngine createEngine(int  type,Query q){
+    public static CEPEngine createEngine(int  type,Query q,OutputEventReceiver outputEventReceiver){
 
         if(type==CEPEngine.ENGINE_TYPE_SIDDHI){
-            return new SiddhiCEPEngine(q);
+            return new SiddhiCEPEngine(q,outputEventReceiver);
         }
         throw new UnsupportedOperationException();
     }
