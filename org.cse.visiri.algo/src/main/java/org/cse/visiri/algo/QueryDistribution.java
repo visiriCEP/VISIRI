@@ -1,37 +1,31 @@
-
 package org.cse.visiri.algo;
+
 import org.cse.visiri.util.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by visiri on 10/31/14.
+ * Created by Geeth on 2014-11-03.
  */
 public class QueryDistribution {
 
-    private HashMap<Query,String> queryToNodeMap;
-    private HashMap<Query,List<Query>> originalToGeneratedQuery;
+    private Map<Query,List<Query>> generatedQueries;
+    private Map<Query,String> queryAllocation;
 
-    public QueryDistribution(){
-        this.queryToNodeMap=new HashMap<Query, String>();
-        this.originalToGeneratedQuery=new HashMap<Query, List<Query>>();
+
+    public  QueryDistribution()
+    {
+        generatedQueries = new HashMap<Query,List<Query>>();
     }
 
-    public void addQueryToNode(Query query,String nodeIp){
-        this.getQueryToNodeMap().put(query, nodeIp);
+    public Map<Query, List<Query>> getGeneratedQueries() {
+        return generatedQueries;
     }
 
-    public void addGeneratedQueryToOriginal(Query query,List<Query> queryList){
-        this.getOriginalToGeneratedQuery().put(query, queryList);
-    }
-
-
-    public HashMap<Query, String> getQueryToNodeMap() {
-        return queryToNodeMap;
-    }
-
-    public HashMap<Query, List<Query>> getOriginalToGeneratedQuery() {
-        return originalToGeneratedQuery;
+    public Map<Query, String> getQueryAllocation() {
+        return queryAllocation;
     }
 }
