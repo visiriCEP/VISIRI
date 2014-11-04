@@ -6,8 +6,11 @@ import org.cse.visiri.util.StreamDefinition;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
+import org.wso2.siddhi.query.api.definition.Attribute;
 
 import java.util.List;
+
+
 
 /**
  * Created by visiri on 11/3/14.
@@ -32,11 +35,37 @@ public class SiddhiCEPEngine extends CEPEngine {
         String queryString=query.getQuery();
         String outputStreamId=query.getOutputStreamDefinition().getStreamId();
 
-       //org.wso2.siddhi.query.api.definition.StreamDefinition streamDefinition;
-
-
         for(int i=0;i<inputStreamDefinitionList.size();i++){
-           // siddhiManager.defineStream(inputStreamDefinitionList.get(i)); //StreamDefinition problem
+            org.wso2.siddhi.query.api.definition.StreamDefinition streamDefinition;
+            streamDefinition = new org.wso2.siddhi.query.api.definition.StreamDefinition();
+            streamDefinition = streamDefinition.name(inputStreamDefinitionList.get(i).getStreamId());
+
+            List<StreamDefinition.Attribute> attributeList=inputStreamDefinitionList.get(i).getAttributeList();
+
+            for(int j=0;j<attributeList.size();j++){
+                StreamDefinition.Type type=attributeList.get(i).getType();
+                Attribute.Type type1;
+                if(type.equals(StreamDefinition.Type.STRING)){
+                    type1= Attribute.Type.STRING;
+                }else if (type.equals(StreamDefinition.Type.INTEGER)){
+                    type1=Attribute.Type.INT;
+                }else if(type.equals(StreamDefinition.Type.DOUBLE)){
+                    type1=Attribute.Type.DOUBLE;
+                }else if(type.equals(StreamDefinition.Type.FLOAT)){
+                    type1=Attribute.Type.FLOAT;
+                }else if (type.equals(StreamDefinition.Type.LONG)){
+                    type1=Attribute.Type.LONG;
+                }else if (type.equals(StreamDefinition.Type.BOOLEAN)){
+                    type1=Attribute.Type.BOOL;
+                }else{
+                    type1=Attribute.Type.TYPE;
+                }
+
+                streamDefinition.attribute(attributeList.get(i).getName(),type1 );
+
+            }
+
+           siddhiManager.defineStream(streamDefinition);
         }
 
         siddhiManager.addQuery(queryString);

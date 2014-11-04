@@ -2,7 +2,7 @@ package org.cse.visiri.algo;
 
 import org.cse.visiri.util.Query;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
