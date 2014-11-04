@@ -1,23 +1,24 @@
 package org.cse.visiri.util;
 
-import java.util.LinkedList;
+
+import java.util.List;
 
 /**
  * Created by visiri on 10/30/14.
  */
 public class Query {
     private String query;
-    private LinkedList<StreamDefinition> inputStreamDefinitionsList;
+    private List<StreamDefinition> inputStreamDefinitionsList;
     private StreamDefinition outputStreamDefinition;
-    private int queryId;
-    private int engingId;
+    private String queryId;
+    private int engineId;
 
-    public Query(String query,LinkedList<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,int queryId,int engingId){
+    public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
         this.setInputStreamDefinitionsList(inputStreamDefinitionList);
         this.setOutputStreamDefinition(outputStreamDefinition);
         this.setQueryId(queryId);
-        this.setEngingId(engingId);
+        this.setEngineId(engineId);
     }
 
 
@@ -29,11 +30,11 @@ public class Query {
         this.query = query;
     }
 
-    public LinkedList<StreamDefinition> getInputStreamDefinitionsList() {
+    public List<StreamDefinition> getInputStreamDefinitionsList() {
         return inputStreamDefinitionsList;
     }
 
-    public void setInputStreamDefinitionsList(LinkedList<StreamDefinition> inputStreamDefinitionsList) {
+    public void setInputStreamDefinitionsList(List<StreamDefinition> inputStreamDefinitionsList) {
         this.inputStreamDefinitionsList = inputStreamDefinitionsList;
     }
 
@@ -49,19 +50,19 @@ public class Query {
         this.outputStreamDefinition = outputStreamDefinition;
     }
 
-    public int getQueryId() {
+    public String getQueryId() {
         return queryId;
     }
 
-    public void setQueryId(int queryId) {
+    public void setQueryId(String queryId) {
         this.queryId = queryId;
     }
 
-    public int getEngingId() {
-        return engingId;
+    public int getEngineId() {
+        return engineId;
     }
 
-    public void setEngingId(int engingId) {
-        this.engingId = engingId;
+    public void setEngineId(int engineId) {
+        this.engineId = engineId;
     }
 }

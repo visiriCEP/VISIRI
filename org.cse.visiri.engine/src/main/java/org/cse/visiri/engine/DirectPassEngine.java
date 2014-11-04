@@ -5,8 +5,7 @@ import org.cse.visiri.util.Event;
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
  */
-public class SiddhiEngine extends CEPEngine{
-
+public class DirectPassEngine extends CEPEngine {
     @Override
     public void start() {
 

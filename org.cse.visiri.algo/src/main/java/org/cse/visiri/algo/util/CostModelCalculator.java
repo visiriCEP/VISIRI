@@ -7,18 +7,9 @@ import org.cse.visiri.util.Query;
  */
 public class CostModelCalculator {
 
-    private Query query;
-    private double cost;
-
-    public CostModelCalculator(Query query){
-        this.query=query;
+    public double calculateCost(Query q){
+        // consider every query has same cost for simplicity
+        return 10.0;
     }
 
-    public void calculateCost(){
-
-    }
-
-    public double getCost(){
-        return cost;
-    }
 }
