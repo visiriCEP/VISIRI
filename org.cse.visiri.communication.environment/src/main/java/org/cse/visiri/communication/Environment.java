@@ -3,10 +3,13 @@ package org.cse.visiri.communication;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
 import org.cse.visiri.util.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -47,7 +50,15 @@ public class Environment {
         return instance;
     }
 
-   
+    public List<String> getNodeIdList() {
+        Set<Member> t = hzInstance.getCluster().getMembers();
+        List<String> nodeIdList = new ArrayList<String>();
+
+        for (Member member : t) {
+            nodeIdList.add(member.getSocketAddress().getHostString());
+        }
+        return nodeIdList;
+    }
 
     public Map<Query,List<Query>> getOriginalToDeployedQueriesMapping()
     {
