@@ -36,7 +36,7 @@ public class EngineHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //have to implement outputEventReceiver updating
+       
     }
 
     public void start() throws Exception {
