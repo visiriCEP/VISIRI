@@ -1,12 +1,13 @@
 package org.cse.visiri.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by visiri on 10/28/14.
  */
-public class StreamDefinition {
+public class StreamDefinition implements Serializable {
 
     public enum Type {
         INTEGER, LONG, BOOLEAN, FLOAT, DOUBLE, STRING
