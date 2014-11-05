@@ -134,12 +134,13 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
             dist.getQueryAllocation().put(q,targetNode);
 
+
             // update calculated tables for allocation of next queries
             nodeQueryTable.get(targetNode).add(q);
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
             costs.put(targetNode, costs.get(targetNode) + costCal.calculateCost(q));
         }
 
-        return null;
+        return dist;
     }
 }

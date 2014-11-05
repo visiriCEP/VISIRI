@@ -15,6 +15,7 @@
         <module>org.cse.visiri.communication.environment</module>
         <module>org.cse.visiri.algo</module>
         <module>org.cse.visiri.engine</module>
+        <module>org.cse.visiri.core</module>
 
     </modules>
     <dependencies>
