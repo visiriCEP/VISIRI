@@ -66,4 +66,16 @@ public class Query implements Serializable{
     public void setEngineId(int engineId) {
         this.engineId = engineId;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Query )
+        {
+            return ((Query)obj).getQueryId().equals(this.getQueryId());
+        }
+        else {
+            return false;
+        }
+    }
 }
