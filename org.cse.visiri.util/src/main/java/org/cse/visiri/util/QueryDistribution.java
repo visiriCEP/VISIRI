@@ -16,6 +16,7 @@ public class QueryDistribution {
     public  QueryDistribution()
     {
         generatedQueries = new HashMap<Query,List<Query>>();
+        queryAllocation=new HashMap<Query, String>();
     }
 
     public Map<Query, List<Query>> getGeneratedQueries() {

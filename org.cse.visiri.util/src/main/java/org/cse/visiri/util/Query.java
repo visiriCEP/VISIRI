@@ -1,12 +1,13 @@
 package org.cse.visiri.util;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by visiri on 10/30/14.
  */
-public class Query {
+public class Query implements Serializable{
     private String query;
     private List<StreamDefinition> inputStreamDefinitionsList;
     private StreamDefinition outputStreamDefinition;
