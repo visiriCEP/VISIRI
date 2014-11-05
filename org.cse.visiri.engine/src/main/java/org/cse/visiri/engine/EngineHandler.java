@@ -1,11 +1,14 @@
 package org.cse.visiri.engine;
 
+import org.cse.visiri.communication.Environment;
+import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
+
 
 import java.util.*;
 
@@ -28,7 +31,11 @@ public class EngineHandler {
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
-
+        try {
+            this.configureOutputEventReceiver();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //have to implement outputEventReceiver updating
     }
 
@@ -104,6 +111,46 @@ public class EngineHandler {
             List<CEPEngine> cepEngineList=new ArrayList<CEPEngine>();
             cepEngineList.add(cepEngine);
             eventEngineMap.put(streamId,cepEngineList);
+        }
+    }
+
+    private void configureOutputEventReceiver() throws Exception {
+        String myIp= Environment.getInstance().getNodeId();
+        List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
+        List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
+        Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
+
+
+        for(Query q : myQueryList){
+            ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
+        }
+
+        Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
+
+        for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
+            String streamId = streamDefinition.getStreamId();
+            List<String> nodeIpList=subscribersMap.get(streamId);
+
+            for(String nodeIp :nodeIpList){
+                if(nodeStreamDefinitionListMap.containsKey(nodeIp)){
+                    List<StreamDefinition> streamDefinitionList=nodeStreamDefinitionListMap.get(nodeIp);
+                    streamDefinitionList.add(streamDefinition);
+                }else{
+                    List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
+                    streamDefinitionList.add(streamDefinition);
+                    nodeStreamDefinitionListMap.put(nodeIp,streamDefinitionList);
+                }
+            }
+        }
+
+        Set nodeIpSet=nodeStreamDefinitionListMap.keySet();
+        while (nodeIpSet.iterator().hasNext()){
+            String nodeIp= (String) nodeIpSet.iterator().next();
+            if(!nodeIp.contains(":")){
+                nodeIp=nodeIp+":"+EventServer.DEFAULT_PORT;
+            }
+            EventClient eventClient=new EventClient(nodeIp,nodeStreamDefinitionListMap.get(nodeIp));
+            outputEventReceiver.addDestinationIp(nodeIp,eventClient);
         }
     }
 }
