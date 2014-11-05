@@ -35,12 +35,12 @@ public class OutputEventReceiver {
         for(int i=0;i<streamDefinitionList.size();i++){
             String streamId=streamDefinitionList.get(i).getStreamId();
             if(eventToClientsMap.containsKey(streamId)){
-                List<EventClient> eventClientList=eventToClientsMap.get(streamId);
+                List<EventClient> eventClientList= eventToClientsMap.get(streamId);
                 eventClientList.add(eventClient);
             }else{
                 List<EventClient> eventClientList=new ArrayList<EventClient>();
                 eventClientList.add(eventClient);
-                eventToClientsMap.put(streamId,eventClientList);
+                eventToClientsMap.put(streamId, eventClientList);
 
             }
         }
@@ -56,12 +56,16 @@ public class OutputEventReceiver {
     }
 
     public void sendEvents(Event event) throws IOException {
-        List<EventClient> eventClientList=eventToClientsMap.get(event.getStreamId());
+        List<EventClient> eventClientList= eventToClientsMap.get(event.getStreamId());
         for(int i=0;i<eventClientList.size();i++){
             EventClient eventClient=eventClientList.get(i);
             eventClient.sendEvent(event);
         }
 
+    }
+
+    public Map<String, List<EventClient>> getEventToClientsMap() {
+        return eventToClientsMap;
     }
 }
 
