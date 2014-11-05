@@ -32,7 +32,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         CostModelCalculator costCal = new CostModelCalculator();
 
-        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryTable());
+        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList());
         Map<String,Double> utilizations = new HashMap<String, Double>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
