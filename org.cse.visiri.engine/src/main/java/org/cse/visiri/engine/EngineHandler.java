@@ -106,6 +106,35 @@ public class EngineHandler {
         }
     }
 
+    public void dynamicAddQuery(Query query){
+        CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
+        queryEngineMap.put(query.getQueryId(),cepEngine);
+
+        List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
+        for(int i=0;i<inputStreamDefinitionList.size();i++){
+            StreamDefinition streamDefinition=inputStreamDefinitionList.get(i);
+            setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
+            streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
+        }
+        this.myQueryList.add(query);
+
+        //configuring outputEventReceiver for new query
+        Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
+
+        StreamDefinition outputStreamDefiniton=query.getOutputStreamDefinition();
+        String streamId=outputStreamDefiniton.getStreamId();
+        List<String> nodeIpList=subscribersMap.get(streamId);
+
+        Map<String,List<EventClient>> eventToClientsMap=outputEventReceiver.getEventToClientsMap();
+
+        if(eventToClientsMap.containsKey(streamId)){
+
+        }else{
+                //have to implement
+        }
+
+    }
+
     public void removeQuery(String queryID){
 
 
