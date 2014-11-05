@@ -21,6 +21,7 @@ public class EngineHandler {
     private OutputEventReceiver outputEventReceiver;
     private Map<String,StreamDefinition> streamDefinitionMap;
     private EventServerConfig eventServerConfig;
+    private List<Query> myQueryList;
 
 
     public EngineHandler(){
@@ -31,6 +32,8 @@ public class EngineHandler {
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
+        this.myQueryList=new ArrayList<Query>();
+
         try {
             this.configureOutputEventReceiver();
         } catch (Exception e) {
@@ -83,7 +86,26 @@ public class EngineHandler {
            setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
            streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
        }
+        this.myQueryList.add(query);
     }
+
+    public void addQueryList(List<Query> queryList){
+        for(Query query: queryList){
+
+            CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
+            queryEngineMap.put(query.getQueryId(),cepEngine);
+
+            List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
+            for(int i=0;i<inputStreamDefinitionList.size();i++){
+                StreamDefinition streamDefinition=inputStreamDefinitionList.get(i);
+                setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
+                streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
+            }
+
+            this.myQueryList.add(query);
+        }
+    }
+
     public void removeQuery(String queryID){
 
 
@@ -116,7 +138,7 @@ public class EngineHandler {
 
     private void configureOutputEventReceiver() throws Exception {
         String myIp= Environment.getInstance().getNodeId();
-        List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
+        //List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
         List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
         Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
 
