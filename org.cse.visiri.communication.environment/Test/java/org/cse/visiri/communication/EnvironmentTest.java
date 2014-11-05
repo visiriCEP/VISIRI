@@ -25,6 +25,12 @@ public class EnvironmentTest extends junit.framework.TestCase {
         environment.setNodeUtilization("1.1.1.1",12.5);
         assertEquals(12.5, environment.getNodeUtilizations().get("1.1.1.1"));
     }
+    public void testGetNodeList() throws Exception {
+     //   List<String> nodes=environment.getNodeIdList();
+
+       // environment.setNodeUtilization("1.1.1.1",12.5);
+        //assertEquals(12.5, environment.getNodeUtilizations().get("1.1.1.1"));
+    }
 
     public void testAddQueryDistribution() throws Exception {
         Query q1=new Query("qq1",new ArrayList<StreamDefinition>(),new StreamDefinition(),"id0",1);
