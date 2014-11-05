@@ -19,7 +19,8 @@ import java.util.concurrent.Executors;
 
 public class EventServer {
 
-    private EventServerConfig eventServerConfig = new EventServerConfig(7211);
+    public static final int DEFAULT_PORT = 7211;
+    private EventServerConfig eventServerConfig = new EventServerConfig(DEFAULT_PORT);
     private List<StreamDefinition> streamDefinitionList;
     private StreamCallback streamCallback;
     private ExecutorService pool;
