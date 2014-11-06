@@ -105,6 +105,12 @@ public class Environment {
         return hzInstance.getMap(ORIGINAL_TO_DEPLOYED_MAP);
     }
 
+    public void stop(){
+        hzInstance.shutdown();
+        instance=null;
+    }
+
+
 
     public String getNodeId() {
         return hzInstance.getCluster().getLocalMember().getSocketAddress().getHostString();

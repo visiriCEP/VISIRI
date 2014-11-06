@@ -11,12 +11,69 @@ import java.util.Map;
 /**
  * Created by Malinda Kumarasinghe on 11/5/2014.
  */
+
 public class EnvironmentTest extends junit.framework.TestCase {
 
     Environment environment;
+    Query q1,q2,nq1;
+    List<Query> qList;
+    QueryDistribution queryDistribution;
+
     public void setUp() throws Exception {
         super.setUp();
         environment=Environment.getInstance();
+
+
+        StreamDefinition strdef1=new StreamDefinition();
+        strdef1.setStreamId("AA");
+        StreamDefinition strdef2=new StreamDefinition();
+        strdef2.setStreamId("BB");
+        StreamDefinition strdef3=new StreamDefinition();
+        strdef3.setStreamId("CC");
+        StreamDefinition strdef4=new StreamDefinition();
+        strdef4.setStreamId("DD");
+
+        List<StreamDefinition> streamDefinitionList1=new ArrayList<StreamDefinition>();
+        streamDefinitionList1.add(strdef1);
+        streamDefinitionList1.add(strdef2);
+
+        List<StreamDefinition> streamDefinitionList2=new ArrayList<StreamDefinition>();
+        streamDefinitionList2.add(strdef3);
+        streamDefinitionList2.add(strdef4);
+
+        List<StreamDefinition> streamDefinitionList3=new ArrayList<StreamDefinition>();
+        streamDefinitionList3.add(strdef3);
+        streamDefinitionList3.add(strdef4);
+
+        q1=new Query("qq1",streamDefinitionList1,new StreamDefinition(),"id0",1);//AA,BB
+        q2=new Query("qq2",streamDefinitionList1,new StreamDefinition(),"id0",2);//AA,BB
+        Query q3=new Query("qq3",streamDefinitionList2,new StreamDefinition(),"id0",3);//CC,DD
+        Query q4=new Query("qq4",streamDefinitionList2,new StreamDefinition(),"id0",4);//CC,DD
+        Query q5=new Query("qq4",streamDefinitionList3,new StreamDefinition(),"id0",4);//CC,DD
+        nq1=new Query("nq2",streamDefinitionList2,new StreamDefinition(),"id0",2);//CC,DD
+
+        qList=new ArrayList<Query>();
+        qList.add(nq1);
+        qList.add(q1);
+
+        queryDistribution=new QueryDistribution();
+        queryDistribution.getGeneratedQueries().put(q1,qList);
+        queryDistribution.getGeneratedQueries().put(q2,qList);
+        queryDistribution.getGeneratedQueries().put(q3,qList);
+
+        //"1.1.1.1" - AA,BB
+        //"2.2.2.2" - AA,BB
+        //"3.3.3.3" - CC,DD
+        //"4.4.4.4" - CC,DD
+        //AA - 1 2
+        //BB -  1 2
+        //CC -  3 4 5
+        //DD - 3 4 5
+        queryDistribution.getQueryAllocation().put(q1,"1.1.1.1");
+        queryDistribution.getQueryAllocation().put(q2,"2.2.2.2");
+        queryDistribution.getQueryAllocation().put(q3,"3.3.3.3");
+        queryDistribution.getQueryAllocation().put(q4,"4.4.4.4");
+        queryDistribution.getQueryAllocation().put(q5,"5.5.5.5");
 
     }
 
@@ -25,33 +82,45 @@ public class EnvironmentTest extends junit.framework.TestCase {
         environment.setNodeUtilization("1.1.1.1",12.5);
         assertEquals(12.5, environment.getNodeUtilizations().get("1.1.1.1"));
     }
-    public void testGetNodeList() throws Exception {
-     //   List<String> nodes=environment.getNodeIdList();
-
-       // environment.setNodeUtilization("1.1.1.1",12.5);
-        //assertEquals(12.5, environment.getNodeUtilizations().get("1.1.1.1"));
-    }
-
-    public void testAddQueryDistribution() throws Exception {
-        Query q1=new Query("qq1",new ArrayList<StreamDefinition>(),new StreamDefinition(),"id0",1);
-        Query q2=new Query("qq2",new ArrayList<StreamDefinition>(),new StreamDefinition(),"id0",2);
-        Query q3=new Query("qq3",new ArrayList<StreamDefinition>(),new StreamDefinition(),"id0",3);
-        Query nq1=new Query("nq2",new ArrayList<StreamDefinition>(),new StreamDefinition(),"id0",2);
-
-        List<Query> qList=new ArrayList<Query>();
-        qList.add(nq1);
-        qList.add(q1);
-
-        QueryDistribution queryDistribution=new QueryDistribution();
-        queryDistribution.getGeneratedQueries().put(q1,qList);
-        queryDistribution.getGeneratedQueries().put(q2,qList);
-        queryDistribution.getGeneratedQueries().put(q3,qList);
-
-        queryDistribution.getQueryAllocation().put(q1,"1.1.1.1");
-        queryDistribution.getQueryAllocation().put(q2,"2.2.2.2");
+    public void testGetEventClientMapping() throws Exception {
 
         environment.addQueryDistribution(queryDistribution);
 
+        Map<String, List<String>> map=environment.getEventClientMapping();
+
+        assertEquals("2.2.2.2",map.get("AA").get(0));
+        assertEquals("1.1.1.1",map.get("AA").get(1));
+
+        assertEquals("2.2.2.2",map.get("BB").get(0));
+        assertEquals("1.1.1.1",map.get("BB").get(1));
+
+        assertEquals("4.4.4.4",map.get("CC").get(0));
+        assertEquals("3.3.3.3",map.get("CC").get(1));
+        assertEquals("5.5.5.5",map.get("CC").get(2));
+
+        assertEquals("4.4.4.4",map.get("DD").get(0));
+        assertEquals("3.3.3.3",map.get("DD").get(1));
+        assertEquals("5.5.5.5",map.get("DD").get(2));
+
+        System.out.println("AA");
+        for(String s : map.get("AA")) {
+            System.out.println("  -"+s);
+        }
+        for(String s : map.get("BB")) {
+            System.out.println("  -"+s);
+        }
+        System.out.println("CC");
+        for(String s : map.get("CC")) {
+            System.out.println("  -"+s);
+        }
+        System.out.println("DD");
+        for(String s : map.get("DD")) {
+            System.out.println("  -"+s);
+        }
+    }
+
+    public void testAddQueryDistribution() throws Exception {
+        environment.addQueryDistribution(queryDistribution);
         assertEquals(3,environment.getOriginalToDeployedQueriesMapping().size());
         assertEquals(nq1.getQuery(),environment.getOriginalToDeployedQueriesMapping().get(q1).get(0).getQuery());
         assertEquals(qList.size(),environment.getOriginalToDeployedQueriesMapping().get(q1).size());
@@ -60,6 +129,11 @@ public class EnvironmentTest extends junit.framework.TestCase {
         assertEquals(q1.getQueryId(),temp.get("1.1.1.1").get(0).getQueryId());
         assertEquals(q2.getQueryId(),temp.get("2.2.2.2").get(0).getQueryId());
 
+    }
+
+    public void tearDown() throws Exception {
+
+        environment.stop();
     }
 
 
