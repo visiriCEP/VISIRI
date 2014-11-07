@@ -40,6 +40,10 @@ public class Environment {
         hzInstance.getMap(NODE_LIST).put(getNodeId(),nodeType);
     }
 
+    public int getNodeType(){
+        return (int)hzInstance.getMap(NODE_LIST).get(getNodeId());
+    }
+
 
     public void setChangedCallback(EnvironmentChangedCallback callback) {
         this.changedCallback = callback;
