@@ -7,6 +7,7 @@ import com.hazelcast.core.Member;
 
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
+import org.cse.visiri.util.StreamDefinition;
 
 import java.util.*;
 
@@ -125,6 +126,35 @@ public class Environment {
     public Map<String, List<String>> getSubscriberMapping() {
         return hzInstance.getMap(SUBSCRIBER_MAP);
     }
+
+    public Map<String, List<String>> getEventClientMapping() {
+
+        Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
+        Map<String,List<String>> eventClientMap=new HashMap<String, List<String>>();
+
+        //For all IPs in the node query map
+        for(Object ob: nodeQueryMap.keySet()){
+            String ip=(String)ob;
+
+            //For all queries for a specific ip
+            for(Query query : nodeQueryMap.get(ip) ){
+
+                //For all StreamDefinitions in a query
+                for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()) {
+
+                    List<String> ipList=eventClientMap.get(streamDefinition.getStreamId());
+                    if(ipList==null){
+                        ipList=new ArrayList<String>();
+                    }
+                    ipList.add(ip);
+                    eventClientMap.put(streamDefinition.getStreamId(), ipList);
+                }
+            }
+        }
+
+        return eventClientMap;
+    }
+
 
 
     public static void main(String args[]) {
