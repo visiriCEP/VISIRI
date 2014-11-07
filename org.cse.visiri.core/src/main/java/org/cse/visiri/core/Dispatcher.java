@@ -20,14 +20,14 @@ public class Dispatcher {
 
     public void start() throws Exception{
 
+        utilizationUpdater = new UtilizationUpdater();
+        utilizationUpdater.start();
+
         engineHandler = new EngineHandler();
         for(Query q : queries)
         {
             engineHandler.addQuery(q);
         }
-
-        utilizationUpdater = new UtilizationUpdater();
-        utilizationUpdater.start();
 
         engineHandler.start();
 
