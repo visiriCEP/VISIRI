@@ -106,7 +106,7 @@ public class EngineHandler {
         }
     }
 
-    public void dynamicAddQuery(Query query){
+    public void dynamicAddQuery(Query query) throws Exception {
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
@@ -127,17 +127,24 @@ public class EngineHandler {
 
         Map<String,List<EventClient>> eventToClientsMap=outputEventReceiver.getEventToClientsMap();
 
-        if(eventToClientsMap.containsKey(streamId)){
-
-        }else{
-                //have to implement
+        if(!eventToClientsMap.containsKey(streamId)){
+            for(String nodeIp: nodeIpList){
+                List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
+                streamDefinitionList.add(outputStreamDefiniton);
+                if(!nodeIp.contains(":")){
+                    nodeIp=nodeIp+":"+EventServer.DEFAULT_PORT;
+                }
+                EventClient eventClient=new EventClient(nodeIp,streamDefinitionList);
+                outputEventReceiver.addDestinationIp(nodeIp,eventClient);
+            }
         }
 
     }
 
-    public void removeQuery(String queryID){
-
-
+    public void dynamicRemoveQuery(Query query){
+        this.queryEngineMap.get(query.getQueryId()).stop();
+        this.queryEngineMap.remove(query.getQueryId());
+        //have to implement persistent siddhi instance
     }
 
     public Map<String, CEPEngine> getQueryEngineMap() {
