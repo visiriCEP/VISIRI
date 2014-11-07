@@ -1,6 +1,10 @@
 .idea/
+.settings/
 out/
 *.iml
+.project
+.classpath
+bin/
 
 *.class
 # Mobile Tools for Java (J2ME)

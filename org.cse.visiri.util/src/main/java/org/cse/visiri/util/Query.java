@@ -18,6 +18,10 @@ public class Query implements Serializable{
 
     public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
+        if(inputStreamDefinitionList == null)
+        {
+            inputStreamDefinitionList = new ArrayList<StreamDefinition>();
+        }
         this.setInputStreamDefinitionsList(inputStreamDefinitionList);
         this.setOutputStreamDefinition(outputStreamDefinition);
         this.setQueryId(queryId);
