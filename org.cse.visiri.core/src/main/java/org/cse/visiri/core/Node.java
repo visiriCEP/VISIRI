@@ -3,6 +3,7 @@ package org.cse.visiri.core;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.UtilizationUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +12,32 @@ import java.util.Map;
 /**
  * Created by Geeth on 2014-11-05.
  */
-public abstract class Node {
+public  class Node {
 
-    public static final int NODE_TYPE_PROCESSINGNODE = 1;
-    public static final int NODE_TYPE_DISPATCHER = 2;
+    private List<Query> queries;
+    private EngineHandler engineHandler;
 
+    private UtilizationUpdater utilizationUpdater;
 
-    protected List<Query> queries;
-    protected EngineHandler engineHandler;
+    public void start() throws Exception{
 
-    public abstract void start();
-    public abstract void stop();
+        engineHandler = new EngineHandler();
+        for(Query q : queries)
+        {
+            engineHandler.addQuery(q);
+        }
+
+        utilizationUpdater = new UtilizationUpdater();
+        utilizationUpdater.start();
+
+        engineHandler.start();
+
+    }
+
+    public void stop() {
+        engineHandler.stop();
+        utilizationUpdater.stop();
+    }
 
     public void subscribeToStream(String eventID, String ip_port)
     {
