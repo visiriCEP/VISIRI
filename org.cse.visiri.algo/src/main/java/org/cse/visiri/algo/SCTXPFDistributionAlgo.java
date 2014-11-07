@@ -2,6 +2,7 @@ package org.cse.visiri.algo;
 
 import org.cse.visiri.algo.util.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -33,10 +34,11 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
         CostModelCalculator costCal = new CostModelCalculator();
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
-        List<String> nodeList = new ArrayList<String>(env.getNodeIdList());
+        List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
         Map<String,Double> utilizations = new HashMap<String, Double>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
+        List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
 
 
         for(String str: nodeList)
@@ -132,7 +134,14 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             int randIndex = randomizer.nextInt(candidateNodes.size());
             String targetNode = candidateNodes.toArray(new String[candidateNodes.size()])[randIndex];
 
+
+            // Add to distribution
+            Query nodeQuery = new Query(q,true);
+
+            nodeQuery.setEngineId(CEPEngine.ENGINE_TYPE_SIDDHI);
             dist.getQueryAllocation().put(q,targetNode);
+            Query dispQuery = new Query(q,true);
+            dispQuery.setEngineId(CEPEngine.ENGINE_TYPE_DIRECT);
 
 
             // update calculated tables for allocation of next queries
@@ -143,4 +152,5 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         return dist;
     }
+
 }

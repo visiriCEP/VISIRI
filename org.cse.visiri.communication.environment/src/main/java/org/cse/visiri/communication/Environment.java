@@ -41,7 +41,7 @@ public class Environment {
     }
 
     public int getNodeType(){
-        return (int)hzInstance.getMap(NODE_LIST).get(getNodeId());
+        return (Integer)hzInstance.getMap(NODE_LIST).get(getNodeId());
     }
 
 
