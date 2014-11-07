@@ -133,10 +133,10 @@ public class Environment {
         return hzInstance.getMap(SUBSCRIBER_MAP);
     }
 
-    public Map<String, List<String>> getEventClientMapping() {
+    public Map<String, Set<String>> getEventClientMapping() {
 
         Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
-        Map<String,List<String>> eventClientMap=new HashMap<String, List<String>>();
+        Map<String,Set<String>> eventClientMap=new HashMap<String, Set<String>>();
 
         //For all IPs in the node query map
         for(Object ob: nodeQueryMap.keySet()){
@@ -148,9 +148,9 @@ public class Environment {
                 //For all StreamDefinitions in a query
                 for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()) {
 
-                    List<String> ipList=eventClientMap.get(streamDefinition.getStreamId());
+                    Set<String> ipList=eventClientMap.get(streamDefinition.getStreamId());
                     if(ipList==null){
-                        ipList=new ArrayList<String>();
+                        ipList=new HashSet<String>();
                     }
                     ipList.add(ip);
                     eventClientMap.put(streamDefinition.getStreamId(), ipList);
