@@ -144,7 +144,7 @@ public class EngineHandler {
     public void dynamicRemoveQuery(Query query){
         this.queryEngineMap.get(query.getQueryId()).stop();
         this.queryEngineMap.remove(query.getQueryId());
-
+        //have to implement persistent siddhi instance
     }
 
     public Map<String, CEPEngine> getQueryEngineMap() {
