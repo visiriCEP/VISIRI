@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Geeth on 2014-11-05.
  */
-public  class Node {
+public class Node {
 
     private List<Query> queries;
     private EngineHandler engineHandler;
@@ -20,6 +20,8 @@ public  class Node {
     private UtilizationUpdater utilizationUpdater;
 
     public void start() throws Exception{
+
+        Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
 
         engineHandler = new EngineHandler();
         for(Query q : queries)
