@@ -53,7 +53,9 @@ public class EventSink {
             }
         });
 
+        System.out.println("Event sink started at port " + port);
         server.start();
+
     }
 
     public static void main(String[] arg) throws Exception {
