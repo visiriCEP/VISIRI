@@ -32,18 +32,25 @@ public class EventSource {
         sd.addAttribute("duration", StreamDefinition.Type.DOUBLE);
         defs.add(sd);
 
+        StreamDefinition inputStreamDefinition1=new StreamDefinition();
+        inputStreamDefinition1.setStreamId("car");
+        inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
+        inputStreamDefinition1.addAttribute("Id", StreamDefinition.Type.INTEGER);
+        inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
+        defs.add(inputStreamDefinition1);
+
         return defs;
     }
 
     public void start() throws  Exception
     {
-        cl = new EventClient("localhost:6666",getDefinitions());
+        cl = new EventClient("localhost:7211",getDefinitions());
     }
 
     public void sendEvents() throws Exception
     {
         List<StreamDefinition> defs = getDefinitions();
-        StreamDefinition def = defs.get(1);
+        StreamDefinition def = defs.get(2);
 
         for(int i=0; i < 10; i++) {
             Event ev = new Event();

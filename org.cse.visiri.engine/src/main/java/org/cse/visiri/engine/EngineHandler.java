@@ -33,16 +33,16 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
+       
+    }
+
+    public void start() throws Exception {
 
         try {
             this.configureOutputEventReceiver();
         } catch (Exception e) {
             e.printStackTrace();
         }
-       
-    }
-
-    public void start() throws Exception {
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
         Set set=streamDefinitionMap.keySet();
@@ -63,7 +63,6 @@ public class EngineHandler {
         });
 
         eventServer.start();
-
 
     }
 
@@ -175,7 +174,7 @@ public class EngineHandler {
     }
 
     private void configureOutputEventReceiver() throws Exception {
-        String myIp= Environment.getInstance().getNodeId();
+        //String myIp= Environment.getInstance().getNodeId();
         //List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
         List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
         Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
@@ -206,9 +205,8 @@ public class EngineHandler {
             }
         }
 
-        Set nodeIpSet=nodeStreamDefinitionListMap.keySet();
-        while (nodeIpSet.iterator().hasNext()){
-            String nodeIp= (String) nodeIpSet.iterator().next();
+        Set<String> nodeIpSet=nodeStreamDefinitionListMap.keySet();
+        for (String nodeIp :  nodeIpSet){
             if(!nodeIp.contains(":")){
                 nodeIp=nodeIp+":"+EventServer.DEFAULT_PORT;
             }

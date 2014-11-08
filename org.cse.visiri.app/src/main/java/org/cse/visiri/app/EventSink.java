@@ -32,7 +32,12 @@ public class EventSink {
         sd.addAttribute("fighters", StreamDefinition.Type.INTEGER);
         sd.addAttribute("deaths", StreamDefinition.Type.INTEGER);
         sd.addAttribute("duration", StreamDefinition.Type.DOUBLE);
-        defs.add(sd);
+
+        StreamDefinition outputStreamDefinition=new StreamDefinition();
+        outputStreamDefinition.setStreamId("filterCar");
+        outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
+        outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
+        defs.add(outputStreamDefinition);
 
         return defs;
     }

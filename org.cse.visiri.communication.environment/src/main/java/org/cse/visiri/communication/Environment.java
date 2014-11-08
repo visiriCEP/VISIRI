@@ -35,6 +35,7 @@ public class Environment {
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
         bufferingEventList = new ArrayList<String>();
 
+
     }
     public void setNodeType(int nodeType){
         hzInstance.getMap(NODE_LIST).put(getNodeId(),nodeType);
