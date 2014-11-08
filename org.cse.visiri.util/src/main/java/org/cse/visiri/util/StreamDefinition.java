@@ -38,6 +38,10 @@ public class StreamDefinition implements Serializable {
 
     public StreamDefinition(String streamId_,List<Attribute> attrs)
     {
+        if(attrs == null)
+        {
+            attrs = new ArrayList<Attribute>();
+        }
         setAttributeList(attrs);
         setStreamId(streamId_);
     }

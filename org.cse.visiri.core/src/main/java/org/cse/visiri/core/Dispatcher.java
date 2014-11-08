@@ -1,5 +1,6 @@
 package org.cse.visiri.core;
 
+import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.UtilizationUpdater;
@@ -19,6 +20,8 @@ public class Dispatcher {
     }
 
     public void start() throws Exception{
+
+        Environment.getInstance().setNodeType(Environment.NODE_TYPE_DISPATCHER);
 
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
