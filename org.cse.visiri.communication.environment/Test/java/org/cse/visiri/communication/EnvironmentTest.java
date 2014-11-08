@@ -86,7 +86,7 @@ public class EnvironmentTest extends junit.framework.TestCase {
 
         environment.addQueryDistribution(queryDistribution);
 
-        Map<String, List<String>> map=environment.getEventClientMapping();
+        Map<String, List<String>> map=environment.getEventNodeMapping();
 
         assertEquals("2.2.2.2",map.get("AA").get(0));
         assertEquals("1.1.1.1",map.get("AA").get(1));
