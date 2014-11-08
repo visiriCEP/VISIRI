@@ -34,6 +34,8 @@ public class StreamDefinition implements Serializable {
         }
     }
 
+    public StreamDefinition(){}
+
     public StreamDefinition(String streamId_,List<Attribute> attrs)
     {
         setAttributeList(attrs);

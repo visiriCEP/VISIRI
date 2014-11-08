@@ -22,7 +22,7 @@ public class EngineHandler {
     private Map<String,StreamDefinition> streamDefinitionMap;
     private EventServerConfig eventServerConfig;
     private List<Query> myQueryList;
-
+    private EventServer eventServer;
 
     public EngineHandler(){
 
@@ -52,7 +52,7 @@ public class EngineHandler {
             streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
 
-        EventServer eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
+        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
             @Override
             public void receive(Event event) {
                 List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
@@ -115,8 +115,10 @@ public class EngineHandler {
             StreamDefinition streamDefinition=inputStreamDefinitionList.get(i);
             setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
             streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
+            eventServer.addStreamDefinition(streamDefinition);
         }
         this.myQueryList.add(query);
+
 
         //configuring outputEventReceiver for new query
         Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
@@ -183,6 +185,9 @@ public class EngineHandler {
             ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
         }
 
+        //Have to check about whether dispatcher or processing node
+
+        //get output event to subscriber map
         Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
 
         for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
