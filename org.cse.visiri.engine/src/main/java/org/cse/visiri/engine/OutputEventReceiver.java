@@ -56,7 +56,7 @@ public class OutputEventReceiver {
     }
 
     public void sendEvents(Event event) throws IOException {
-        System.out.println(event.getStreamId()+ " : "+event.getData()); //for test
+       // System.out.println(event.getStreamId()+ " : "+event.getData()); //for test
         List<EventClient> eventClientList= eventToClientsMap.get(event.getStreamId());
         for(int i=0;i<eventClientList.size();i++){
             EventClient eventClient=eventClientList.get(i);

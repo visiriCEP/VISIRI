@@ -45,10 +45,9 @@ public class EngineHandler {
         }
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
-        Set set=streamDefinitionMap.keySet();
+        Set<String> streamIdSet=streamDefinitionMap.keySet();
 
-        for(int i=0;i<streamDefinitionMap.size();i++){
-            String streamId= (String) set.iterator().next();
+        for(String streamId: streamIdSet){
             streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
 
@@ -178,7 +177,6 @@ public class EngineHandler {
         //List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
         List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
         Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
-
 
         for(Query q : myQueryList){
             ouputStreamDefinitionList.add(q.getOutputStreamDefinition());

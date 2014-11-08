@@ -86,7 +86,6 @@ public class SiddhiCEPEngine extends CEPEngine {
                         e.printStackTrace();
                     }
                 }
-
             }
         });
 
@@ -112,7 +111,6 @@ public class SiddhiCEPEngine extends CEPEngine {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-
     }
 
 }
