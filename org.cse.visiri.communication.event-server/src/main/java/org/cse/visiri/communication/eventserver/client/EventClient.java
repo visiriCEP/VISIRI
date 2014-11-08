@@ -119,18 +119,18 @@ public class EventClient {
     public static void main(String[] args) throws Exception {
 
         //TsendEventhread.sleep(1000);
-        System.out.println("Start testing");
-        Random random = new Random();
-
-        StreamDefinition streamDefinition1=new StreamDefinition();
-        streamDefinition1.setStreamId("ABC");
-        streamDefinition1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
-        streamDefinition1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-
-        StreamDefinition def2=new StreamDefinition();
-        def2.setStreamId("student");
-        def2.addAttribute("age", StreamDefinition.Type.INTEGER);
-        def2.addAttribute("weight", StreamDefinition.Type.FLOAT);
+//        System.out.println("Start testing");
+//        Random random = new Random();
+//
+//        StreamDefinition streamDefinition1=new StreamDefinition();
+//        streamDefinition1.setStreamId("ABC");
+//        streamDefinition1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+//        streamDefinition1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+//
+//        StreamDefinition def2=new StreamDefinition();
+//        def2.setStreamId("student");
+//        def2.addAttribute("age", StreamDefinition.Type.INTEGER);
+//        def2.addAttribute("weight", StreamDefinition.Type.FLOAT);
 
         //SimpleEventHandler client = new SimpleEventHandler("localhost:7612");
 //        EventClient client1=new EventClient("localhost:5180",streamDefinition1);
