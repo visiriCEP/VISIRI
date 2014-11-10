@@ -41,7 +41,7 @@ public class Environment {
     }
 
     public int getNodeType(){
-        return (int)hzInstance.getMap(NODE_LIST).get(getNodeId());
+        return (Integer.parseInt(hzInstance.getMap(NODE_LIST).get(getNodeId()).toString()));
     }
 
 
@@ -137,10 +137,11 @@ public class Environment {
         return hzInstance.getMap(SUBSCRIBER_MAP);
     }
 
-    public Map<String, Set<String>> getEventClientMapping() {
+    public Map<String, List<String>> getEventNodeMapping() {
 
         Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
-        Map<String,Set<String>> eventClientMap=new HashMap<String, Set<String>>();
+        Map<String,Set<String>> eventNodeMap=new HashMap<String, Set<String>>();
+        Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
         //For all IPs in the node query map
         for(Object ob: nodeQueryMap.keySet()){
@@ -152,17 +153,24 @@ public class Environment {
                 //For all StreamDefinitions in a query
                 for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()) {
 
-                    Set<String> ipList=eventClientMap.get(streamDefinition.getStreamId());
+                    Set<String> ipList=eventNodeMap.get(streamDefinition.getStreamId());
                     if(ipList==null){
                         ipList=new HashSet<String>();
                     }
                     ipList.add(ip);
-                    eventClientMap.put(streamDefinition.getStreamId(), ipList);
+                    eventNodeMap.put(streamDefinition.getStreamId(), ipList);
                 }
             }
         }
 
-        return eventClientMap;
+        //Converting Set to List
+        for(String stream : eventNodeMap.keySet()){
+            Set<String> ipSet=eventNodeMap.get(stream);
+            List<String> iplist = new ArrayList<String>(ipSet);
+            eventNodeMap2.put(stream,iplist);
+        }
+
+        return eventNodeMap2;
     }
 
 
