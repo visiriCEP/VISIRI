@@ -117,13 +117,19 @@ public class EngineHandler {
         }
         this.myQueryList.add(query);
 
+        Map<String,List<String>> destinationNodeMap;
 
-        //configuring outputEventReceiver for new query
-        Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
+        //Have to check about whether dispatcher or processing node
+        if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
+            destinationNodeMap=Environment.getInstance().getEventNodeMapping();
+        }else {
+            destinationNodeMap=Environment.getInstance().getSubscriberMapping();
+        }
+
 
         StreamDefinition outputStreamDefiniton=query.getOutputStreamDefinition();
         String streamId=outputStreamDefiniton.getStreamId();
-        List<String> nodeIpList=subscribersMap.get(streamId);
+        List<String> nodeIpList=destinationNodeMap.get(streamId);
 
         Map<String,List<EventClient>> eventToClientsMap=outputEventReceiver.getEventToClientsMap();
 
@@ -182,16 +188,19 @@ public class EngineHandler {
             ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
         }
 
+        Map<String,List<String>> destinationNodeMap;
+
         //Have to check about whether dispatcher or processing node
         if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
-
+            destinationNodeMap=Environment.getInstance().getEventNodeMapping();
+        }else {
+            destinationNodeMap=Environment.getInstance().getSubscriberMapping();
         }
-        //get output event to subscriber map
-        Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
+
 
         for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
             String streamId = streamDefinition.getStreamId();
-            List<String> nodeIpList=subscribersMap.get(streamId);
+            List<String> nodeIpList=destinationNodeMap.get(streamId);
 
             for(String nodeIp :nodeIpList){
                 if(nodeStreamDefinitionListMap.containsKey(nodeIp)){
