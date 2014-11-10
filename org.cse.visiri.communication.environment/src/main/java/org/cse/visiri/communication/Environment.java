@@ -112,8 +112,6 @@ public class Environment implements MessageListener {
         instance=null;
     }
 
-
-
     public String getNodeId() {
         return hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
     }

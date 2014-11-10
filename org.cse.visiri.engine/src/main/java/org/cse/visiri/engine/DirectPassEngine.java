@@ -1,11 +1,24 @@
 package org.cse.visiri.engine;
 
 import org.cse.visiri.util.Event;
+import org.cse.visiri.util.Query;
+
+import java.io.IOException;
 
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
  */
 public class DirectPassEngine extends CEPEngine {
+
+    private Query query;
+    private OutputEventReceiver outputEventReceiver;
+
+    public DirectPassEngine(Query query,OutputEventReceiver outputEventReceiver){
+        this.query=query;
+        this.outputEventReceiver=outputEventReceiver;
+        this.start();
+    }
+
     @Override
     public void start() {
 
@@ -22,7 +35,11 @@ public class DirectPassEngine extends CEPEngine {
     }
 
     @Override
-    public void sendEvent(Event e) {
-
+    public void sendEvent(Event event) {
+        try {
+            outputEventReceiver.sendEvents(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

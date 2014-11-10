@@ -38,7 +38,7 @@ public class EngineHandlerTest extends TestCase {
         Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1",CEPEngine.ENGINE_TYPE_SIDDHI);
 
         engineHandler.addQuery(query1);
-        //engineHandler.start();
+
     }
 
     public void testStart() throws Exception {
