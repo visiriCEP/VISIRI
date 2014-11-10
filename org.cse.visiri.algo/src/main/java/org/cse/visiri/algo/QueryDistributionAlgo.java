@@ -10,5 +10,5 @@ import java.util.List;
  */
 public abstract class QueryDistributionAlgo {
 
-    abstract QueryDistribution getQueryDistribution(List<Query> queries);
+    public abstract QueryDistribution getQueryDistribution(List<Query> queries);
 }

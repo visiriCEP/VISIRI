@@ -1,42 +1,97 @@
 package org.cse.visiri.core;
 
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.communication.EnvironmentChangedCallback;
 import org.cse.visiri.engine.EngineHandler;
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.UtilizationUpdater;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Malinda Kumarasinghe on 11/5/2014.
  */
-public class Dispatcher {
+public class Dispatcher implements EnvironmentChangedCallback {
     private List<Query> queries;
     private EngineHandler engineHandler;
     private UtilizationUpdater utilizationUpdater;
+    boolean started;
 
-    private void createStreamDefNodeMap(){
-     //   Map<String, List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
-    }
-
-    public void start() throws Exception{
-
+    public void initialize()
+    {
+        started = false;
+        Environment.getInstance().setChangedCallback(this);
+        Configuration.setNodeType(Environment.NODE_TYPE_DISPATCHER);
         Environment.getInstance().setNodeType(Environment.NODE_TYPE_DISPATCHER);
 
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
-
         engineHandler = new EngineHandler();
-        for(Query q : queries)
-        {
-            engineHandler.addQuery(q);
-        }
+    }
 
-        engineHandler.start();
+
+    public void start() throws Exception{
+
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_START);
 
     }
 
     public void stop() {
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_STOP);
+
+    }
+
+    @Override
+    public void queriesChanged() {
+
+        String nodeID = Environment.getInstance().getNodeId();
+        List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
+
+        List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
+        addedQueries.removeAll(queries);
+
+        for(Query q : addedQueries)
+        {
+            queries.add(q);
+            engineHandler.addQuery(q);
+        }
+    }
+
+    @Override
+    public void nodesChanged() {
+
+    }
+
+    @Override
+    public void bufferingStateChanged() {
+
+    }
+
+    @Override
+    public void eventSubscriberChanged() {
+
+    }
+
+    @Override
+    public void startNode() {
+
+        if(!started)
+        {
+            try {
+                engineHandler.start();
+                started = true;
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void stopNode() {
         engineHandler.stop();
         utilizationUpdater.stop();
     }
