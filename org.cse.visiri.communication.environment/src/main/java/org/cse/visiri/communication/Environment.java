@@ -1,9 +1,7 @@
 package org.cse.visiri.communication;
 
 import com.hazelcast.config.Config;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Member;
+import com.hazelcast.core.*;
 
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
@@ -14,7 +12,7 @@ import java.util.*;
 /**
  * Created by Geeth on 2014-10-31.
  */
-public class Environment {
+public class Environment implements MessageListener {
 
     public static final int NODE_TYPE_PROCESSINGNODE = 1;
     public static final int NODE_TYPE_DISPATCHER = 2;
@@ -115,7 +113,7 @@ public class Environment {
     }
 
     public String getNodeId() {
-        return hzInstance.getCluster().getLocalMember().getSocketAddress().getHostString();
+        return hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
     }
 
     public Map<String, List<Query>> getNodeQueryMap() {
@@ -145,10 +143,10 @@ public class Environment {
         for(Object ob: nodeQueryMap.keySet()){
             String ip=(String)ob;
 
-            //For all queries for a specific ip
+            //For all queries of a specific ip
             for(Query query : nodeQueryMap.get(ip) ){
 
-                //For all StreamDefinitions in a query
+                //For all StreamDefinitions of a query
                 for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()) {
 
                     Set<String> ipList=eventNodeMap.get(streamDefinition.getStreamId());
@@ -169,6 +167,29 @@ public class Environment {
         }
 
         return eventNodeMap2;
+    }
+
+    @Override
+    public void onMessage(Message arg0) {
+        System.out.println(" "+"Message received : " + arg0.getMessageObject().toString());
+        changedCallback.nodesChanged();
+    }
+
+    public void sendMessage(){
+        //String
+
+        ITopic<Object> topic = hzInstance.getTopic ("default 77");
+        topic.addMessageListener(this);
+        //  System.out.println("Me="+instance.getCluster().getLocalMember().getInetSocketAddress());
+        do{
+            topic.publish ("from  "+getNodeId());
+
+            System.out.println("Enter:");
+
+            Scanner a = new Scanner(System.in);
+            int x = a.nextInt();
+
+        }while(true);
     }
 
 
