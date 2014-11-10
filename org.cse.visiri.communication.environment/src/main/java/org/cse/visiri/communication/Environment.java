@@ -129,7 +129,7 @@ public class Environment implements MessageListener {
     }
 
 
-    public Map<String, Double> getNodeUtilizations() {
+    public Map<String, Utilization> getNodeUtilizations() {
         return hzInstance.getMap(UTILIZATION_MAP);
     }
 
