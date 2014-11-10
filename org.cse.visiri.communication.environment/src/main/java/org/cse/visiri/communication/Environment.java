@@ -17,6 +17,11 @@ public class Environment implements MessageListener {
     public static final int NODE_TYPE_PROCESSINGNODE = 1;
     public static final int NODE_TYPE_DISPATCHER = 2;
 
+    public static final int EVENT_TYPE_QUERIES_CHANGED = 1;
+    public static final int EVENT_TYPE_NODES_CHANGED = 2;
+    public static final int EVENT_TYPE_BUFFERINGSTATE_CHANGED = 3;
+    public static final int EVENT_TYPE_EVENTSUBSCIBER_CHANGED = 4;
+
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
     private final String ORIGINAL_TO_DEPLOYED_MAP = "ORIGINAL_TO_DEPLOYED_MAP";
@@ -170,38 +175,43 @@ public class Environment implements MessageListener {
     }
 
     @Override
-    public void onMessage(Message arg0) {
-        System.out.println(" "+"Message received : " + arg0.getMessageObject().toString());
-        changedCallback.nodesChanged();
+    public void onMessage(Message event) {
+        int eventType=(Integer)event.getMessageObject();
+
+        switch (eventType){
+            case Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED:
+                changedCallback.bufferingStateChanged();
+                break;
+            case Environment.EVENT_TYPE_QUERIES_CHANGED:
+                changedCallback.queriesChanged();
+                break;
+            case Environment.EVENT_TYPE_NODES_CHANGED:
+                changedCallback.nodesChanged();
+                break;
+            case Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED:
+                changedCallback.eventSubscriberChanged();
+                break;
+        }
     }
 
-    public void sendMessage(){
-        //String
-
+    public void sendEvent(int eventType){
         ITopic<Object> topic = hzInstance.getTopic ("default 77");
         topic.addMessageListener(this);
+        topic.publish(eventType);
         //  System.out.println("Me="+instance.getCluster().getLocalMember().getInetSocketAddress());
-        do{
-            topic.publish ("from  "+getNodeId());
-
-            System.out.println("Enter:");
-
-            Scanner a = new Scanner(System.in);
-            int x = a.nextInt();
-
-        }while(true);
+//        do{
+//            topic.publish ("from  "+getNodeId());
+//            topic.publish(eventType);
+//            System.out.println("Enter:");
+//            Scanner a = new Scanner(System.in);
+//            int x = a.nextInt();
+//
+//        }while(true);
     }
 
 
 
     public static void main(String args[]) {
-//       Environment.getInstance().setNodeType(Environment.NODE_TYPE_DISPATCHER);
-//       // hzInstance.getMap(NODE_LIST).put("as",Environment.NODE_TYPE_PROCESSINGNODE);
-//
-//        System.out.println("asaaaaaaaaaaaaaaaa");
-//        for(String s : getInstance().getNodeIdList(Environment.NODE_TYPE_DISPATCHER)){
-//            System.out.println("g"+s);
-//        }
 
     }
 }
