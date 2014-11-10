@@ -39,6 +39,12 @@ public class EventSink {
         outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
         defs.add(outputStreamDefinition);
 
+        StreamDefinition outputDef=new StreamDefinition();
+        outputDef.setStreamId("StockQuote");
+        outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+        defs.add(outputDef);
+
         return defs;
     }
 
