@@ -21,6 +21,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     public void initialize()
     {
+        queries = new ArrayList<Query>();
         started = false;
         Environment.getInstance().setChangedCallback(this);
         Configuration.setNodeType(Environment.NODE_TYPE_DISPATCHER);

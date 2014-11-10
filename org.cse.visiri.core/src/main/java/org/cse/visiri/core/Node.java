@@ -53,7 +53,7 @@ public class Node implements EnvironmentChangedCallback{
         utilizationUpdater.stop();
     }
 
-    public void AddQueries(List<Query> queries)
+    public void addQueries(List<Query> queries)
     {
         QueryDistributionAlgo algo = new SCTXPFDistributionAlgo();
         QueryDistribution dist = algo.getQueryDistribution(queries);
