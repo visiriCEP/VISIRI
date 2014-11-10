@@ -5,9 +5,11 @@ package org.cse.visiri.util;
  */
 public class UtilizationUpdater {
 
+    private Utilization utilization;
 
     public UtilizationUpdater(){
-
+        this.utilization=new Utilization();
+        this.start();
     }
 
     public void start(){

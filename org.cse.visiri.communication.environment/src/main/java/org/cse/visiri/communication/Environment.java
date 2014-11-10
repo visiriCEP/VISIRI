@@ -103,7 +103,7 @@ public class Environment implements MessageListener {
         List<String> nodeIdList = new ArrayList<String>();
 
         for (Member member : t) {
-            String ip=member.getSocketAddress().getHostString();
+            String ip=member.getInetSocketAddress().getHostString();
 
             if(nodeType == hzInstance.getMap(NODE_LIST).get(ip))
                 nodeIdList.add(ip);
@@ -121,7 +121,7 @@ public class Environment implements MessageListener {
     }
 
     public String getNodeId() {
-        return hzInstance.getCluster().getLocalMember().getSocketAddress().getHostString();
+        return hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
     }
 
     public Map<String, List<Query>> getNodeQueryMap() {

@@ -7,6 +7,8 @@ public class Utilization {
 
     private double cpuUtilization;
 
+    public Utilization(){};
+
     public Utilization(double cpuUtilization){
         this.setCpuUtilization(cpuUtilization);
     }
