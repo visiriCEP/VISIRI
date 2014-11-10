@@ -8,7 +8,7 @@ import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
-import org.cse.visiri.util.UtilizationUpdater;
+import org.cse.visiri.algo.util.UtilizationUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +42,7 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     public void start() throws Exception{
-
-        //Environment.getInstance().sendEvent;
-
-
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_START);
     }
 
     public void stop() {

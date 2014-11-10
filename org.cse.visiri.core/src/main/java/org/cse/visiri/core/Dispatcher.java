@@ -5,7 +5,7 @@ import org.cse.visiri.communication.EnvironmentChangedCallback;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
-import org.cse.visiri.util.UtilizationUpdater;
+import org.cse.visiri.algo.util.UtilizationUpdater;
 
 import java.util.ArrayList;
 import java.util.List;

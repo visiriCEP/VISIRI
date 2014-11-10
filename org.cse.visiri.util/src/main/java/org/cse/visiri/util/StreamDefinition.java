@@ -16,7 +16,7 @@ public class StreamDefinition implements Serializable {
     private String streamId;
     private List<Attribute> attributeList = new ArrayList<Attribute>();
 
-    public class Attribute {
+    public class Attribute implements Serializable {
         private String name;
         private Type type;
 
@@ -51,7 +51,7 @@ public class StreamDefinition implements Serializable {
         setStreamId(s.getStreamId());
         for(Attribute a: s.getAttributeList())
         {
-            s.addAttribute(a.getName(),a.getType());
+            addAttribute(a.getName(),a.getType());
         }
     }
 

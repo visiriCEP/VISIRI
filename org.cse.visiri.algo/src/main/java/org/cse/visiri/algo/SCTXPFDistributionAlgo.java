@@ -35,7 +35,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
-        Map<String,Double> utilizations = new HashMap<String, Double>(env.getNodeUtilizations());
+       // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
@@ -46,6 +46,12 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
         {
             //calculate costs of each node
             double cost = 0.0;
+
+            if(!nodeQueryTable.containsKey(str))
+            {
+                nodeQueryTable.put(str,new ArrayList<Query>());
+            }
+
            for(Query q: nodeQueryTable.get(str))
            {
                 cost += costCal.calculateCost(q);
@@ -69,6 +75,11 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
         //store types of events in dispatcher list
         for(String str: dispatcherList)
         {
+            if(!nodeQueryTable.containsKey(str))
+            {
+                nodeQueryTable.put(str,new ArrayList<Query>());
+            }
+
             Set<String> eventTypes = new HashSet<String>();
             List<Query> existingQueries = nodeQueryTable.get(str);
             for(Query q: existingQueries)
@@ -100,6 +111,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
                 }
             }
 
+            /*
             // min cpu utilization
             double minUtil = Collections.min(utilizations.values());
             //filter ones above utilization threshold
@@ -111,6 +123,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
                     iter.remove();
                 }
             }
+            */
 
             //types of events used
             Set<String> usedEventTypes = new HashSet<String>();
@@ -154,7 +167,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             Query nodeQuery = new Query(q,true);
 
             nodeQuery.setEngineId(CEPEngine.ENGINE_TYPE_SIDDHI);
-            dist.getQueryAllocation().put(q,targetNode);
+            dist.getQueryAllocation().put(nodeQuery,targetNode);
             derivedQueries.add(nodeQuery);
 
             //add to dispatchers
