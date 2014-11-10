@@ -2,7 +2,9 @@ package org.cse.visiri.util;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by visiri on 10/30/14.
@@ -16,12 +18,40 @@ public class Query implements Serializable{
 
     public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
+        if(inputStreamDefinitionList == null)
+        {
+            inputStreamDefinitionList = new ArrayList<StreamDefinition>();
+        }
         this.setInputStreamDefinitionsList(inputStreamDefinitionList);
         this.setOutputStreamDefinition(outputStreamDefinition);
         this.setQueryId(queryId);
         this.setEngineId(engineId);
     }
 
+    /** Create a copy of a query **/
+    public Query(Query q, boolean newID)
+    {
+        this.setQuery(q.query);
+        this.setInputStreamDefinitionsList(new ArrayList<StreamDefinition>());
+        for(StreamDefinition sd : q.getInputStreamDefinitionsList())
+        {
+            this.addInputStreamDefinition(new StreamDefinition(sd));
+        }
+
+        this.setOutputStreamDefinition(new StreamDefinition(q.getOutputStreamDefinition()));
+        this.setQueryId(queryId);
+        this.setEngineId(engineId);
+
+        if(newID)
+        {
+            setQueryId(getNewQueryId());
+        }
+    }
+
+    private static String getNewQueryId()
+    {
+        return UUID.randomUUID().toString();
+    }
 
     public String getQuery() {
         return query;

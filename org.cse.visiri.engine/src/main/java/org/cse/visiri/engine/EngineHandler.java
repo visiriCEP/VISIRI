@@ -22,7 +22,7 @@ public class EngineHandler {
     private Map<String,StreamDefinition> streamDefinitionMap;
     private EventServerConfig eventServerConfig;
     private List<Query> myQueryList;
-
+    private EventServer eventServer;
 
     public EngineHandler(){
 
@@ -33,26 +33,25 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
+       
+    }
+
+    public void start() throws Exception {
 
         try {
             this.configureOutputEventReceiver();
         } catch (Exception e) {
             e.printStackTrace();
         }
-       
-    }
-
-    public void start() throws Exception {
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
-        Set set=streamDefinitionMap.keySet();
+        Set<String> streamIdSet=streamDefinitionMap.keySet();
 
-        for(int i=0;i<streamDefinitionMap.size();i++){
-            String streamId= (String) set.iterator().next();
+        for(String streamId: streamIdSet){
             streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
 
-        EventServer eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
+        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
             @Override
             public void receive(Event event) {
                 List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
@@ -63,7 +62,6 @@ public class EngineHandler {
         });
 
         eventServer.start();
-
 
     }
 
@@ -115,8 +113,10 @@ public class EngineHandler {
             StreamDefinition streamDefinition=inputStreamDefinitionList.get(i);
             setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
             streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
+            eventServer.addStreamDefinition(streamDefinition);
         }
         this.myQueryList.add(query);
+
 
         //configuring outputEventReceiver for new query
         Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
@@ -173,16 +173,18 @@ public class EngineHandler {
     }
 
     private void configureOutputEventReceiver() throws Exception {
-        String myIp= Environment.getInstance().getNodeId();
+        //String myIp= Environment.getInstance().getNodeId();
         //List<Query> myQueryList=Environment.getInstance().getNodeQueryMap().get(myIp);
         List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
         Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
-
 
         for(Query q : myQueryList){
             ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
         }
 
+        //Have to check about whether dispatcher or processing node
+
+        //get output event to subscriber map
         Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
 
         for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
@@ -201,9 +203,8 @@ public class EngineHandler {
             }
         }
 
-        Set nodeIpSet=nodeStreamDefinitionListMap.keySet();
-        while (nodeIpSet.iterator().hasNext()){
-            String nodeIp= (String) nodeIpSet.iterator().next();
+        Set<String> nodeIpSet=nodeStreamDefinitionListMap.keySet();
+        for (String nodeIp :  nodeIpSet){
             if(!nodeIp.contains(":")){
                 nodeIp=nodeIp+":"+EventServer.DEFAULT_PORT;
             }

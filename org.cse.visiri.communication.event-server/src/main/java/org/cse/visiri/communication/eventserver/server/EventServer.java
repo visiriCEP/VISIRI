@@ -113,6 +113,14 @@ public class EventServer {
 
     }
 
+    public void addStreamDefinition(StreamDefinition streamDefinition){
+
+        if(!streamDefinitionList.contains(streamDefinition)) {
+            streamDefinitionList.add(streamDefinition);
+            streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(), EventServerUtils.createStreamRuntimeInfo(streamDefinition));
+        }
+    }
+
     private int loadData(BufferedInputStream in) throws IOException {
 
         while (true) {

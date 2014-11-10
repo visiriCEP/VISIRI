@@ -16,6 +16,7 @@
         <module>org.cse.visiri.algo</module>
         <module>org.cse.visiri.engine</module>
         <module>org.cse.visiri.core</module>
+        <module>org.cse.visiri.app</module>
 
     </modules>
     <dependencies>

@@ -45,7 +45,7 @@ public class SiddhiCEPEngine extends CEPEngine {
             List<StreamDefinition.Attribute> attributeList=inputStreamDefinitionList.get(i).getAttributeList();
 
             for(int j=0;j<attributeList.size();j++){
-                StreamDefinition.Type type=attributeList.get(i).getType();
+                StreamDefinition.Type type=attributeList.get(j).getType();
                 Attribute.Type type1;
                 if(type.equals(StreamDefinition.Type.STRING)){
                     type1= Attribute.Type.STRING;
@@ -63,7 +63,7 @@ public class SiddhiCEPEngine extends CEPEngine {
                     type1=Attribute.Type.TYPE;
                 }
 
-                streamDefinition.attribute(attributeList.get(i).getName(),type1 );
+                streamDefinition.attribute(attributeList.get(j).getName(),type1 );
 
             }
 
@@ -86,7 +86,6 @@ public class SiddhiCEPEngine extends CEPEngine {
                         e.printStackTrace();
                     }
                 }
-
             }
         });
 
@@ -112,7 +111,6 @@ public class SiddhiCEPEngine extends CEPEngine {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-
     }
 
 }

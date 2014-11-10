@@ -2,6 +2,7 @@ package org.cse.visiri.algo;
 
 import org.cse.visiri.algo.util.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -33,12 +34,14 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
         CostModelCalculator costCal = new CostModelCalculator();
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
-        List<String> nodeList = new ArrayList<String>(env.getNodeIdList());
+        List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
         Map<String,Double> utilizations = new HashMap<String, Double>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
+        List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
 
 
+        // Store types of events in nodelist and theircosts
         for(String str: nodeList)
         {
             //calculate costs of each node
@@ -63,9 +66,22 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             nodeEventTypes.put(str,eventTypes);
 
         }
+        //store types of events in dispatcher list
+        for(String str: dispatcherList)
+        {
+            Set<String> eventTypes = new HashSet<String>();
+            List<Query> existingQueries = nodeQueryTable.get(str);
+            for(Query q: existingQueries)
+            {
+                for(StreamDefinition def : q.getInputStreamDefinitionsList())
+                {
+                    eventTypes.add(def.getStreamId());
+                }
+            }
+            nodeEventTypes.put(str,eventTypes);
+        }
 
-        //
-
+        // ************* ALLOCATE QUERIES ************
         for(Query q : queries)
         {
             //take all noes as possible candidates
@@ -128,12 +144,41 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
             candidateNodes.retainAll(maximumCommonEventNodes);
 
-            //select one randomly
+            //select one node randomly
             int randIndex = randomizer.nextInt(candidateNodes.size());
             String targetNode = candidateNodes.toArray(new String[candidateNodes.size()])[randIndex];
 
-            dist.getQueryAllocation().put(q,targetNode);
 
+            // *********** Add to distribution *************
+            List<Query> derivedQueries = new ArrayList<Query>();
+            Query nodeQuery = new Query(q,true);
+
+            nodeQuery.setEngineId(CEPEngine.ENGINE_TYPE_SIDDHI);
+            dist.getQueryAllocation().put(q,targetNode);
+            derivedQueries.add(nodeQuery);
+
+            //add to dispatchers
+            Query dispQuery = new Query( "", null,null,"tempquery",CEPEngine.ENGINE_TYPE_DIRECT);
+
+            for(String disp : dispatcherList)
+            {
+                Set<String> evtTypes = nodeEventTypes.get(disp);
+                for(StreamDefinition def : dispQuery.getInputStreamDefinitionsList()) {
+                    String evtType = def.getStreamId();
+                    if (!evtTypes.contains(evtType))
+                    {
+                        Query newQ = new Query(dispQuery,true);
+                        StreamDefinition newDef = new StreamDefinition(def);
+                        newQ.addInputStreamDefinition(newDef);
+                        newQ.setOutputStreamDefinition(newDef);
+
+                        derivedQueries.add(newQ);
+                        evtTypes.add(evtType);
+                    }
+                }
+            }
+
+            dist.getGeneratedQueries().put(q,derivedQueries);
 
             // update calculated tables for allocation of next queries
             nodeQueryTable.get(targetNode).add(q);
@@ -143,4 +188,5 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         return dist;
     }
+
 }
