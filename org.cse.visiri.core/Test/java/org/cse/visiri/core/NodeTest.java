@@ -49,6 +49,31 @@ public class NodeTest extends TestCase {
        environment.sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
        while(node.recievedEvent==0){}
        assertEquals(Environment.EVENT_TYPE_QUERIES_CHANGED,node.recievedEvent);
+
+        node.recievedEvent=0;
+        environment.sendEvent(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED);
+        while(node.recievedEvent==0){}
+        assertEquals(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED,node.recievedEvent);
+
+        node.recievedEvent=0;
+        environment.sendEvent(Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED);
+        while(node.recievedEvent==0){}
+        assertEquals(Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED,node.recievedEvent);
+
+        node.recievedEvent=0;
+        environment.sendEvent(Environment.EVENT_TYPE_NODES_CHANGED);
+        while(node.recievedEvent==0){}
+        assertEquals(Environment.EVENT_TYPE_NODES_CHANGED,node.recievedEvent);
+
+        node.recievedEvent=0;
+        environment.sendEvent(Environment.EVENT_TYPE_NODE_START);
+        while(node.recievedEvent==0){}
+        assertEquals(Environment.EVENT_TYPE_NODE_START,node.recievedEvent);
+
+        node.recievedEvent=0;
+        environment.sendEvent(Environment.EVENT_TYPE_NODE_STOP);
+        while(node.recievedEvent==0){}
+        assertEquals(Environment.EVENT_TYPE_NODE_STOP,node.recievedEvent);
     }
 
     public void testNodesChanged() throws Exception {

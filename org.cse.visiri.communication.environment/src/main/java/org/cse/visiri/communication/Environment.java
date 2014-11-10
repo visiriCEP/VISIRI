@@ -6,6 +6,7 @@ import com.hazelcast.core.*;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
+import org.cse.visiri.util.Utilization;
 
 import java.util.*;
 
@@ -21,6 +22,8 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_NODES_CHANGED = 2;
     public static final int EVENT_TYPE_BUFFERINGSTATE_CHANGED = 3;
     public static final int EVENT_TYPE_EVENTSUBSCIBER_CHANGED = 4;
+    public static final int EVENT_TYPE_NODE_START = 5;
+    public static final int EVENT_TYPE_NODE_STOP = 6;
 
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
@@ -130,6 +133,10 @@ public class Environment implements MessageListener {
         return hzInstance.getMap(UTILIZATION_MAP);
     }
 
+    public void setNodeUtilizations(Utilization utilization) {
+        hzInstance.getMap(UTILIZATION_MAP).put(getNodeId(),utilization);
+    }
+
     public List<String> getBufferingEventList() {
         return bufferingEventList;
     }
@@ -191,22 +198,19 @@ public class Environment implements MessageListener {
             case Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED:
                 changedCallback.eventSubscriberChanged();
                 break;
+            case Environment.EVENT_TYPE_NODE_START:
+                changedCallback.startNode();
+                break;
+            case Environment.EVENT_TYPE_NODE_STOP:
+                changedCallback.stopNode();
+                break;
         }
     }
 
     public void sendEvent(int eventType){
-        ITopic<Object> topic = hzInstance.getTopic ("default 77");
+        ITopic<Object> topic = hzInstance.getTopic ("VISIRI");
         topic.addMessageListener(this);
         topic.publish(eventType);
-        //  System.out.println("Me="+instance.getCluster().getLocalMember().getInetSocketAddress());
-//        do{
-//            topic.publish ("from  "+getNodeId());
-//            topic.publish(eventType);
-//            System.out.println("Enter:");
-//            Scanner a = new Scanner(System.in);
-//            int x = a.nextInt();
-//
-//        }while(true);
     }
 
 
