@@ -4,9 +4,11 @@ import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Malinda Kumarasinghe on 11/5/2014.
@@ -75,6 +77,8 @@ public class EnvironmentTest extends junit.framework.TestCase {
         queryDistribution.getQueryAllocation().put(q4,"4.4.4.4");
         queryDistribution.getQueryAllocation().put(q5,"5.5.5.5");
 
+        environment.addQueryDistribution(queryDistribution);
+
     }
 
 
@@ -83,29 +87,33 @@ public class EnvironmentTest extends junit.framework.TestCase {
         assertEquals(12.5, environment.getNodeUtilizations().get("1.1.1.1"));
     }
     public void testGetEventClientMapping() throws Exception {
-//
-//        environment.addQueryDistribution(queryDistribution);
-//
-//        Map<String, List<String>> map=environment.getEventNodeMapping();
-//
-//        assertEquals("2.2.2.2",map.get("AA").get(0));
-//        assertEquals("1.1.1.1",map.get("AA").get(1));
-//
-//        assertEquals("2.2.2.2",map.get("BB").get(0));
-//        assertEquals("1.1.1.1",map.get("BB").get(1));
-//
-//        assertEquals("4.4.4.4",map.get("CC").get(0));
-//        assertEquals("3.3.3.3",map.get("CC").get(1));
-//        assertEquals("5.5.5.5",map.get("CC").get(2));
-//
-//        assertEquals("4.4.4.4",map.get("DD").get(0));
-//        assertEquals("3.3.3.3",map.get("DD").get(1));
-//        assertEquals("5.5.5.5",map.get("DD").get(2));
-//
+
+        environment.addQueryDistribution(queryDistribution);
+
+        Map<String, List<String>> map=environment.getEventNodeMapping();
+
+        assertEquals("1.1.1.1", map.get("AA").toArray()[0]);
+        assertEquals("2.2.2.2",map.get("AA").toArray()[1]);
+
+        assertEquals("1.1.1.1",map.get("BB").toArray()[0]);
+        assertEquals("2.2.2.2",map.get("BB").toArray()[1]);
+
+        assertEquals("5.5.5.5",map.get("CC").toArray()[0]);
+        assertEquals("3.3.3.3",map.get("CC").toArray()[1]);
+        assertEquals("4.4.4.4",map.get("CC").toArray()[2]);
+
+
+        assertEquals("5.5.5.5",map.get("DD").toArray()[0]);
+        assertEquals("3.3.3.3",map.get("DD").toArray()[1]);
+        assertEquals("4.4.4.4",map.get("DD").toArray()[2]);
+
 //        System.out.println("AA");
 //        for(String s : map.get("AA")) {
 //            System.out.println("  -"+s);
 //        }
+
+//        System.out.println("BB");
+
 //        for(String s : map.get("BB")) {
 //            System.out.println("  -"+s);
 //        }
@@ -128,12 +136,24 @@ public class EnvironmentTest extends junit.framework.TestCase {
         Map<String,List<Query>> temp=environment.getNodeQueryMap();
         assertEquals(q1.getQueryId(),temp.get("1.1.1.1").get(0).getQueryId());
         assertEquals(q2.getQueryId(),temp.get("2.2.2.2").get(0).getQueryId());
-
     }
+    public void testGetNodeType() throws Exception {
+        environment.setNodeType(Environment.NODE_TYPE_DISPATCHER);
+        assertEquals(Environment.NODE_TYPE_DISPATCHER,environment.getNodeType());
+
+        environment.setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
+        assertEquals(Environment.NODE_TYPE_PROCESSINGNODE,environment.getNodeType());
+    }
+
+    public void testGetNodeId() throws Exception {
+        String IP= InetAddress.getLocalHost().toString().split("/")[1];
+        assertEquals(IP,environment.getNodeId());
+    }
+
 
     public void tearDown() throws Exception {
 
-        environment.stop();
+      //  environment.stop();
     }
 
 
