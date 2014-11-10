@@ -1,7 +1,10 @@
 package org.cse.visiri.core;
 
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.communication.EnvironmentChangedCallback;
+import org.cse.visiri.communication.EventReceivedCallback;
 import org.cse.visiri.engine.EngineHandler;
+import org.cse.visiri.util.Event;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.UtilizationUpdater;
 
@@ -12,16 +15,18 @@ import java.util.Map;
 /**
  * Created by Geeth on 2014-11-05.
  */
-public class Node {
+public class Node implements EnvironmentChangedCallback{
 
     private List<Query> queries;
     private EngineHandler engineHandler;
+    public int recievedEvent=0;     // For testing only
 
     private UtilizationUpdater utilizationUpdater;
 
     public void start() throws Exception{
 
         Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
+        Environment.getInstance().setChangedCallback(this);
 
         engineHandler = new EngineHandler();
         for(Query q : queries)
@@ -57,4 +62,23 @@ public class Node {
         subMap.get(eventID).remove(ip_port);
     }
 
+    @Override
+    public void queriesChanged() {
+        recievedEvent=1;
+    }
+
+    @Override
+    public void nodesChanged() {
+        recievedEvent=2;
+    }
+
+    @Override
+    public void bufferingStateChanged() {
+        recievedEvent=3;
+    }
+
+    @Override
+    public void eventSubscriberChanged() {
+        recievedEvent=4;
+    }
 }
