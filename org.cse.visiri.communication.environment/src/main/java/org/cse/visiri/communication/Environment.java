@@ -35,14 +35,13 @@ public class Environment {
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
         bufferingEventList = new ArrayList<String>();
 
-
     }
     public void setNodeType(int nodeType){
         hzInstance.getMap(NODE_LIST).put(getNodeId(),nodeType);
     }
 
     public int getNodeType(){
-        return (Integer)hzInstance.getMap(NODE_LIST).get(getNodeId());
+        return (Integer.parseInt(hzInstance.getMap(NODE_LIST).get(getNodeId()).toString()));
     }
 
 
@@ -138,10 +137,11 @@ public class Environment {
         return hzInstance.getMap(SUBSCRIBER_MAP);
     }
 
-    public Map<String, Set<String>> getEventNodeMapping() {
+    public Map<String, List<String>> getEventNodeMapping() {
 
         Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
         Map<String,Set<String>> eventNodeMap=new HashMap<String, Set<String>>();
+        Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
         //For all IPs in the node query map
         for(Object ob: nodeQueryMap.keySet()){
@@ -163,7 +163,14 @@ public class Environment {
             }
         }
 
-        return eventNodeMap;
+        //Converting Set to List
+        for(String stream : eventNodeMap.keySet()){
+            Set<String> ipSet=eventNodeMap.get(stream);
+            List<String> iplist = new ArrayList<String>(ipSet);
+            eventNodeMap2.put(stream,iplist);
+        }
+
+        return eventNodeMap2;
     }
 
 
