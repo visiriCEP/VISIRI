@@ -114,8 +114,6 @@ public class Environment {
         instance=null;
     }
 
-
-
     public String getNodeId() {
         return hzInstance.getCluster().getLocalMember().getSocketAddress().getHostString();
     }

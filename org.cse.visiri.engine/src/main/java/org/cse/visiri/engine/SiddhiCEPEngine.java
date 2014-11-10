@@ -24,8 +24,9 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     public SiddhiCEPEngine(Query query,OutputEventReceiver outputEventReceiver){
         this.query=query;
-        this.start();
         this.outputEventReceiver=outputEventReceiver;
+        this.start();
+
 
     }
 
