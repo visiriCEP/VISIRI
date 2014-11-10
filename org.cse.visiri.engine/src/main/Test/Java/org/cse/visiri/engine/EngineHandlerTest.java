@@ -35,9 +35,30 @@ public class EngineHandlerTest extends TestCase {
         subs.add("localhost:6666");
         mp.put("filterCar",subs);
 
+        Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
+
         Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1",CEPEngine.ENGINE_TYPE_SIDDHI);
 
         engineHandler.addQuery(query1);
+
+
+        StreamDefinition def1=new StreamDefinition();
+        def1.setStreamId("ABC");
+        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+        def1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+
+        List<StreamDefinition> inputStreamDefinitionList2=new ArrayList<StreamDefinition>();
+        inputStreamDefinitionList2.add(def1);
+        //String queryString2="from  ABC [ Att1 >= 50 ] select Att1, Att2 insert into StockQuote;";
+        String queryString2="from  ABC select Att1, Att2 insert into StockQuote;";
+        StreamDefinition outputDef=new StreamDefinition();
+        outputDef.setStreamId("StockQuote");
+        outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+
+        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2",CEPEngine.ENGINE_TYPE_SIDDHI);
+
+        engineHandler.addQuery(query2);
 
     }
 

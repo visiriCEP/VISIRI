@@ -39,6 +39,12 @@ public class EventSource {
         inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
         defs.add(inputStreamDefinition1);
 
+        StreamDefinition def1=new StreamDefinition();
+        def1.setStreamId("ABC");
+        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+        def1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+        defs.add(def1);
+
         return defs;
     }
 
