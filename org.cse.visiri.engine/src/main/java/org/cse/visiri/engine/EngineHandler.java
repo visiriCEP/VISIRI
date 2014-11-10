@@ -183,7 +183,9 @@ public class EngineHandler {
         }
 
         //Have to check about whether dispatcher or processing node
+        if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
 
+        }
         //get output event to subscriber map
         Map<String,List<String>> subscribersMap=Environment.getInstance().getSubscriberMapping();
 
