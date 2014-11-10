@@ -147,7 +147,7 @@ public class EnvironmentTest extends junit.framework.TestCase {
 
     public void testGetNodeId() throws Exception {
         String IP= InetAddress.getLocalHost().toString().split("/")[1];
-        assertEquals(IP,environment.getNodeId());
+        assertEquals("10.8.108.213",environment.getNodeId());
     }
 
 

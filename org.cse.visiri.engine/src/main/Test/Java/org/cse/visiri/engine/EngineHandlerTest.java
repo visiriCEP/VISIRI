@@ -34,6 +34,10 @@ public class EngineHandlerTest extends TestCase {
         List<String> subs = new ArrayList<String>();
         subs.add("localhost:6666");
         mp.put("filterCar",subs);
+        List<String> subs2=new ArrayList<String>();
+        subs2.add("localhost:6666");
+        mp.put("StockQuote",subs2);
+
 
         Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
 
