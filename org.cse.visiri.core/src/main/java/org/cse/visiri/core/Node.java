@@ -1,11 +1,13 @@
 package org.cse.visiri.core;
 
+import org.cse.visiri.algo.QueryDistributionAlgo;
+import org.cse.visiri.algo.SCTXPFDistributionAlgo;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.EnvironmentChangedCallback;
-import org.cse.visiri.communication.EventReceivedCallback;
 import org.cse.visiri.engine.EngineHandler;
-import org.cse.visiri.util.Event;
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.UtilizationUpdater;
 
 import java.util.ArrayList;
@@ -23,27 +25,41 @@ public class Node implements EnvironmentChangedCallback{
 
     private UtilizationUpdater utilizationUpdater;
 
-    public void start() throws Exception{
+    private boolean started ;
 
-        Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
+
+    public  void initialize()
+    {
+        queries = new ArrayList<Query>();
+        started = false;
         Environment.getInstance().setChangedCallback(this);
-
-        engineHandler = new EngineHandler();
-        for(Query q : queries)
-        {
-            engineHandler.addQuery(q);
-        }
+        Configuration.setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
+        Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
 
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
+        engineHandler = new EngineHandler();
+    }
 
-        engineHandler.start();
+    public void start() throws Exception{
+
+        //Environment.getInstance().sendEvent;
+
 
     }
 
     public void stop() {
         engineHandler.stop();
         utilizationUpdater.stop();
+    }
+
+    public void AddQueries(List<Query> queries)
+    {
+        QueryDistributionAlgo algo = new SCTXPFDistributionAlgo();
+        QueryDistribution dist = algo.getQueryDistribution(queries);
+        Environment.getInstance().addQueryDistribution(dist);
+
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
     }
 
     public void subscribeToStream(String eventID, String ip_port)
@@ -65,6 +81,17 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void queriesChanged() {
         recievedEvent=1;
+        String nodeID = Environment.getInstance().getNodeId();
+        List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
+
+        List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
+        addedQueries.removeAll(queries);
+
+        for(Query q : addedQueries)
+        {
+            queries.add(q);
+            engineHandler.addQuery(q);
+        }
     }
 
     @Override
@@ -85,10 +112,24 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void startNode() {
         recievedEvent=5;
+
+        if(!started)
+        {
+            try {
+                engineHandler.start();
+                started = true;
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
     @Override
     public void stopNode()
     {
         recievedEvent=6;
+        engineHandler.stop();
+        utilizationUpdater.stop();
     }
 }

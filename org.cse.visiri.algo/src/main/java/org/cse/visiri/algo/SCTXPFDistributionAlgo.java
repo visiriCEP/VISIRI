@@ -24,7 +24,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
 
     @Override
-    QueryDistribution getQueryDistribution(List<Query> queries) {
+    public QueryDistribution getQueryDistribution(List<Query> queries) {
 
         QueryDistribution dist = new QueryDistribution();
         Environment env = Environment.getInstance();
