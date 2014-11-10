@@ -81,4 +81,14 @@ public class Node implements EnvironmentChangedCallback{
     public void eventSubscriberChanged() {
         recievedEvent=4;
     }
+
+    @Override
+    public void startNode() {
+        recievedEvent=5;
+    }
+    @Override
+    public void stopNode()
+    {
+        recievedEvent=6;
+    }
 }
