@@ -31,12 +31,12 @@ public class NodeTest extends TestCase {
 
     }
 
-    public void testStart() throws Exception {
+    public void testMainNode() throws Exception {
         node.initialize();
 
         Scanner sc = new Scanner(System.in);
-        System.out.println(" 1 - add query. wait otherwise");
-        int command = 1;// sc.nextInt();
+       // System.out.println("");
+       int command =   1;//sc.nextInt();
 
         if(command != 1)
         {
@@ -90,8 +90,8 @@ public class NodeTest extends TestCase {
         sc.next();
     }
 
-    public void testStop() throws Exception {
-
+    public void testSubNode() throws Exception {
+        node.initialize();
     }
 
     public void testSubscribeToStream() throws Exception {

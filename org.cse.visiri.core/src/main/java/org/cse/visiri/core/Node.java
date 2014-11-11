@@ -84,6 +84,7 @@ public class Node implements EnvironmentChangedCallback{
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
 
+        System.out.println("Queries changed. added "+ addedQueries.size()+" queries" );
         for(Query q : addedQueries)
         {
             queries.add(q);
@@ -109,6 +110,7 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void startNode() {
         recievedEvent=5;
+        System.out.println("Node started");
 
         if(!started)
         {

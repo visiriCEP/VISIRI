@@ -53,6 +53,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
 
+        System.out.println("Queries changed. added "+ addedQueries.size()+" queries" );
+
         for(Query q : addedQueries)
         {
             queries.add(q);
@@ -77,7 +79,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     @Override
     public void startNode() {
-
+        System.out.println("Disp started");
         if(!started)
         {
             try {
