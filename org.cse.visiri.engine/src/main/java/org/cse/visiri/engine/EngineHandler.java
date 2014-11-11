@@ -201,15 +201,17 @@ public class EngineHandler {
         for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
             String streamId = streamDefinition.getStreamId();
             List<String> nodeIpList=destinationNodeMap.get(streamId);
+            if(nodeIpList != null) {
 
-            for(String nodeIp :nodeIpList){
-                if(nodeStreamDefinitionListMap.containsKey(nodeIp)){
-                    List<StreamDefinition> streamDefinitionList=nodeStreamDefinitionListMap.get(nodeIp);
-                    streamDefinitionList.add(streamDefinition);
-                }else{
-                    List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
-                    streamDefinitionList.add(streamDefinition);
-                    nodeStreamDefinitionListMap.put(nodeIp,streamDefinitionList);
+                for (String nodeIp : nodeIpList) {
+                    if (nodeStreamDefinitionListMap.containsKey(nodeIp)) {
+                        List<StreamDefinition> streamDefinitionList = nodeStreamDefinitionListMap.get(nodeIp);
+                        streamDefinitionList.add(streamDefinition);
+                    } else {
+                        List<StreamDefinition> streamDefinitionList = new ArrayList<StreamDefinition>();
+                        streamDefinitionList.add(streamDefinition);
+                        nodeStreamDefinitionListMap.put(nodeIp, streamDefinitionList);
+                    }
                 }
             }
         }

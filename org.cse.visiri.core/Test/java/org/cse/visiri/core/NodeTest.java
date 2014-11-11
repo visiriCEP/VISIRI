@@ -81,8 +81,10 @@ public class NodeTest extends TestCase {
         //--- add queries
         List<Query> queries = Arrays.asList(query1,query2);
         node.addQueries(queries);
+        node.subscribeToStream("StockQuote",Environment.getInstance().getNodeId()+":6666" );
 
-        Thread.sleep(2000);
+        System.out.println("Starting in 5 seconds");
+        Thread.sleep(5*1000);
 
         node.start();
 
@@ -92,6 +94,7 @@ public class NodeTest extends TestCase {
 
     public void testSubNode() throws Exception {
         node.initialize();
+       // node.subscribeToStream("filterCar",Environment.getInstance().getNodeId()+":6666" );
     }
 
     public void testSubscribeToStream() throws Exception {

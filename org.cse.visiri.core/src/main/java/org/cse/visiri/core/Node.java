@@ -62,11 +62,13 @@ public class Node implements EnvironmentChangedCallback{
     public void subscribeToStream(String eventID, String ip_port)
     {
         Map<String,List<String>> subMap = Environment.getInstance().getSubscriberMapping();
-        if(! subMap.containsKey(eventID) )
+        List<String> subs= new ArrayList<String>();
+        if( subMap.containsKey(eventID) )
         {
-            subMap.put(eventID,new ArrayList<String>());
+            subs = subMap.get(eventID);
         }
-        subMap.get(eventID).add(ip_port);
+        subs.add(ip_port);
+        subMap.put(eventID,subs);
 
     }
     public void unsubscribeFromStream(String eventID, String ip_port)
