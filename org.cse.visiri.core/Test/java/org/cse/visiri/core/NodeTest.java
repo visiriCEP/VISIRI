@@ -94,6 +94,8 @@ public class NodeTest extends TestCase {
 
     public void testSubNode() throws Exception {
         node.initialize();
+        Scanner sc = new Scanner(System.in);
+        sc.next();
        // node.subscribeToStream("filterCar",Environment.getInstance().getNodeId()+":6666" );
     }
 
