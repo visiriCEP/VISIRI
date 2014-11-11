@@ -5,10 +5,7 @@ import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Malinda Kumarasinghe on 11/5/2014.
@@ -151,7 +148,9 @@ public class EnvironmentTest extends junit.framework.TestCase {
     }
 
     public void testOnMessage() throws Exception {
-
+            environment.sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
+       Scanner sc=new Scanner(System.in);
+        sc.next();
      //   Node node=new Node();
        // node.start();
        // String IP= InetAddress.getLocalHost().toString().split("/")[1];
