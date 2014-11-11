@@ -68,7 +68,7 @@ public class Node implements EnvironmentChangedCallback{
             subs = subMap.get(eventID);
         }
         subs.add(ip_port);
-        subMap.put(eventID,subs);
+        subMap.put(eventID, subs);
 
     }
     public void unsubscribeFromStream(String eventID, String ip_port)
@@ -82,7 +82,10 @@ public class Node implements EnvironmentChangedCallback{
         recievedEvent=1;
         String nodeID = Environment.getInstance().getNodeId();
         List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
-
+        if(newQuerySet == null)
+        {
+            newQuerySet = new ArrayList<Query>();
+        }
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
 
