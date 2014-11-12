@@ -41,7 +41,6 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     public void stop() {
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_STOP);
-
     }
 
     @Override

@@ -2,6 +2,8 @@ package org.cse.visiri.core;
 
 import junit.framework.TestCase;
 
+import java.util.Scanner;
+
 /**
  * Created by Geeth on 2014-11-11.
  */
@@ -18,5 +20,8 @@ public class DispatcherTest extends TestCase {
 
     public void testStart() throws Exception {
         disp.initialize();
+
+        Scanner sc = new Scanner(System.in);
+        sc.next();
     }
 }
