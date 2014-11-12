@@ -128,7 +128,7 @@ public class EventServer {
     }
 
     public void bufferStateChanged(List<String> bufferingEventList){
-
+    return;
     }
 
     private int loadData(BufferedInputStream in) throws IOException {
