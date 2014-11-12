@@ -36,12 +36,15 @@ public class Environment implements MessageListener {
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
 
+    private ITopic<Object> topic;
+
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
         bufferingEventList = new ArrayList<String>();
 
-        sendEvent(0);
+        topic = hzInstance.getTopic ("VISIRI");
+        topic.addMessageListener(this);
 
     }
     public void setNodeType(int nodeType){
@@ -188,7 +191,7 @@ public class Environment implements MessageListener {
         System.out.println("Message Recieved "+event.getMessageObject());
 
         int eventType=(Integer)event.getMessageObject();
-/*
+
         switch (eventType){
             case Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED:
                 changedCallback.bufferingStateChanged();
@@ -209,14 +212,11 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
         }
-*/
+
     }
 
     public void sendEvent(int eventType){
-        ITopic<Object> topic = hzInstance.getTopic ("VISIRI");
-        topic.addMessageListener(this);
        topic.publish(eventType);
-       // topic.publish("Malinda");
     }
 
 
