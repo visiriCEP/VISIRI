@@ -49,10 +49,10 @@ public class StreamDefinition implements Serializable {
     public StreamDefinition(StreamDefinition s)
     {
         setStreamId(s.getStreamId());
-        for(Attribute a: s.getAttributeList())
-        {
-            addAttribute(a.getName(),a.getType());
+        for (Attribute a : s.getAttributeList()) {
+            addAttribute(a.getName(), a.getType());
         }
+
     }
 
     public String getStreamId() {
