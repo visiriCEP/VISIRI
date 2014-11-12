@@ -176,7 +176,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             for(String disp : dispatcherList)
             {
                 Set<String> evtTypes = nodeEventTypes.get(disp);
-                for(StreamDefinition def : dispQuery.getInputStreamDefinitionsList()) {
+                for(StreamDefinition def : q.getInputStreamDefinitionsList()) {
                     String evtType = def.getStreamId();
                     if (!evtTypes.contains(evtType))
                     {
