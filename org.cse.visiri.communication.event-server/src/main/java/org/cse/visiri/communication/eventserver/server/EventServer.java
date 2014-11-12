@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,10 +62,10 @@ public class EventServer {
                             while (true) {
                                 int streamNameSize = loadData(in) & 0xff;
                                 byte[] streamNameData = loadData(in, new byte[streamNameSize]);
-                                String streamId=new String(streamNameData, 0, streamNameData.length);//
+                                String streamId = new String(streamNameData, 0, streamNameData.length);//
                                 //System.out.println("Stream ID :"+streamId);//
 
-                                StreamRuntimeInfo streamRuntimeInfo=streamRuntimeInfoHashMap.get(streamId);//
+                                StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(streamId);//
                                 Object[] event = new Object[streamRuntimeInfo.getNoOfAttributes()];
                                 byte[] fixedMessageData = loadData(in, new byte[streamRuntimeInfo.getFixedMessageSize()]);
 
@@ -99,11 +96,16 @@ public class EventServer {
                                     }
                                 }
 
-                                Event eventStream=new Event();
+                                Event eventStream = new Event();
                                 eventStream.setStreamId(streamId);
                                 eventStream.setData(event);
-
-                                streamCallback.receive(eventStream);
+                                if(eventBufferMap.get(streamId)==null) {
+                                    streamCallback.receive(eventStream);
+                                }else{
+                                    Queue<Object> tmpQ=eventBufferMap.get(streamId);
+                                    tmpQ.add(eventStream);
+                                    eventBufferMap.put(streamId, tmpQ);
+                                }
                             }
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
@@ -128,7 +130,17 @@ public class EventServer {
     }
 
     public void bufferStateChanged(List<String> bufferingEventList){
-
+        for(String eventStreamId:bufferingEventList){
+            if(eventBufferMap.get(eventStreamId)==null){
+                eventBufferMap.put(eventStreamId,new LinkedList());
+            }
+            else{
+                Queue<Event> tmpQ=eventBufferMap.get(eventStreamId);
+                for(Event e:tmpQ){
+                    streamCallback.receive(e);
+                }
+            }
+        }
     }
 
     private int loadData(BufferedInputStream in) throws IOException {
