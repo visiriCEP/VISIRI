@@ -148,7 +148,8 @@ public class EnvironmentTest extends junit.framework.TestCase {
     }
 
     public void testOnMessage() throws Exception {
-            environment.sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
+
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
        Scanner sc=new Scanner(System.in);
         sc.next();
      //   Node node=new Node();
@@ -156,6 +157,8 @@ public class EnvironmentTest extends junit.framework.TestCase {
        // String IP= InetAddress.getLocalHost().toString().split("/")[1];
         //assertEquals(IP,environment.getNodeId());
     }
+
+
 
 
     public void tearDown() throws Exception {
