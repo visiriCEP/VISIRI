@@ -14,6 +14,10 @@ public class CEPFactory {
         if(type==CEPEngine.ENGINE_TYPE_SIDDHI){
             return new SiddhiCEPEngine(q,outputEventReceiver);
         }
+        else if(type == CEPEngine.ENGINE_TYPE_DIRECT)
+        {
+            return new DirectPassEngine(q,outputEventReceiver);
+        }
         throw new UnsupportedOperationException();
     }
     public CEPEngine restoreEngine(){
