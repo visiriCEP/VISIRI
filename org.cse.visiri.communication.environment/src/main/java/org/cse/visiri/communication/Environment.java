@@ -7,8 +7,10 @@ import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
+import sun.misc.*;
 
 import java.util.*;
+import java.util.Queue;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -30,8 +32,8 @@ public class Environment implements MessageListener {
     private final String ORIGINAL_TO_DEPLOYED_MAP = "ORIGINAL_TO_DEPLOYED_MAP";
     private final String SUBSCRIBER_MAP = "SUBSCRIBER_MAP";
     private final String NODE_LIST = "NODE_LIST";
+    private final String BUFFERING_EVENT_MAP="BUFFERING_EVENT_MAP";
 
-    private List<String> bufferingEventList = null;
     private EnvironmentChangedCallback changedCallback = null;
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
@@ -41,7 +43,6 @@ public class Environment implements MessageListener {
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-        bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
         topic.addMessageListener(this);
@@ -142,8 +143,8 @@ public class Environment implements MessageListener {
         hzInstance.getMap(UTILIZATION_MAP).put(getNodeId(),utilization);
     }
 
-    public List<String> getBufferingEventList() {
-        return bufferingEventList;
+    public Map<String, Queue> getBufferingEventList() {
+        return hzInstance.getMap(BUFFERING_EVENT_MAP);
     }
 
     public Map<String, List<String>> getSubscriberMapping() {
@@ -218,8 +219,6 @@ public class Environment implements MessageListener {
     public void sendEvent(int eventType){
        topic.publish(eventType);
     }
-
-
 
     public static void main(String args[]) {
 
