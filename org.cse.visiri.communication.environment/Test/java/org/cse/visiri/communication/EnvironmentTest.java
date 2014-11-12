@@ -152,10 +152,7 @@ public class EnvironmentTest extends junit.framework.TestCase {
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
        Scanner sc=new Scanner(System.in);
         sc.next();
-     //   Node node=new Node();
-       // node.start();
-       // String IP= InetAddress.getLocalHost().toString().split("/")[1];
-        //assertEquals(IP,environment.getNodeId());
+
     }
 
 

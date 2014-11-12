@@ -9,7 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,6 +29,8 @@ public class EventServer {
     //private StreamRuntimeInfo streamRuntimeInfo;
     private HashMap<String,StreamRuntimeInfo> streamRuntimeInfoHashMap;
 
+    private HashMap<String,Queue> eventBufferMap;
+
     public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback) {
         this.eventServerConfig = eventServerConfig;
         this.streamDefinitionList = streamDefinitions;
@@ -34,9 +38,11 @@ public class EventServer {
         //this.streamRuntimeInfo = EventServerUtils.createStreamRuntimeInfo(streamDefinition);
 
         this.streamRuntimeInfoHashMap=new HashMap<String, StreamRuntimeInfo>();
+        this.eventBufferMap=new HashMap<String, Queue>();
         for(int i=0;i<streamDefinitions.size();i++){
             // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
             streamRuntimeInfoHashMap.put(streamDefinitions.get(i).getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions.get(i)));
+            //eventBufferMap.put(streamDefinitions.get(i).getStreamId(),new LinkedList());
         }
         pool = Executors.newFixedThreadPool(eventServerConfig.getNumberOfThreads());
 
@@ -119,6 +125,10 @@ public class EventServer {
             streamDefinitionList.add(streamDefinition);
             streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(), EventServerUtils.createStreamRuntimeInfo(streamDefinition));
         }
+    }
+
+    public void bufferStateChanged(List<String> bufferingEventList){
+
     }
 
     private int loadData(BufferedInputStream in) throws IOException {
