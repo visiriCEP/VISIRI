@@ -20,7 +20,7 @@ public class DispatcherTest extends TestCase {
 
     public void testStart() throws Exception {
         disp.initialize();
-
+        System.out.println("disp inited");
         Scanner sc = new Scanner(System.in);
         sc.next();
     }

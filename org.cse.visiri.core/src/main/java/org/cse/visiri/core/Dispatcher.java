@@ -48,12 +48,14 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
         String nodeID = Environment.getInstance().getNodeId();
         List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
-
+        if(newQuerySet == null)
+        {
+            newQuerySet = new ArrayList<Query>();
+        }
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
 
         System.out.println("Queries changed. added "+ addedQueries.size()+" queries" );
-
         for(Query q : addedQueries)
         {
             queries.add(q);

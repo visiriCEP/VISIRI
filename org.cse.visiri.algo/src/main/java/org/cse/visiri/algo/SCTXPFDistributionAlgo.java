@@ -185,6 +185,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
                         newQ.addInputStreamDefinition(newDef);
                         newQ.setOutputStreamDefinition(newDef);
 
+                        dist.getQueryAllocation().put(newQ,disp);
                         derivedQueries.add(newQ);
                         evtTypes.add(evtType);
                     }
