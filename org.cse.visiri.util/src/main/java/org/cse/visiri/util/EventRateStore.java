@@ -21,6 +21,11 @@ public class EventRateStore {
       //calendar = Calendar.getInstance();
         historyMap=new HashMap<Integer, Long>();
         startTime=System.currentTimeMillis();
+
+        for(int i=0;i<eventCount;i++){
+            historyMap.put(i,startTime);
+        }
+
     }
     public void increment(){
         Long mil=System.currentTimeMillis();
@@ -31,32 +36,55 @@ public class EventRateStore {
         historyMap.put(pos,mil);
 
 
-        System.out.println("Pos="+pos+"  "+mil);
+       // System.out.println("Pos="+pos+"  "+mil);
+        getAverageRecent();
+        printMap();
     }
-    public double getAverage(){
+    public double getAverageAll(){
         long mil=System.currentTimeMillis();
         return count/(mil-startTime);
     }
+    public double getAverageRecent(){
+        int front = ((int)count-1)%eventCount;
+        int last = (front+1)%eventCount;
 
+        long gg=historyMap.get(front)-historyMap.get(last);
+        
+        System.out.println("front="+front+"   last="+last   +"   gap = "+gg);
+        return 0.0;
+    }
+
+    private void printMap(){
+        for(int x : historyMap.keySet()){
+            System.out.print(" " + historyMap.get(x));
+        }
+        System.out.println("\n");
+    }
 
 
 
 
     public static void main(String[] args){
-        EventRateStore eventRateStore=new EventRateStore(4);
+        int sle=100;
+        EventRateStore eventRateStore=new EventRateStore(6);
+        eventRateStore.increment();
         eventRateStore.increment();
 
-        eventRateStore.increment();
-
-        for(int i=0;i<10;i++){
+        for(int i=0;i<15;i++){
             eventRateStore.increment();
             try {
-                Thread.sleep(100);
+                if(i==5)    {
+                    sle=500;
+                    System.out.println("sleeep");
+                }
+                else    sle=100;
+
+                Thread.sleep(sle);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        eventRateStore.increment();
+        //eventRateStore.increment();
     }
 
 }

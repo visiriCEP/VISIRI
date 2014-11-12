@@ -101,6 +101,7 @@ public class EventServer {
                                 eventStream.setData(event);
                                 if(eventBufferMap.get(streamId)==null) {
                                     streamCallback.receive(eventStream);
+                                    System.out.println("event received");
                                 }else{
                                     Queue<Object> tmpQ=eventBufferMap.get(streamId);
                                     tmpQ.add(eventStream);
