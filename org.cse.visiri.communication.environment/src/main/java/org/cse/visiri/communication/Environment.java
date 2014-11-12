@@ -9,6 +9,7 @@ import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
 
 import java.util.*;
+import java.util.Queue;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -31,8 +32,7 @@ public class Environment implements MessageListener {
     private final String SUBSCRIBER_MAP = "SUBSCRIBER_MAP";
     private final String NODE_LIST = "NODE_LIST";
 
-    private final String BUFFERING_EVENT_MAP="BUFFERING_EVENT_LIST";
-    //private List<String> bufferingEventList = null;
+    private List<String> bufferingEventList = null;
     private EnvironmentChangedCallback changedCallback = null;
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
@@ -42,7 +42,7 @@ public class Environment implements MessageListener {
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-        //bufferingEventList = new ArrayList<String>();
+        bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
         topic.addMessageListener(this);
@@ -144,7 +144,7 @@ public class Environment implements MessageListener {
     }
 
     public List<String> getBufferingEventList() {
-        return hzInstance.getList(BUFFERING_EVENT_MAP);
+        return bufferingEventList;
     }
 
     public Map<String, List<String>> getSubscriberMapping() {
@@ -158,7 +158,7 @@ public class Environment implements MessageListener {
         Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
         //For all IPs in the node query map
-        for(Object ob: nodeQueryMap.keySet()){
+        for(Object ob: getNodeIdList(NODE_TYPE_PROCESSINGNODE)){
             String ip=(String)ob;
 
             //For all queries of a specific ip
