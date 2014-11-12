@@ -158,7 +158,7 @@ public class Environment implements MessageListener {
         Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
         //For all IPs in the node query map
-        for(Object ob: nodeQueryMap.keySet()){
+        for(Object ob: getNodeIdList(NODE_TYPE_PROCESSINGNODE)){
             String ip=(String)ob;
 
             //For all queries of a specific ip
