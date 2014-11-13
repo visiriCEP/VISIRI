@@ -9,6 +9,7 @@ import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
 
 import java.util.*;
+import java.util.Queue;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -36,10 +37,15 @@ public class Environment implements MessageListener {
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
 
+    private ITopic<Object> topic;
+
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
         bufferingEventList = new ArrayList<String>();
+
+        topic = hzInstance.getTopic ("VISIRI");
+        topic.addMessageListener(this);
 
     }
     public void setNodeType(int nodeType){
@@ -152,7 +158,7 @@ public class Environment implements MessageListener {
         Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
         //For all IPs in the node query map
-        for(Object ob: nodeQueryMap.keySet()){
+        for(Object ob: getNodeIdList(NODE_TYPE_PROCESSINGNODE)){
             String ip=(String)ob;
 
             //For all queries of a specific ip
@@ -183,7 +189,8 @@ public class Environment implements MessageListener {
 
     @Override
     public void onMessage(Message event) {
-        System.out.println("---------------------Message Recieved -"+event.getMessageObject());
+        System.out.println("Message Recieved "+event.getMessageObject());
+
         int eventType=(Integer)event.getMessageObject();
 
         switch (eventType){
@@ -210,9 +217,7 @@ public class Environment implements MessageListener {
     }
 
     public void sendEvent(int eventType){
-        ITopic<Object> topic = hzInstance.getTopic ("VISIRI");
-        topic.addMessageListener(this);
-        topic.publish(eventType);
+       topic.publish(eventType);
     }
 
 

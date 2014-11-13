@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,6 +26,10 @@ public class EventServer {
     //private StreamRuntimeInfo streamRuntimeInfo;
     private HashMap<String,StreamRuntimeInfo> streamRuntimeInfoHashMap;
 
+    private HashMap<String,Queue> eventBufferQueueMap;
+    private HashMap<String,Boolean> eventBufferConditionMap;
+
+
     public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback) {
         this.eventServerConfig = eventServerConfig;
         this.streamDefinitionList = streamDefinitions;
@@ -34,9 +37,13 @@ public class EventServer {
         //this.streamRuntimeInfo = EventServerUtils.createStreamRuntimeInfo(streamDefinition);
 
         this.streamRuntimeInfoHashMap=new HashMap<String, StreamRuntimeInfo>();
+        this.eventBufferQueueMap =new HashMap<String, Queue>();
+        this.eventBufferConditionMap=new HashMap<String, Boolean>();
         for(int i=0;i<streamDefinitions.size();i++){
             // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
             streamRuntimeInfoHashMap.put(streamDefinitions.get(i).getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions.get(i)));
+            eventBufferQueueMap.put(streamDefinitions.get(i).getStreamId(),new LinkedList());
+            eventBufferConditionMap.put(streamDefinitions.get(i).getStreamId(),false);
         }
         pool = Executors.newFixedThreadPool(eventServerConfig.getNumberOfThreads());
 
@@ -59,10 +66,10 @@ public class EventServer {
                             while (true) {
                                 int streamNameSize = loadData(in) & 0xff;
                                 byte[] streamNameData = loadData(in, new byte[streamNameSize]);
-                                String streamId=new String(streamNameData, 0, streamNameData.length);//
+                                String streamId = new String(streamNameData, 0, streamNameData.length);//
                                 //System.out.println("Stream ID :"+streamId);//
 
-                                StreamRuntimeInfo streamRuntimeInfo=streamRuntimeInfoHashMap.get(streamId);//
+                                StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(streamId);//
                                 Object[] event = new Object[streamRuntimeInfo.getNoOfAttributes()];
                                 byte[] fixedMessageData = loadData(in, new byte[streamRuntimeInfo.getFixedMessageSize()]);
 
@@ -93,11 +100,17 @@ public class EventServer {
                                     }
                                 }
 
-                                Event eventStream=new Event();
+                                Event eventStream = new Event();
                                 eventStream.setStreamId(streamId);
                                 eventStream.setData(event);
-
-                                streamCallback.receive(eventStream);
+                                if(!eventBufferConditionMap.get(streamId)) {
+                                    streamCallback.receive(eventStream);
+                                    System.out.println("event received");
+                                }else{
+                                    Queue<Object> tmpQ= eventBufferQueueMap.get(streamId);
+                                    tmpQ.add(eventStream);
+                                    eventBufferQueueMap.put(streamId, tmpQ);
+                                }
                             }
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
@@ -118,6 +131,25 @@ public class EventServer {
         if(!streamDefinitionList.contains(streamDefinition)) {
             streamDefinitionList.add(streamDefinition);
             streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(), EventServerUtils.createStreamRuntimeInfo(streamDefinition));
+        }
+    }
+
+    public void bufferStateChanged(List<String> bufferingEventList){
+        Iterator it = eventBufferQueueMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            if(!bufferingEventList.contains(pairs.getKey())){
+                Queue<Event> tmpQ= eventBufferQueueMap.get(pairs.getKey());
+                eventBufferConditionMap.put(pairs.getKey().toString(),false);
+                System.out.println("releasing buffer:"+pairs.getKey());
+                for(Event e:tmpQ){
+                    streamCallback.receive(e);
+                }
+                eventBufferQueueMap.put(pairs.getKey().toString(),new LinkedList());
+            }
+            else{
+                eventBufferConditionMap.put(pairs.getKey().toString(),true);
+            }
         }
     }
 

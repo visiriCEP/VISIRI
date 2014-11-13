@@ -1,23 +1,47 @@
-package org.cse.visiri.app;
+package org.cse.visiri.communication.eventserver.server;
 
-import org.cse.visiri.communication.eventserver.server.EventServer;
-import org.cse.visiri.communication.eventserver.server.EventServerConfig;
-import org.cse.visiri.communication.eventserver.server.StreamCallback;
+import junit.framework.TestCase;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Geeth on 2014-11-08.
- */
-public class EventSink {
+public class EventServerTest extends TestCase {
+
+    public void testBufferStateChanged() throws Exception {
+        Thread t1 = new Thread(new Runnable() {
+            public void run() {
+                // code goes here.
+                try {
+                    start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        t1.start();
+        Thread.sleep(1000);
+
+        List<String> tmpQ=new LinkedList<String>();
+        tmpQ.add("fire");
+        server.bufferStateChanged(tmpQ);
+
+        System.out.println("timer started");
+        Thread.sleep(10000);
+        System.out.println("timeout");
+        tmpQ.remove("fire");
+        server.bufferStateChanged(tmpQ);
+    }
+
 
     private static int port = 6666;
     EventServer server;
 
-    private  List<StreamDefinition> getDefinitions()
+    private List<StreamDefinition> getDefinitions()
     {
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
@@ -45,18 +69,6 @@ public class EventSink {
         outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
         defs.add(outputDef);
 
-        StreamDefinition inputStreamDefinition1=new StreamDefinition();
-        inputStreamDefinition1.setStreamId("car");
-        inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
-        inputStreamDefinition1.addAttribute("Id", StreamDefinition.Type.INTEGER);
-        inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
-        defs.add(inputStreamDefinition1);
-
-        StreamDefinition def1=new StreamDefinition();
-        def1.setStreamId("ABC");
-        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
-        def1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-
         return defs;
     }
 
@@ -75,14 +87,9 @@ public class EventSink {
 
             }
         });
-
         System.out.println("Event sink started at port " + port);
         server.start();
 
     }
 
-    public static void main(String[] arg) throws Exception {
-        EventSink sink = new EventSink();
-        sink.start();
-    }
 }

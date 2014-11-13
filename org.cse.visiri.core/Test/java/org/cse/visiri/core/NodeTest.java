@@ -21,7 +21,7 @@ public class NodeTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        environment=Environment.getInstance();
+      //  environment=Environment.getInstance();
         node=new Node();
 
 
@@ -88,17 +88,25 @@ public class NodeTest extends TestCase {
 
         node.start();
 
-        System.out.print("enter to exit");
+        System.out.println("Started");
         sc.next();
     }
 
     public void testSubNode() throws Exception {
         node.initialize();
+        System.out.println("Subnode started");
         Scanner sc = new Scanner(System.in);
         sc.next();
        // node.subscribeToStream("filterCar",Environment.getInstance().getNodeId()+":6666" );
     }
 
+    public void testOnMessage() throws Exception {
+
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
+        Scanner sc=new Scanner(System.in);
+        sc.next();
+
+    }
     public void testSubscribeToStream() throws Exception {
 
     }

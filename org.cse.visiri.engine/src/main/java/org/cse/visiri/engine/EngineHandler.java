@@ -218,10 +218,11 @@ public class EngineHandler {
 
         Set<String> nodeIpSet=nodeStreamDefinitionListMap.keySet();
         for (String nodeIp :  nodeIpSet){
+            String fullIp = nodeIp;
             if(!nodeIp.contains(":")){
-                nodeIp=nodeIp+":"+EventServer.DEFAULT_PORT;
+                fullIp=nodeIp+":"+EventServer.DEFAULT_PORT;
             }
-            EventClient eventClient=new EventClient(nodeIp,nodeStreamDefinitionListMap.get(nodeIp));
+            EventClient eventClient=new EventClient(fullIp,nodeStreamDefinitionListMap.get(nodeIp));
             outputEventReceiver.addDestinationIp(nodeIp,eventClient);
         }
     }

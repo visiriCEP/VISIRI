@@ -37,8 +37,9 @@ public class Query implements Serializable{
         {
             this.addInputStreamDefinition(new StreamDefinition(sd));
         }
-
-        this.setOutputStreamDefinition(new StreamDefinition(q.getOutputStreamDefinition()));
+        if(q.getOutputStreamDefinition() != null) {
+            this.setOutputStreamDefinition(new StreamDefinition(q.getOutputStreamDefinition()));
+        }
         this.setQueryId(queryId);
         this.setEngineId(engineId);
 

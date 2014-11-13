@@ -7,6 +7,7 @@ import org.cse.visiri.util.StreamDefinition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Created by Geeth on 2014-11-08.
@@ -50,7 +51,10 @@ public class EventSource {
 
     public void start() throws  Exception
     {
-        cl = new EventClient("localhost:7211",getDefinitions());
+
+        cl = //new EventClient("169.254.190.2:6666",getDefinitions());
+        new EventClient("localhost:6666",getDefinitions());
+        //7211
     }
 
     public void sendEvents() throws Exception
@@ -59,7 +63,7 @@ public class EventSource {
 
         for(StreamDefinition def:defs) {
             //StreamDefinition def = defs.get(2);
-
+            System.out.println("\nSending " + def.getStreamId() + " :");
             for (int i = 0; i < 10; i++) {
                 Event ev = new Event();
                 ev.setStreamId(def.getStreamId());
@@ -97,5 +101,8 @@ public class EventSource {
         EventSource source = new EventSource();
         source.start();
         source.sendEvents();
+
+        Scanner sc = new Scanner(System.in);
+        sc.next();
     }
 }

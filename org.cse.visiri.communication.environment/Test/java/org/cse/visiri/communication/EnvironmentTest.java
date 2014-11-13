@@ -148,17 +148,18 @@ public class EnvironmentTest extends junit.framework.TestCase {
     }
 
     public void testOnMessage() throws Exception {
+
         Environment.getInstance();
 
-            Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
-       Scanner sc=new Scanner(System.in);
-        System.out.println("Waiting...");
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
+        System.out.println("Send");
+
+        Scanner sc=new Scanner(System.in);
         sc.next();
-     //   Node node=new Node();
-       // node.start();
-       // String IP= InetAddress.getLocalHost().toString().split("/")[1];
-        //assertEquals(IP,environment.getNodeId());
+
     }
+
+
 
 
     public void tearDown() throws Exception {

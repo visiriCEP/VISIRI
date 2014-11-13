@@ -2,6 +2,7 @@
 .settings/
 out/
 *.iml
+gtmvn.bat
 .project
 .classpath
 bin/
