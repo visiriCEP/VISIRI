@@ -6,6 +6,7 @@ package org.cse.visiri.util;
 public class Configuration {
 
     private static int nodeType;
+    public static int INSTANT_EVENT_COUNT=5;
 
 
     public static int getNodeType() {

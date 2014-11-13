@@ -7,51 +7,40 @@ import java.util.HashMap;
  * Created by Malinda Kumarasinghe on 11/12/2014.
  */
 public class EventRateStore {
-    private int period;
-    private int eventCount;
-    private int hCount;
+
+    private long instantEventCount;
     private double count;
     private long startTime;
     private HashMap<Integer,Long> historyMap;
-   // private Calendar calendar;
 
-    public EventRateStore(int eventCount){
-        this.eventCount=eventCount;
+    public EventRateStore(int instantEventCount){
+        this.instantEventCount=instantEventCount;
         count=0;
-      //calendar = Calendar.getInstance();
         historyMap=new HashMap<Integer, Long>();
         startTime=System.currentTimeMillis();
 
-        for(int i=0;i<eventCount;i++){
+        for(int i=0;i<instantEventCount;i++){
             historyMap.put(i,startTime);
         }
 
     }
     public void increment(){
         Long mil=System.currentTimeMillis();
-        //count++;
-
-        int pos=((int)count++)%eventCount;
-
+        int pos=((int)count++)%((int)instantEventCount);
         historyMap.put(pos,mil);
-
-
-       // System.out.println("Pos="+pos+"  "+mil);
-        getAverageRecent();
-        printMap();
     }
-    public double getAverageAll(){
+    public double getAverageRate(){
         long mil=System.currentTimeMillis();
-        return count/(mil-startTime);
+        double avg=count/(mil-startTime);
+       // System.out.println("AVg="+avg);
+        return avg;
     }
-    public double getAverageRecent(){
-        int front = ((int)count-1)%eventCount;
-        int last = (front+1)%eventCount;
-
+    public double getInstantRate(){
+        int front = ((int)count-1)%((int)instantEventCount);
+        int last = (front+1)%((int)instantEventCount);
         long gg=historyMap.get(front)-historyMap.get(last);
-        
-        System.out.println("front="+front+"   last="+last   +"   gap = "+gg);
-        return 0.0;
+        float rate=(long)((float)instantEventCount)/(float)(gg+1);
+        return rate;
     }
 
     private void printMap(){
@@ -65,26 +54,26 @@ public class EventRateStore {
 
 
     public static void main(String[] args){
-        int sle=100;
-        EventRateStore eventRateStore=new EventRateStore(6);
-        eventRateStore.increment();
-        eventRateStore.increment();
 
-        for(int i=0;i<15;i++){
-            eventRateStore.increment();
-            try {
-                if(i==5)    {
-                    sle=500;
-                    System.out.println("sleeep");
-                }
-                else    sle=100;
+//        EventRateStore eventRateStore=new EventRateStore(4);
+//
+//        for(int i=0;i<25;i++){
+//            eventRateStore.increment();
+//            try {
+//                if(i>5 && i<10)    {
+//                    Thread.sleep(100);
+//                }
+//                else {
+//                    Thread.sleep(500);
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("\n"+i);
+//            eventRateStore.getAverageRate();
+//            eventRateStore.getInstantRate();
+//        }
 
-                Thread.sleep(sle);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        //eventRateStore.increment();
     }
 
 }

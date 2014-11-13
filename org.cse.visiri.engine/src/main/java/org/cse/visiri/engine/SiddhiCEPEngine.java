@@ -1,8 +1,6 @@
 package org.cse.visiri.engine;
 
-import org.cse.visiri.util.Event;
-import org.cse.visiri.util.Query;
-import org.cse.visiri.util.StreamDefinition;
+import org.cse.visiri.util.*;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
@@ -20,14 +18,23 @@ public class SiddhiCEPEngine extends CEPEngine {
     private SiddhiManager siddhiManager;
     private Query query;
     private OutputEventReceiver outputEventReceiver;
+    public EventRateStore eventRateStore;
 
 
     public SiddhiCEPEngine(Query query,OutputEventReceiver outputEventReceiver){
+        eventRateStore=new EventRateStore(Configuration.INSTANT_EVENT_COUNT);
         this.query=query;
         this.outputEventReceiver=outputEventReceiver;
         this.start();
 
+    }
 
+    public double getAvgEventRate(){
+        return eventRateStore.getAverageRate();
+    }
+
+    public double getInstantEventRate(){
+        return eventRateStore.getInstantRate();
     }
 
     @Override
@@ -107,6 +114,7 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     @Override
     public void sendEvent(Event event) {
+        eventRateStore.increment();
         InputHandler inputHandler=siddhiManager.getInputHandler(event.getStreamId());
         try {
             inputHandler.send(event.getData());
