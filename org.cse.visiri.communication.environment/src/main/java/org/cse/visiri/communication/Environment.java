@@ -183,6 +183,7 @@ public class Environment implements MessageListener {
 
     @Override
     public void onMessage(Message event) {
+        System.out.println("---------------------Message Recieved -"+event.getMessageObject());
         int eventType=(Integer)event.getMessageObject();
 
         switch (eventType){
@@ -205,6 +206,7 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
         }
+
     }
 
     public void sendEvent(int eventType){
