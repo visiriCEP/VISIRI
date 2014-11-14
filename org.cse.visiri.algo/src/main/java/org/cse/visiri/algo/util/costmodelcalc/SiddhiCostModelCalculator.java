@@ -7,6 +7,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.StreamDefinition;
 import org.wso2.siddhi.query.compiler.SiddhiCompiler;
 import org.wso2.siddhi.query.compiler.SiddhiQLGrammarLexer;
 import org.wso2.siddhi.query.compiler.SiddhiQLGrammarParser;
@@ -26,20 +27,31 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
         org.wso2.siddhi.query.api.query.Query siddhiQuery=SiddhiCompiler.parseQuery(q.getQuery());
         CommonTokenStream siddhiTokens= this.parseQueryTokens(q.getQuery());
         List<CommonToken> tokenList=siddhiTokens.getTokens();
-        cost+=getFilteringCost(q.getQuery(),tokenList);
-        cost+=getStreamCountCost(siddhiQuery);
-        cost+=getTimeWindowCost(q.getQuery(),tokenList);
+
+        cost+=calcAttributeCost(q);
+        cost+=calcFilteringCost(q.getQuery(), tokenList);
+        cost+=calcStreamCountCost(siddhiQuery);
+        cost+=calcTimeWindowCost(q.getQuery(), tokenList);
         return cost;
     }
 
-    private static double getFilteringCost(String query,List<CommonToken> tokenList){
+    private static double calcAttributeCost(Query q){
+        double cost=0.0;
+        for(StreamDefinition d:q.getInputStreamDefinitionsList()){
+            cost+=0.1*d.getAttributeList().size();
+        }
+        cost+=0.1*q.getOutputStreamDefinition().getAttributeList().size();
+        return cost;
+    }
+
+    private static double calcFilteringCost(String query,List<CommonToken> tokenList){
         double cost=0;
 
         return cost;
     }
 
 
-    private static double getTimeWindowCost(String query,List<CommonToken> tokenList){
+    private static double calcTimeWindowCost(String query,List<CommonToken> tokenList){
         double cost=0.0;
         for(CommonToken t:tokenList){
             if(t.getType()==138){//time window
@@ -50,14 +62,15 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
                 }
                 System.out.println(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
                 double windowVal=Integer.parseInt(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
-                cost+=Math.pow(2,windowVal/100);
+                windowVal/=10000;
+                cost+=Math.pow(2,windowVal);
                 break;
             }
         }
         return cost;
     }
 
-    private static double getStreamCountCost(org.wso2.siddhi.query.api.query.Query siddhiQuery){
+    private static double calcStreamCountCost(org.wso2.siddhi.query.api.query.Query siddhiQuery){
         double cost=0.0;
         cost+=siddhiQuery.getInputStream().getStreamIds().size();
         if(siddhiQuery.getOutputStream()!=null) {
