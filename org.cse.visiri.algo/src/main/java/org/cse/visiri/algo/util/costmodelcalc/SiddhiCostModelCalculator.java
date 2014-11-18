@@ -45,8 +45,21 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
     }
 
     private static double calcFilteringCost(String query,List<CommonToken> tokenList){
-        double cost=0;
-        //TODO find a way to get filtering queries
+        double cost=0.0;
+        //find a better way to get filtering queries
+        for(CommonToken t:tokenList){
+            if(t.getType()==88){//filter
+                cost+=10;
+                int windowIdx=tokenList.indexOf(t);
+                while(tokenList.get(windowIdx).getType()!=89){
+                    if(tokenList.get(windowIdx).getType()==21){
+                        cost+=5;
+                    }
+                    windowIdx++;
+                }
+                break;
+            }
+        }
         return cost;
     }
 
@@ -83,24 +96,24 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
     }
 
     private static double calcTimeUnitValue(String timeUnitString){
-        double timeUnitVal=1;
+        double timeUnitVal=1.0;
         if("year".equals(timeUnitString)||"years".equals(timeUnitString)){
-            timeUnitVal=365*24*60;
+            timeUnitVal=365*24*60*60000;
         }
         else if("month".equals(timeUnitString)||"months".equals(timeUnitString)){
-            timeUnitVal=30*24*60;
+            timeUnitVal=30*24*60*60000;
         }else if("week".equals(timeUnitString)||"weeks".equals(timeUnitString)){
-            timeUnitVal=7*24*60;
+            timeUnitVal=7*24*60*60000;
         }else if("day".equals(timeUnitString)||"days".equals(timeUnitString)){
-            timeUnitVal=24*60;
+            timeUnitVal=24*60*60000;
         }else if("hour".equals(timeUnitString)||"hours".equals(timeUnitString)){
-            timeUnitVal=60;
+            timeUnitVal=60*60000;
         }else if("minute".equals(timeUnitString)||"minutes".equals(timeUnitString)||"min".equals(timeUnitString)){
-            timeUnitVal=1;
+            timeUnitVal=1*60000;
         }else if("second".equals(timeUnitString)||"seconds".equals(timeUnitString)||"sec".equals(timeUnitString)){
-            timeUnitVal= 0.01666;
+            timeUnitVal=1000;
         }else if("millisecond".equals(timeUnitString)||"milliseconds".equals(timeUnitString)){
-            timeUnitVal=0.0000166;
+            timeUnitVal=1;
         }
         return timeUnitVal;
     }
