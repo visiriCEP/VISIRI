@@ -1,6 +1,6 @@
 package org.cse.visiri.algo.util.costmodelcalc;
 
-import antlr.TokenStream;
+
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
@@ -11,7 +11,6 @@ import org.cse.visiri.util.StreamDefinition;
 import org.wso2.siddhi.query.compiler.SiddhiCompiler;
 import org.wso2.siddhi.query.compiler.SiddhiQLGrammarLexer;
 import org.wso2.siddhi.query.compiler.SiddhiQLGrammarParser;
-import org.wso2.siddhi.query.compiler.SiddhiQLGrammarWalker;
 import org.wso2.siddhi.query.compiler.exception.SiddhiParserException;
 
 import java.util.List;
@@ -20,7 +19,9 @@ import java.util.List;
  * Created by lasitha on 11/13/14.
  */
 public class SiddhiCostModelCalculator extends CostModelCalculator {
+    private double maxCost=1000.0;
 
+    //TODO normalize the cost values
     @Override
     public double calculateCost(Query q) {
         double cost=10.0;
@@ -46,14 +47,14 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
 
     private static double calcFilteringCost(String query,List<CommonToken> tokenList){
         double cost=0.0;
-        //find a better way to get filtering queries
+        //TODO find a better way to get filtering queries
         for(CommonToken t:tokenList){
             if(t.getType()==88){//filter
-                cost+=10;
+                cost+=10.0;
                 int windowIdx=tokenList.indexOf(t);
                 while(tokenList.get(windowIdx).getType()!=89){
                     if(tokenList.get(windowIdx).getType()==21){
-                        cost+=5;
+                        cost+=0.5;
                     }
                     windowIdx++;
                 }
@@ -89,7 +90,7 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
                     timeUnitVal=calcTimeUnitValue(timeUnit);
                 }
                 cost+=Math.pow(windowVal*timeUnitVal,2);
-                break;
+                //break;
             }
         }
         return cost;
