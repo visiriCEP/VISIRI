@@ -46,7 +46,7 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
 
     private static double calcFilteringCost(String query,List<CommonToken> tokenList){
         double cost=0;
-
+        //TODO find a way to get filtering queries
         return cost;
     }
 
@@ -62,14 +62,48 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
                 }
                 System.out.println(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
                 double windowVal=Integer.parseInt(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
-                windowVal/=10000;
-                cost+=Math.pow(2,windowVal);
+                //windowVal/=10000;
+                while(tokenList.get(windowIdx).getType()!=21){
+                    if(tokenList.get(windowIdx).getType()==72){
+                        windowIdx--;
+                        break;
+                    }
+                    windowIdx++;
+                }
+                String timeUnit=query.substring(tokenList.get(windowIdx).getStartIndex(), tokenList.get(windowIdx).getStopIndex() + 1);
+                double timeUnitVal=1;
+                if (tokenList.get(windowIdx).getType()==21){
+                    timeUnitVal=calcTimeUnitValue(timeUnit);
+                }
+                cost+=Math.pow(windowVal*timeUnitVal,2);
                 break;
             }
         }
         return cost;
     }
 
+    private static double calcTimeUnitValue(String timeUnitString){
+        double timeUnitVal=1;
+        if("year".equals(timeUnitString)||"years".equals(timeUnitString)){
+            timeUnitVal=365*24*60;
+        }
+        else if("month".equals(timeUnitString)||"months".equals(timeUnitString)){
+            timeUnitVal=30*24*60;
+        }else if("week".equals(timeUnitString)||"weeks".equals(timeUnitString)){
+            timeUnitVal=7*24*60;
+        }else if("day".equals(timeUnitString)||"days".equals(timeUnitString)){
+            timeUnitVal=24*60;
+        }else if("hour".equals(timeUnitString)||"hours".equals(timeUnitString)){
+            timeUnitVal=60;
+        }else if("minute".equals(timeUnitString)||"minutes".equals(timeUnitString)||"min".equals(timeUnitString)){
+            timeUnitVal=1;
+        }else if("second".equals(timeUnitString)||"seconds".equals(timeUnitString)||"sec".equals(timeUnitString)){
+            timeUnitVal= 0.01666;
+        }else if("millisecond".equals(timeUnitString)||"milliseconds".equals(timeUnitString)){
+            timeUnitVal=0.0000166;
+        }
+        return timeUnitVal;
+    }
     private static double calcStreamCountCost(org.wso2.siddhi.query.api.query.Query siddhiQuery){
         double cost=0.0;
         cost+=siddhiQuery.getInputStream().getStreamIds().size();
