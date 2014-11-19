@@ -2,9 +2,9 @@ package org.cse.visiri.communication.eventserver.client;
 
 
 import org.cse.visiri.communication.eventserver.server.EventServerUtils;
-import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.communication.eventserver.server.StreamRuntimeInfo;
 import org.cse.visiri.util.Event;
+import org.cse.visiri.util.StreamDefinition;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by visiri on 10/28/14.
@@ -48,6 +47,13 @@ public class EventClient {
         clientSocket = new Socket(host, port);
         //clientSocket = new Socket("10.219.122.189", 5180);
         outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
+
+        System.out.print("Event Client started :" + host + " :" + port + " ;");
+        for(StreamDefinition sd: streamDefinitionsList)
+        {
+            System.out.print(sd.getStreamId() + ", ");
+        }
+        System.out.println();
     }
 
     public void close() {
@@ -102,7 +108,7 @@ public class EventClient {
             outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
         }
         outputStream.flush();
-        System.out.println("sent event");
+        System.out.println("sent event : " + eventStream.getStreamId()+".");
     }
 
     public List<StreamDefinition> getStreamDefinitionsList(){
