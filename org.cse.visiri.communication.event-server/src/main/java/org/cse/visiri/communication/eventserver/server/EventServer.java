@@ -47,6 +47,12 @@ public class EventServer {
         }
         pool = Executors.newFixedThreadPool(eventServerConfig.getNumberOfThreads());
 
+        System.out.print("Event Server started for :");
+        for(StreamDefinition sd : streamDefinitionList)
+        {
+            System.out.print(sd.getStreamId()+",");
+        }
+        System.out.println("\n");
     }
 
 

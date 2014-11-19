@@ -52,8 +52,8 @@ public class EventSource {
     public void start() throws  Exception
     {
 
-        cl = //new EventClient("169.254.190.2:6666",getDefinitions());
-        new EventClient("localhost:6666",getDefinitions());
+        cl =// new EventClient("169.254.190.2:6666",getDefinitions());
+        new EventClient("localhost:7211",getDefinitions());
         //7211
     }
 
