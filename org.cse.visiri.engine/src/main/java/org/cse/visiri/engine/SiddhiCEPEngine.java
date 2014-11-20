@@ -102,13 +102,10 @@ public class SiddhiCEPEngine extends CEPEngine {
     @Override
     public void stop() {
         siddhiManager.shutdown();
-
     }
 
     @Override
     public Object saveState() {
-
-
         return null;
     }
 

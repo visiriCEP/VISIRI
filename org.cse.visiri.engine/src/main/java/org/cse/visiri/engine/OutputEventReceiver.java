@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
@@ -58,9 +59,14 @@ public class OutputEventReceiver {
     public void sendEvents(Event event) throws IOException {
        // System.out.println(event.getStreamId()+ " : "+event.getData()); //for test
         List<EventClient> eventClientList= eventToClientsMap.get(event.getStreamId());
-        for(int i=0;i<eventClientList.size();i++){
-            EventClient eventClient=eventClientList.get(i);
-            eventClient.sendEvent(event);
+        if(eventClientList!=null) {
+            for (int i = 0; i < eventClientList.size(); i++) {
+                EventClient eventClient = eventClientList.get(i);
+                eventClient.sendEvent(event);
+
+            }
+        }else{
+            System.out.println("eventClientList is null");
 
         }
 
