@@ -30,6 +30,11 @@ public class UtilizationUpdater {
 
     }
 
+    public  double getUtilizationLevel(){
+        throw new UnsupportedOperationException();
+    }
+
+
     public void stop(){
 
     }
