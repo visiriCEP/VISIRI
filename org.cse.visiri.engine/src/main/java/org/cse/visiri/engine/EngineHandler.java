@@ -109,9 +109,13 @@ public class EngineHandler {
         }
     }
 
-    public void dynamicAddQuery(Query query) throws Exception {
+    public void dynamicAddQuery(String persistedEngine) throws Exception {
+        //Should be changed
+        //public void dynamicAddQuery(Query query) throws Exception {
+        Query query=null;
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
         queryEngineMap.put(query.getQueryId(),cepEngine);
+
 
         List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
         for(int i=0;i<inputStreamDefinitionList.size();i++){

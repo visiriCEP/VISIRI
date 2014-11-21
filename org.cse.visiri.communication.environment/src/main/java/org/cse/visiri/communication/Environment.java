@@ -215,7 +215,9 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                changedCallback.newEngineRecieved(messageObject.getPersistedEngine());
+                if(messageObject.getDestination().equals(getNodeId()))
+                    changedCallback.newEngineRecieved(messageObject.getPersistedEngine());
+                break;
         }
 
     }
