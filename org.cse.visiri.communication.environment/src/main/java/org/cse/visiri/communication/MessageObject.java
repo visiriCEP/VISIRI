@@ -6,10 +6,12 @@ package org.cse.visiri.communication;
 public class MessageObject {
     private int eventType;
     private String persistedEngine;
+    private String destination;
 
-    public MessageObject(int eventType,String persistedEngine){
+    public MessageObject(int eventType,String persistedEngine,String destination){
         this.eventType=eventType;
         this.persistedEngine=persistedEngine;
+        this.destination=destination;
     }
 
     public MessageObject(int eventType){
@@ -24,4 +26,8 @@ public class MessageObject {
     public String getPersistedEngine() {
         return persistedEngine;
     }
+    public String getDestination(){
+        return destination;
+    }
+
 }

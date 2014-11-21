@@ -138,7 +138,8 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void newEngineRecieved() {
+    public void newEngineRecieved(String persistedEngine) {
 
     }
+
 }

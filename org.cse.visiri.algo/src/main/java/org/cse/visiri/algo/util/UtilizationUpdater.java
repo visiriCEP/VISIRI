@@ -15,6 +15,7 @@ import java.lang.management.ManagementFactory;
 public class UtilizationUpdater {
         private Utilization utilization;
 
+
     public UtilizationUpdater(){
         this.utilization=new Utilization();
     }

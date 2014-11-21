@@ -25,6 +25,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_EVENTSUBSCIBER_CHANGED = 4;
     public static final int EVENT_TYPE_NODE_START = 5;
     public static final int EVENT_TYPE_NODE_STOP = 6;
+    public static final int EVENT_TYPE_ENGINE_PASS = 7;
 
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
@@ -191,7 +192,8 @@ public class Environment implements MessageListener {
     public void onMessage(Message event) {
         System.out.println("Message Recieved "+event.getMessageObject());
 
-        int eventType=(Integer)event.getMessageObject();
+        MessageObject messageObject=(MessageObject)event.getMessageObject();
+        int eventType=messageObject.getEventType();
 
         switch (eventType){
             case Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED:
@@ -212,13 +214,20 @@ public class Environment implements MessageListener {
             case Environment.EVENT_TYPE_NODE_STOP:
                 changedCallback.stopNode();
                 break;
+            case Environment.EVENT_TYPE_ENGINE_PASS:
+                changedCallback.newEngineRecieved(messageObject.getPersistedEngine());
         }
 
     }
 
     public void sendEvent(int eventType){
-       topic.publish(eventType);
+       topic.publish(new MessageObject(eventType));
     }
+
+    public void sendEngine(String engine,String destination){
+        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,engine,destination));
+    }
+
 
 
 
