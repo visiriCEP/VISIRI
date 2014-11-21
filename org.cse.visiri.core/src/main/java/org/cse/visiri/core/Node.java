@@ -136,4 +136,9 @@ public class Node implements EnvironmentChangedCallback{
         engineHandler.stop();
         utilizationUpdater.stop();
     }
+
+    @Override
+    public void newEngineRecieved() {
+
+    }
 }
