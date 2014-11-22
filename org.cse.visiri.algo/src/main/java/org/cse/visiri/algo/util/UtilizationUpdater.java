@@ -26,6 +26,23 @@ public class UtilizationUpdater {
     }
 
     public void update(){
+        OperatingSystemMXBean bean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
+                .getOperatingSystemMXBean();
+
+        double jvmUsage=bean.getProcessCpuLoad(); //Returns the "recent cpu usage" for the Java Virtual Machine process
+        double cpuUsage=bean.getSystemCpuLoad();  //Returns the "recent cpu usage" for the whole system
+        double systemRecentUsage=bean.getSystemLoadAverage(); //Returns the system load average for the last minute
+
+        utilization.setJVMCpuUtilization(jvmUsage);
+        utilization.setAverageSystemLoad(systemRecentUsage);
+
+        double freeMemoryPercentage=getMemoryUingSigar();
+
+        utilization.setFreeMemoryPercentage(freeMemoryPercentage);
+
+        Environment.getInstance().setNodeUtilizations(utilization);
+
+
 
     }
 
@@ -33,13 +50,9 @@ public class UtilizationUpdater {
 
     }
 
-    private void updateUsingMXBeans(){
+    private double getMemoryUsingMXBeans(){
         OperatingSystemMXBean bean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
                 .getOperatingSystemMXBean();
-
-        System.out.println(bean.getProcessCpuLoad()*100); //Returns the "recent cpu usage" for the Java Virtual Machine process
-        System.out.println(bean.getSystemCpuLoad()*100); //Returns the "recent cpu usage" for the whole system
-        System.out.println(bean.getSystemLoadAverage()); //Returns the system load average for the last minute
 
         double free=bean.getFreePhysicalMemorySize();
         double tot=bean.getTotalPhysicalMemorySize();
@@ -47,9 +60,11 @@ public class UtilizationUpdater {
         double perc=(free/tot)*100;     //free memory percentage
         System.out.println(perc);
 
+        return  perc;
+
     }
 
-    private void updateUsingSigar()  {
+    private double getMemoryUingSigar()  {
         Sigar sigar=new Sigar();
         Mem mem=null;
         try {
@@ -58,20 +73,22 @@ public class UtilizationUpdater {
             e.printStackTrace();
         }
 
-        System.out.println("Actual total free system memory: "
-                + mem.getActualFree() / 1024 / 1024+ " MB");
-        System.out.println("Actual total used system memory: "
-                + mem.getActualUsed() / 1024 / 1024 + " MB");
-        System.out.println("Total free system memory ......: " + mem.getFree()
-                / 1024 / 1024+ " MB");
-        System.out.println("System Random Access Memory....: " + mem.getRam()
-                + " MB");
-        System.out.println("Total system memory............: " + mem.getTotal()
-                / 1024 / 1024+ " MB");
-        System.out.println("Total used system memory.......: " + mem.getUsed()
-                / 1024 / 1024+ " MB");
+//        System.out.println("Actual total free system memory: "
+//                + mem.getActualFree() / 1024 / 1024+ " MB");
+//        System.out.println("Actual total used system memory: "
+//                + mem.getActualUsed() / 1024 / 1024 + " MB");
+//        System.out.println("Total free system memory ......: " + mem.getFree()
+//                / 1024 / 1024+ " MB");
+//        System.out.println("System Random Access Memory....: " + mem.getRam()
+//                + " MB");
+//        System.out.println("Total system memory............: " + mem.getTotal()
+//                / 1024 / 1024+ " MB");
+//        System.out.println("Total used system memory.......: " + mem.getUsed()
+//                / 1024 / 1024+ " MB");
+//
+//        System.out.println(mem.getFreePercent());
 
-        System.out.println(mem.getFreePercent());
+        return  mem.getFreePercent();
     }
 
     private void updateUsingRuntime(){

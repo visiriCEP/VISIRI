@@ -7,20 +7,39 @@ import java.io.Serializable;
  */
 public class Utilization implements Serializable {
 
-    private double cpuUtilization;
+    private double JVMCpuUtilization;
+    private double freeMemoryPercentage;
+    private double averageSystemLoad;
 
     public Utilization(){};
 
+    public double getAverageSystemLoad() {
+        return averageSystemLoad;
+    }
+
+    public void setAverageSystemLoad(double averageSystemLoad) {
+        this.averageSystemLoad = averageSystemLoad;
+    }
+
+    public double getFreeMemoryPercentage() {
+        return freeMemoryPercentage;
+    }
+
+    public void setFreeMemoryPercentage(double freeMemoryPercentage) {
+        this.freeMemoryPercentage = freeMemoryPercentage;
+    }
+
+
     public Utilization(double cpuUtilization){
-        this.setCpuUtilization(cpuUtilization);
+        this.setJVMCpuUtilization(cpuUtilization);
     }
 
 
-    public double getCpuUtilization() {
-        return cpuUtilization;
+    public double getJVMCpuUtilization() {
+        return JVMCpuUtilization;
     }
 
-    public void setCpuUtilization(double cpuUtilization) {
-        this.cpuUtilization = cpuUtilization;
+    public void setJVMCpuUtilization(double JVMCpuUtilization) {
+        this.JVMCpuUtilization = JVMCpuUtilization;
     }
 }
