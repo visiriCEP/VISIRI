@@ -15,6 +15,7 @@ import java.lang.management.ManagementFactory;
 public class UtilizationUpdater {
         private Utilization utilization;
 
+
     public UtilizationUpdater(){
         this.utilization=new Utilization();
     }
@@ -45,6 +46,11 @@ public class UtilizationUpdater {
 
 
     }
+
+    public  double getUtilizationLevel(){
+        throw new UnsupportedOperationException();
+    }
+
 
     public void stop(){
 
