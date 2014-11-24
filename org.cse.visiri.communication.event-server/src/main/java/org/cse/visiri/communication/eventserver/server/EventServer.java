@@ -73,7 +73,7 @@ public class EventServer {
                                 int streamNameSize = loadData(in) & 0xff;
                                 byte[] streamNameData = loadData(in, new byte[streamNameSize]);
                                 String streamId = new String(streamNameData, 0, streamNameData.length);//
-                                //System.out.println("Stream ID :"+streamId);//
+                                System.out.println("Stream ID :"+streamId);//
 
                                 StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(streamId);//
                                 Object[] event = new Object[streamRuntimeInfo.getNoOfAttributes()];
@@ -111,7 +111,7 @@ public class EventServer {
                                 eventStream.setData(event);
                                 if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
-                                    System.out.println("event received");
+                                    System.out.println("event received"+streamId);
                                 }else{
                                     Queue<Object> tmpQ= eventBufferQueueMap.get(streamId);
                                     tmpQ.add(eventStream);

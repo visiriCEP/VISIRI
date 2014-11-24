@@ -35,13 +35,13 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
-       // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
+        // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
 
 
-        // Store types of events in nodelist and theircosts
+        // Store types of events in node list and their costs
         for(String str: nodeList)
         {
             //calculate costs of each node

@@ -1,5 +1,8 @@
 package org.cse.visiri.engine;
 
+import com.hazelcast.core.Hazelcast;
+import org.apache.log4j.BasicConfigurator;
+import org.cse.visiri.communication.Environment;
 import org.cse.visiri.util.*;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
@@ -76,6 +79,7 @@ public class SiddhiCEPEngine extends CEPEngine {
             }
 
            siddhiManager.defineStream(streamDefinition);
+
         }
 
         siddhiManager.addQuery(queryString);

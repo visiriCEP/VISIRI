@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public class QueryDistribution {
 
-    private Map<Query,List<Query>> generatedQueries;
-    private Map<Query,String> queryAllocation;
+    private Map<Query,List<Query>> generatedQueries;//original query->rewrited query
+    private Map<Query,String> queryAllocation;//query->IP
 
 
     public  QueryDistribution()
