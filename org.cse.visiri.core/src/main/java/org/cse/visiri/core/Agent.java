@@ -3,9 +3,11 @@ package org.cse.visiri.core;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
-import org.cse.visiri.util.Configuration;
-import org.cse.visiri.util.DynamicQueryDistribution;
-import org.cse.visiri.util.QueryDistribution;
+import org.cse.visiri.util.*;
+
+import java.util.ArrayDeque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Malinda Kumarasinghe on 11/21/2014.
@@ -15,23 +17,29 @@ public class Agent extends Thread {
     private UtilizationUpdater utilizationUpdater;
     private Environment environment;
     private EngineHandler engineHandler;
-
+    private Queue<Double> utilizationLevelQueue;
+    private WindowQueue windowQueue;
 
     public Agent(EngineHandler engineHandler){
         environment = Environment.getInstance();
         this.engineHandler=engineHandler;
         this.utilizationUpdater=new UtilizationUpdater();
-        throw new UnsupportedOperationException();
+        this.utilizationUpdater.start();
+        utilizationLevelQueue=new ArrayDeque<Double>();
+        windowQueue=new WindowQueue(6);
     }
 
     public void run(){
         while(true){
 
-            Double utilizationLevel=0.0;
             //Double utilizationLevel=utilizationUpdater.getUtilizationLevel();
+            Utilization utilization=utilizationUpdater.update();
+            double utilizationLevel=utilization.getOverallUtilizationValue();
+            windowQueue.add(utilizationLevel);
+            double utilizationLevelAvg=windowQueue.getAverage();
 
-            if(utilizationLevel>=Configuration.UTILIZATION_THRESHOULD){
-
+            if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
+                transferEngine();
             }
 
             try {
@@ -49,10 +57,7 @@ public class Agent extends Thread {
             for(String engine : transferableEngines.getEngineAllocation().keySet()){
                 environment.sendEngine(engine,transferableEngines.getEngineAllocation().get(engine));
             }
-
-
     //Notification to dispatcher
-
         throw new UnsupportedOperationException();
     }
 
