@@ -63,7 +63,7 @@ public class EngineHandler {
         eventServer.start();
 
     }
-    public DynamicQueryDistribution getTransferableEngines(){
+    public QueryDistribution getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
