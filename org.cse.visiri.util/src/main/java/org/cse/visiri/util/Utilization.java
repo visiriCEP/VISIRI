@@ -10,6 +10,7 @@ public class Utilization implements Serializable {
     private double JVMCpuUtilization;
     private double freeMemoryPercentage;
     private double averageSystemLoad;
+    private double overallUtilizationValue;
 
     public Utilization(){};
 
@@ -37,6 +38,16 @@ public class Utilization implements Serializable {
 
     public double getJVMCpuUtilization() {
         return JVMCpuUtilization;
+    }
+
+    private void calculateOverallUtilizationValue(){
+
+        this.overallUtilizationValue=(100-freeMemoryPercentage); //this value should be model with results
+    }
+
+    public double getOverallUtilizationValue(){
+        calculateOverallUtilizationValue();
+        return overallUtilizationValue;
     }
 
     public void setJVMCpuUtilization(double JVMCpuUtilization) {

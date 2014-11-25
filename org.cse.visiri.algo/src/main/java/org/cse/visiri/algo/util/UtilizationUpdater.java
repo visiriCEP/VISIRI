@@ -26,7 +26,7 @@ public class UtilizationUpdater {
 
     }
 
-    public void update(){
+    public Utilization update(){
         OperatingSystemMXBean bean = (com.sun.management.OperatingSystemMXBean) ManagementFactory
                 .getOperatingSystemMXBean();
 
@@ -41,9 +41,7 @@ public class UtilizationUpdater {
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
 
-        Environment.getInstance().setNodeUtilizations(utilization);
-
-
+        return utilization;
 
     }
 
