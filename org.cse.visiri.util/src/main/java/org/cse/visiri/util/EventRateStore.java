@@ -8,72 +8,94 @@ import java.util.HashMap;
  */
 public class EventRateStore {
 
-    private long instantEventCount;
-    private double count;
-    private long startTime;
-    private HashMap<Integer,Long> historyMap;
+    private HashMap<Integer,Long> instantMap,avgMap;
+    private int instantPos=-1;
+    private int avgPos=-1;
+    private int instantMapSize,avgMapSize;
 
-    public EventRateStore(int instantEventCount){
-        this.instantEventCount=instantEventCount;
-        count=0;
-        historyMap=new HashMap<Integer, Long>();
-        startTime=System.currentTimeMillis();
+    public EventRateStore(){
 
-        for(int i=0;i<instantEventCount;i++){
-            historyMap.put(i,startTime);
+        instantMapSize=Configuration.INSTANT_EVENT_COUNT;
+        avgMapSize=Configuration.AVERAGE_EVENT_COUNT;
+
+        instantMap=new HashMap<Integer, Long>();
+        avgMap=new HashMap<Integer, Long>();
+
+        Long startTime=System.currentTimeMillis();
+
+        for(int i=0;i<instantMapSize;i++){
+            instantMap.put(i,startTime);
+        }
+
+        for(int i=0;i<avgMapSize;i++){
+            avgMap.put(i,startTime);
         }
 
     }
     public void increment(){
         Long mil=System.currentTimeMillis();
-        int pos=((int)count++)%((int)instantEventCount);
-        historyMap.put(pos,mil);
-    }
-    public double getAverageRate(){
-        long mil=System.currentTimeMillis();
-        double avg=count/(mil-startTime);
-       // System.out.println("AVg="+avg);
-        return avg;
+
+        instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
+        instantMap.put(instantPos,mil);
+
+        avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
+        avgMap.put(avgPos,mil);
     }
     public double getInstantRate(){
-        int front = ((int)count-1)%((int)instantEventCount);
-        int last = (front+1)%((int)instantEventCount);
-        long gg=historyMap.get(front)-historyMap.get(last);
-        float rate=(long)((float)instantEventCount)/(float)(gg+1);
-        return rate;
+
+        int idxLast=instantPos;
+        int idxFirst=(instantPos + 1)%(instantMapSize);
+
+        long last=instantMap.get(idxLast);
+        long first=instantMap.get(idxFirst);
+
+        double avg=((double)instantMapSize)/(double)(last-first+1);
+        return avg;
+
+    }
+    public double getAverageRate(){
+        int idxLast=avgPos;
+        int idxFirst=(avgPos + 1)%(avgMapSize);
+
+        long last=avgMap.get(idxLast);
+        long first=avgMap.get(idxFirst);
+
+        double avg=((double)avgMapSize)/(double)(last-first+1);
+        return avg;
     }
 
-    private void printMap(){
-        for(int x : historyMap.keySet()){
-            System.out.print(" " + historyMap.get(x));
-        }
-        System.out.println("\n");
-    }
+//    private void printMap(){
+//        for(int x : historyMap.keySet()){
+//            System.out.print(" " + historyMap.get(x));
+//        }
+//        System.out.println("\n");
+//    }
 
 
 
-
+/*
     public static void main(String[] args){
 
-//        EventRateStore eventRateStore=new EventRateStore(4);
-//
-//        for(int i=0;i<25;i++){
-//            eventRateStore.increment();
-//            try {
-//                if(i>5 && i<10)    {
-//                    Thread.sleep(100);
-//                }
-//                else {
-//                    Thread.sleep(500);
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println("\n"+i);
-//            eventRateStore.getAverageRate();
-//            eventRateStore.getInstantRate();
-//        }
+        EventRateStore eventRateStore=new EventRateStore();
+
+        for(int i=0;i<25;i++){
+            eventRateStore.increment();
+            try {
+                if(i>5 && i<10)    {
+                    Thread.sleep(50);
+                }
+                else {
+                    Thread.sleep(500);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.print(i+"\t"+eventRateStore.getAverageRate()*1000);
+            System.out.println("\t\t"+i+"\t"+eventRateStore.getInstantRate()*1000);
+
+        }
 
     }
-
+*/
 }
