@@ -1,18 +1,16 @@
 package org.cse.visiri.algo;
 
-import org.cse.visiri.algo.util.costmodelcalc.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
-import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
-import org.cse.visiri.util.StreamDefinition;
 
 import java.util.*;
 
 /**
- * Created by lasitha on 11/21/14.
+ * Created by lasitha on 11/24/14.
  */
-public class RoundRobinDistributionAlgo extends QueryDistributionAlgo{
+public class RandomDistributionAlgo extends QueryDistributionAlgo {
+
     @Override
     public QueryDistribution getQueryDistribution(List<Query> queries) {
         QueryDistribution dist = new QueryDistribution();
@@ -26,17 +24,13 @@ public class RoundRobinDistributionAlgo extends QueryDistributionAlgo{
 
         List<Query> queryToQueryList=new LinkedList<Query>();
 
-        int querycount=0;
-        while(querycount<queries.size()) {
-            for (String str : nodeList) {
-                System.out.println(str);
-                Query tmpQ = queries.get(querycount);
-                queryToQueryList.add(tmpQ);
-                dist.getGeneratedQueries().put(tmpQ, queryToQueryList);
-                dist.getQueryAllocation().put(tmpQ, str);
-                querycount++;
-            }
+        for(Query q:queries){
+            int randomNum=randomizer.nextInt(nodeList.size());
+            queryToQueryList.add(q);
+            dist.getGeneratedQueries().put(q, queryToQueryList);
+            dist.getQueryAllocation().put(q, nodeList.get(randomNum));
         }
+
         return dist;
     }
 }
