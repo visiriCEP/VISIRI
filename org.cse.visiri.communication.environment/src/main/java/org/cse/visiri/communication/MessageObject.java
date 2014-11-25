@@ -1,9 +1,11 @@
 package org.cse.visiri.communication;
 
+import java.io.Serializable;
+
 /**
  * Created by Malinda Kumarasinghe on 11/21/2014.
  */
-public class MessageObject {
+public class MessageObject implements Serializable {
     private int eventType;
     private String persistedEngine;
     private String destination;
