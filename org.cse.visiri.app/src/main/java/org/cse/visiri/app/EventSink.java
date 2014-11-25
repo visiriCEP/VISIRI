@@ -4,6 +4,7 @@ import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.Event;
+import org.cse.visiri.util.EventRateStore;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.util.ArrayList;
@@ -16,9 +17,12 @@ public class EventSink {
 
     private static int port = 6666;
     EventServer server;
+    EventRateStore eventRateStore;
 
     private  List<StreamDefinition> getDefinitions()
     {
+        eventRateStore=new EventRateStore();
+
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
         StreamDefinition sd =new StreamDefinition("fire",null);
@@ -76,13 +80,19 @@ public class EventSink {
         server = new EventServer(conf,getDefinitions(), new StreamCallback() {
             @Override
             public void receive(Event event) {
-                System.out.printf("Event received : %s {", event.getStreamId());
-                for(Object o : event.getData())
-                {
-                    System.out.print(o.toString());
-                    System.out.print(",");
-                }
-                System.out.println("}");
+             //   System.out.printf("Event received : %s ", event.getStreamId());
+
+
+
+//                for(Object o : event.getData())
+//                {
+//                    System.out.print(o.toString());
+//                    System.out.print(",");
+//                }
+//                System.out.println("}");
+
+                eventRateStore.increment();
+
 
             }
         });

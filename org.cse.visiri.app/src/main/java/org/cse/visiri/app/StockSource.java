@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class StockSource {
     //events per second
-    public final int frequency = 100;
+    public final int frequency = 500;
 
     public static void main(String[] arg) throws Exception {
         StockSource sink = new StockSource();

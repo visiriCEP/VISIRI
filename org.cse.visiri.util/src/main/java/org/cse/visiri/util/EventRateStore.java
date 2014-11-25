@@ -39,6 +39,10 @@ public class EventRateStore {
 
         avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
         avgMap.put(avgPos,mil);
+
+        if(avgPos%100==0){
+            System.out.println("Ins.Rate : "+getInstantRate()+"\tAvg.Rate : "+getAverageRate());
+        }
     }
     public double getInstantRate(){
 
