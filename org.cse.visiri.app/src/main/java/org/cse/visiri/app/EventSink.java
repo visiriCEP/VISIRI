@@ -80,16 +80,16 @@ public class EventSink {
         server = new EventServer(conf,getDefinitions(), new StreamCallback() {
             @Override
             public void receive(Event event) {
-                System.out.printf("Event received : %s {", event.getStreamId());
+             //   System.out.printf("Event received : %s ", event.getStreamId());
 
 
 
-                for(Object o : event.getData())
-                {
-                    System.out.print(o.toString());
-                    System.out.print(",");
-                }
-                System.out.println("}");
+//                for(Object o : event.getData())
+//                {
+//                    System.out.print(o.toString());
+//                    System.out.print(",");
+//                }
+//                System.out.println("}");
 
                 eventRateStore.increment();
 
