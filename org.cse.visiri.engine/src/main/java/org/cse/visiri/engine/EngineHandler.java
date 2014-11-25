@@ -63,7 +63,7 @@ public class EngineHandler {
 
     }
     public DynamicQueryDistribution getTransferableEngines(){
-        //1. get transferable queries from TransferableQueries
+        //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
         //4. return new dynamic query distribution
@@ -102,6 +102,10 @@ public class EngineHandler {
        }
         System.out.println(" Out:"+query.getOutputStreamDefinition().getStreamId());
         this.myQueryList.add(query);
+    }
+
+    public void eventServerBufferChanged(List<String> bufferingEventList){
+        eventServer.bufferStateChanged(bufferingEventList);
     }
 
     public void addQueryList(List<Query> queryList){
