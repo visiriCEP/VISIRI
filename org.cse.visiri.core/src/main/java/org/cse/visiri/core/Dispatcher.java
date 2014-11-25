@@ -72,7 +72,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     @Override
     public void bufferingStateChanged() {
-
+        List<String> bufList=Environment.getInstance().getBufferingEventList();
+        engineHandler.eventServerBufferChanged(bufList);
     }
 
     @Override
