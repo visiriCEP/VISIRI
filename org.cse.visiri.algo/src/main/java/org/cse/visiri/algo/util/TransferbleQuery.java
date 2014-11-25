@@ -12,12 +12,14 @@ import java.util.Map;
 /**
  * Created by visiri on 11/23/14.
  */
-public class detectTransferbleQuery {
+public class TransferbleQuery {
 
     private Query[] queryArray;
     private CostModelCalculator costModelCalculator;
 
-    public detectTransferbleQuery(){
+
+
+    public TransferbleQuery(){
         this.costModelCalculator=new CostModelCalculator();
         String myNode= Environment.getInstance().getNodeId();
         Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
@@ -28,7 +30,7 @@ public class detectTransferbleQuery {
 
     }
 
-    public detectTransferbleQuery(Query[] queriesArray){
+    public TransferbleQuery(Query[] queriesArray){
         this.costModelCalculator=new CostModelCalculator();
         this.queryArray=queriesArray;
     }
@@ -42,7 +44,7 @@ public class detectTransferbleQuery {
         queryArray= (Query[]) queryList.toArray();
     }
 
-    public Query detectQuery(double[] eventRates){
+    public Query detectTransferbleQuery(double[] eventRates){
 
         if(eventRates.length!=queryArray.length){
             System.out.println("*****Error****");       //has to handle exception
@@ -65,10 +67,9 @@ public class detectTransferbleQuery {
 
         Arrays.sort(costRateValueArray);
 
-        int middleIndex=costRateValueArray.length/2;
+        int middleIndex=costRateValueArray.length/2;        //get the query w.r.t the moddle values in the costRate array
 
         return costRateQueryMap.get(costRateValueArray[middleIndex]);
     }
-
 
 }
