@@ -1,13 +1,10 @@
-package org.cse.visiri.algo.util;
+package org.cse.visiri.util;
 
-import org.cse.visiri.algo.util.costmodelcalc.CostModelCalculator;
-import org.cse.visiri.communication.Environment;
+import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
+
 import org.cse.visiri.util.Query;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by visiri on 11/23/14.
@@ -19,11 +16,11 @@ public class TransferbleQuery {
 
 
 
-    public TransferbleQuery(){
+    public TransferbleQuery(List<Query> queryList){
         this.costModelCalculator=new CostModelCalculator();
-        String myNode= Environment.getInstance().getNodeId();
-        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
-        List<Query> queryList=nodeQueryMap.get(myNode);
+//        String myNode= Environment.getInstance().getNodeId();
+//        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
+//        List<Query> queryList=nodeQueryMap.get(myNode);
 
         queryArray=new Query[queryList.size()];
         queryArray= (Query[]) queryList.toArray();
@@ -35,17 +32,18 @@ public class TransferbleQuery {
         this.queryArray=queriesArray;
     }
 
-    public void updateQueryArray(){
-        String myNode= Environment.getInstance().getNodeId();
-        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
-        List<Query> queryList=nodeQueryMap.get(myNode);
-
+    private void updateQueryArray(List<Query> qList){
+//        String myNode= Environment.getInstance().getNodeId();
+//        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
+//        List<Query> queryList=nodeQueryMap.get(myNode);
+          List<Query> queryList=qList;
         queryArray=new Query[queryList.size()];
         queryArray= (Query[]) queryList.toArray();
     }
 
-    public Query detectTransferbleQuery(double[] eventRates){
-
+    public List<Query> detectTransferbleQuery(double[] eventRates,List<Query> qList){
+        updateQueryArray(qList);
+        List<Query> queryList=new ArrayList<Query>();
         if(eventRates.length!=queryArray.length){
             System.out.println("*****Error****");       //has to handle exception
             throw new UnknownError();
@@ -68,8 +66,8 @@ public class TransferbleQuery {
         Arrays.sort(costRateValueArray);
 
         int middleIndex=costRateValueArray.length/2;        //get the query w.r.t the moddle values in the costRate array
-
-        return costRateQueryMap.get(costRateValueArray[middleIndex]);
+        queryList.add(costRateQueryMap.get(costRateValueArray[middleIndex]));
+        return queryList;
     }
 
 }

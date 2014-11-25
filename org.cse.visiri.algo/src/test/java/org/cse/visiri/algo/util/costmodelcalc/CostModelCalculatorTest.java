@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
+import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 
 import java.util.ArrayList;
 import java.util.List;

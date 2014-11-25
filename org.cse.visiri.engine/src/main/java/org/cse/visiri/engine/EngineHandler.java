@@ -22,6 +22,7 @@ public class EngineHandler {
     private List<Query> myQueryList;
     private EventServer eventServer;
 
+
     public EngineHandler(){
 
         this.queryEngineMap=new HashMap<String, CEPEngine>();
@@ -68,6 +69,8 @@ public class EngineHandler {
         //3. call "removeEngine" method for all transferable engines
         //4. return new dynamic query distribution
         throw new UnsupportedOperationException();
+
+
     }
 
     private void removeEngine(){

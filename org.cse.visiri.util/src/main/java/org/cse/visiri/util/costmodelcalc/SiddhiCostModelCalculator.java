@@ -1,4 +1,4 @@
-package org.cse.visiri.algo.util.costmodelcalc;
+package org.cse.visiri.util.costmodelcalc;
 
 
 import org.antlr.runtime.ANTLRStringStream;

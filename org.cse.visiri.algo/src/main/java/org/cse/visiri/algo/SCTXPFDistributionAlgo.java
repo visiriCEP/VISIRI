@@ -1,6 +1,6 @@
 package org.cse.visiri.algo;
 
-import org.cse.visiri.algo.util.costmodelcalc.CostModelCalculator;
+import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
