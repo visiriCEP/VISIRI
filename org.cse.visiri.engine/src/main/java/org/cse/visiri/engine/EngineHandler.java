@@ -5,9 +5,7 @@ import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
-import org.cse.visiri.util.Event;
-import org.cse.visiri.util.Query;
-import org.cse.visiri.util.StreamDefinition;
+import org.cse.visiri.util.*;
 
 
 import java.util.*;
@@ -64,6 +62,21 @@ public class EngineHandler {
         eventServer.start();
 
     }
+    public DynamicQueryDistribution getTransferableEngines(){
+        //1. get transferable queries from TransferableQueries
+        //2. run Dynamic distribution algorithm to get query distribution algorithm
+        //3. call "removeEngine" method for all transferable engines
+        //4. return new dynamic query distribution
+        throw new UnsupportedOperationException();
+    }
+
+    private void removeEngine(){
+
+        //1. add to dispatcher buffer
+        //2. remove from engine handler
+        throw new UnsupportedOperationException();
+    }
+
 
     public void stop(){
 

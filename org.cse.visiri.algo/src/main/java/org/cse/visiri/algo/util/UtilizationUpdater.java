@@ -47,7 +47,7 @@ public class UtilizationUpdater {
 
     }
 
-    public  double getUtilizationLevel(){
+    public double getUtilizationLevel(){
         throw new UnsupportedOperationException();
     }
 

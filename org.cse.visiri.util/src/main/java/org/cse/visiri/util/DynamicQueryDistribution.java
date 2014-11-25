@@ -15,7 +15,7 @@ public class DynamicQueryDistribution {
         engineAllocation=new HashMap<String, String>();
     }
 
-    public Map<String, String> getGeneratedQueries() {
+    public Map<String, String> getEngineAllocation() {
         return engineAllocation;
     }
 }
