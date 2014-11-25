@@ -1,6 +1,8 @@
 package org.cse.visiri.core;
 
 import org.cse.visiri.algo.QueryDistributionAlgo;
+import org.cse.visiri.algo.RandomDistributionAlgo;
+import org.cse.visiri.algo.RoundRobinDistributionAlgo;
 import org.cse.visiri.algo.SCTXPFDistributionAlgo;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
@@ -52,7 +54,7 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
-        QueryDistributionAlgo algo = new SCTXPFDistributionAlgo();
+        QueryDistributionAlgo algo = new RoundRobinDistributionAlgo();
         QueryDistribution dist = algo.getQueryDistribution(queries);
         Environment.getInstance().addQueryDistribution(dist);
 
