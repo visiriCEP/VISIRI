@@ -1,6 +1,8 @@
-package org.cse.visiri.engine;
+package org.cse.visiri.core;
 
+import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.DynamicQueryDistribution;
 import org.cse.visiri.util.QueryDistribution;
@@ -10,13 +12,15 @@ import org.cse.visiri.util.QueryDistribution;
  */
 public class Agent extends Thread {
 
-    //private UtilizationUpdater utilizationUpdater;
+    private UtilizationUpdater utilizationUpdater;
     private Environment environment;
     private EngineHandler engineHandler;
+
 
     public Agent(EngineHandler engineHandler){
         environment = Environment.getInstance();
         this.engineHandler=engineHandler;
+        this.utilizationUpdater=new UtilizationUpdater();
         throw new UnsupportedOperationException();
     }
 
