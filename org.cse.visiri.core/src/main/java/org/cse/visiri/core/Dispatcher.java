@@ -101,4 +101,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
         engineHandler.stop();
         utilizationUpdater.stop();
     }
+
+    @Override
+    public void newEngineRecieved(String persistedEngine) {
+
+    }
 }
