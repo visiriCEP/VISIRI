@@ -92,7 +92,7 @@ public class EventSink {
                 System.out.println("}");
 
                 eventRateStore.increment();
-                System.out.println("Ins.Rate : "+eventRateStore.getInstantRate()+"\tAvg.Rate : "+eventRateStore.getAverageRate());
+
 
             }
         });
