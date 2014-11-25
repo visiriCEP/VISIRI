@@ -11,6 +11,9 @@ import java.util.List;
  * Created by Geeth on 2014-11-25.
  */
 public class StockSource {
+    //events per second
+    public final int frequency = 100;
+
     public static void main(String[] arg) throws Exception {
         StockSource sink = new StockSource();
         sink.start();
@@ -46,9 +49,11 @@ public class StockSource {
 
             Event ev;
 
+            long sleepTime = (1000)/frequency;
             while((ev = reader.getNextEvent()) != null)
             {
                 client.sendEvent(ev);
+                Thread.sleep(sleepTime);
             }
 
         } catch (Exception e) {

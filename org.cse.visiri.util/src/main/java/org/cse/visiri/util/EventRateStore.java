@@ -1,6 +1,5 @@
 package org.cse.visiri.util;
 
-import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -21,7 +20,7 @@ public class EventRateStore {
         instantMap=new HashMap<Integer, Long>();
         avgMap=new HashMap<Integer, Long>();
 
-        Long startTime=System.currentTimeMillis();
+        long startTime=System.currentTimeMillis();
 
         for(int i=0;i<instantMapSize;i++){
             instantMap.put(i,startTime);
