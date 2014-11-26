@@ -65,7 +65,11 @@ public class EngineHandler {
         eventServer.start();
 
     }
-    public QueryDistribution getTransferableEngines(){
+    public Map<String,String> getTransferableEngines(){
+        //1. get transferable queries from TransferableQueries class
+        //2. run Dynamic distribution algorithm to get query distribution algorithm
+        //3. call "removeEngine" method for all transferable engines
+        //4. return new dynamic query distribution
 
         String myNode= Environment.getInstance().getNodeId();
         Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
@@ -82,7 +86,15 @@ public class EngineHandler {
         QueryDistributionAlgo queryDistributionAlgo= AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
         QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(transferbleQueryList);
 
-        return queryDistribution;
+        Map<Query,String> queryAllocation=queryDistribution.getQueryAllocation();
+        Map<String,String> transferbleEnginesMap=new HashMap<String, String>();
+
+        for(Query query:transferbleQueryList){
+            SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
+            String engine=(String)siddhiCEPEngine.saveState();
+            transferbleEnginesMap.put(queryAllocation.get(query),engine);
+        }
+        return transferbleEnginesMap;
 
     }
 
