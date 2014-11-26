@@ -32,6 +32,10 @@ public class TransferbleQuery {
         this.queryArray=queriesArray;
     }
 
+    public TransferbleQuery(){
+        this.costModelCalculator=new CostModelCalculator();
+    }
+
     private void updateQueryArray(List<Query> qList){
 //        String myNode= Environment.getInstance().getNodeId();
 //        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
