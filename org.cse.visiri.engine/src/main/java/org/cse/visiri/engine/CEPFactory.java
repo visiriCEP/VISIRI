@@ -1,5 +1,6 @@
 package org.cse.visiri.engine;
 
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 
 /**
@@ -11,10 +12,10 @@ public class CEPFactory {
 
     public static CEPEngine createEngine(int  type,Query q,OutputEventReceiver outputEventReceiver){
 
-        if(type==CEPEngine.ENGINE_TYPE_SIDDHI){
+        if(type== Configuration.ENGINE_TYPE_SIDDHI){
             return new SiddhiCEPEngine(q,outputEventReceiver);
         }
-        else if(type == CEPEngine.ENGINE_TYPE_DIRECT)
+        else if(type == Configuration.ENGINE_TYPE_DIRECT)
         {
             return new DirectPassEngine(q,outputEventReceiver);
         }

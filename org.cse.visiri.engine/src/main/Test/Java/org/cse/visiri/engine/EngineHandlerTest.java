@@ -2,6 +2,7 @@ package org.cse.visiri.engine;
 
 import junit.framework.TestCase;
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
@@ -41,7 +42,7 @@ public class EngineHandlerTest extends TestCase {
 
         Environment.getInstance().setNodeType(Environment.NODE_TYPE_PROCESSINGNODE);
 
-        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1",CEPEngine.ENGINE_TYPE_SIDDHI);
+        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI);
 
         engineHandler.addQuery(query1);
 
@@ -60,7 +61,7 @@ public class EngineHandlerTest extends TestCase {
         outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
         outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
 
-        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2",CEPEngine.ENGINE_TYPE_SIDDHI);
+        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2",Configuration.ENGINE_TYPE_SIDDHI);
 
         engineHandler.addQuery(query2);
 

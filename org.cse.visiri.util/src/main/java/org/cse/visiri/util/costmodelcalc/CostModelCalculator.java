@@ -1,11 +1,7 @@
 package org.cse.visiri.util.costmodelcalc;
 
-import org.cse.visiri.communication.Environment;
-import org.cse.visiri.engine.CEPEngine;
-import org.cse.visiri.engine.EngineHandler;
+
 import org.cse.visiri.util.Query;
-import org.h2.engine.Engine;
-import org.wso2.siddhi.query.compiler.SiddhiCompiler;
 
 
 /**

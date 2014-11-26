@@ -1,7 +1,7 @@
 package org.cse.visiri.algo;
 
 import junit.framework.TestCase;
-import org.cse.visiri.engine.CEPEngine;
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -29,7 +29,7 @@ public class RoundRobinDistributionAlgoTest extends TestCase {
         outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
         outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
 
-        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2", CEPEngine.ENGINE_TYPE_SIDDHI);
+        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2", Configuration.ENGINE_TYPE_SIDDHI);
 
         queryList.add(query2);
 
