@@ -10,5 +10,10 @@ import java.util.List;
  */
 public abstract class QueryDistributionAlgo {
 
+    public final static int SCTXPF_ALGO=0;
+    public final static int SCTXPF_PLUS_ALGO=1;
+    public final static int ROUNDROBIN_ALGO=2;
+    public final static int RANDOM_DISTRIBUTOR_ALGO=3;
+
     public abstract QueryDistribution getQueryDistribution(List<Query> queries);
 }
