@@ -41,9 +41,15 @@ public class EventRateStore {
         avgMap.put(avgPos,mil);
 
         if(avgPos%100==0){
-            System.out.println("Ins.Rate : "+getInstantRate()+"\tAvg.Rate : "+getAverageRate());
+            System.out.println("Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
         }
     }
+
+    public void increment(String message){
+        System.err.print(message+"-");
+        increment();
+    }
+
     public double getInstantRate(){
 
         int idxLast=instantPos;
@@ -53,7 +59,7 @@ public class EventRateStore {
         long first=instantMap.get(idxFirst);
 
         double avg=((double)instantMapSize)/(double)(last-first+1);
-        return avg;
+        return avg*1000;
 
     }
     public double getAverageRate(){
@@ -64,7 +70,7 @@ public class EventRateStore {
         long first=avgMap.get(idxFirst);
 
         double avg=((double)avgMapSize)/(double)(last-first+1);
-        return avg;
+        return avg*1000;
     }
 
 //    private void printMap(){

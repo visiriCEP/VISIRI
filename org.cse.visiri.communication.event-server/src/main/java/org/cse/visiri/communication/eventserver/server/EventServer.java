@@ -1,6 +1,7 @@
 package org.cse.visiri.communication.eventserver.server;
 
 import org.cse.visiri.util.Event;
+import org.cse.visiri.util.EventRateStore;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.io.BufferedInputStream;
@@ -25,12 +26,16 @@ public class EventServer {
     private ExecutorService pool;
     //private StreamRuntimeInfo streamRuntimeInfo;
     private HashMap<String,StreamRuntimeInfo> streamRuntimeInfoHashMap;
+    private EventRateStore eventRateStore;
 
     private HashMap<String,Queue> eventBufferQueueMap;
     private HashMap<String,Boolean> eventBufferConditionMap;
 
 
     public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback) {
+
+        eventRateStore=new EventRateStore();
+
         this.eventServerConfig = eventServerConfig;
         this.streamDefinitionList = streamDefinitions;
         this.streamCallback = streamCallback;
@@ -109,6 +114,9 @@ public class EventServer {
                                 Event eventStream = new Event();
                                 eventStream.setStreamId(streamId);
                                 eventStream.setData(event);
+
+                                eventRateStore.increment("Server");
+
                                 if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
                                //     System.out.println("event received"+streamId);
