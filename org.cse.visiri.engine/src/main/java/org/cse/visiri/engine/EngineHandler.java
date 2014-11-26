@@ -1,5 +1,7 @@
 package org.cse.visiri.engine;
 
+import org.cse.visiri.algo.AlgoFactory;
+import org.cse.visiri.algo.QueryDistributionAlgo;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
@@ -64,10 +66,6 @@ public class EngineHandler {
 
     }
     public QueryDistribution getTransferableEngines(){
-        //1. get transferable queries from TransferableQueries class
-        //2. run Dynamic distribution algorithm to get query distribution algorithm
-        //3. call "removeEngine" method for all transferable engines
-        //4. return new dynamic query distribution
 
         String myNode= Environment.getInstance().getNodeId();
         Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
@@ -81,10 +79,11 @@ public class EngineHandler {
         }
 
         List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
+        QueryDistributionAlgo queryDistributionAlgo= AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
+        QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(transferbleQueryList);
 
+        return queryDistribution;
 
-
-        throw new UnsupportedOperationException();
     }
 
     private void removeEngine(){
