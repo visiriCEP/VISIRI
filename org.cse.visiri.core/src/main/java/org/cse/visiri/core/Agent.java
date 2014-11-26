@@ -5,9 +5,7 @@ import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.*;
 
-import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by Malinda Kumarasinghe on 11/21/2014.
@@ -51,13 +49,13 @@ public class Agent extends Thread {
     }
 
     private void transferEngines(){
-            DynamicQueryDistribution transferableEngines=engineHandler.getTransferableEngines();
+            Map<String,String> transferableEngines=engineHandler.getTransferableEngines();
 
             //Should Add internode communications
-            for(String engine : transferableEngines.getEngineAllocation().keySet()){
-                environment.sendEngine(engine,transferableEngines.getEngineAllocation().get(engine));
+            for(String engine : transferableEngines.keySet()){
+                environment.sendEngine(engine,transferableEngines.get(engine));
             }
-    //Notification to dispatcher
+        //Notification to dispatcher
         throw new UnsupportedOperationException();
     }
 
