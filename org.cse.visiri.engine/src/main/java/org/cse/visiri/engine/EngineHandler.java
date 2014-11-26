@@ -21,7 +21,7 @@ public class EngineHandler {
     private EventServerConfig eventServerConfig;
     private List<Query> myQueryList;
     private EventServer eventServer;
-
+    private TransferbleQuery transferbleQuery;
 
     public EngineHandler(){
 
@@ -32,7 +32,7 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
-       
+       this.transferbleQuery=new TransferbleQuery();
     }
 
     public void start() throws Exception {
@@ -68,9 +68,23 @@ public class EngineHandler {
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
         //4. return new dynamic query distribution
+
+        String myNode= Environment.getInstance().getNodeId();
+        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
+        List<Query> queryList=nodeQueryMap.get(myNode);
+        double[] eventRates=new double[queryList.size()];
+        int i=0;
+        for(Query query:queryList){
+            SiddhiCEPEngine cepEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
+            eventRates[i]=cepEngine.getAvgEventRate();
+            i++;
+        }
+
+        List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
+
+
+
         throw new UnsupportedOperationException();
-
-
     }
 
     private void removeEngine(){
