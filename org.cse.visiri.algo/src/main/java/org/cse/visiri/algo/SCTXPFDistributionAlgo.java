@@ -1,5 +1,6 @@
 package org.cse.visiri.algo;
 
+import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.CEPEngine;
@@ -166,12 +167,12 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             List<Query> derivedQueries = new ArrayList<Query>();
             Query nodeQuery = new Query(q,true);
 
-            nodeQuery.setEngineId(CEPEngine.ENGINE_TYPE_SIDDHI);
+            nodeQuery.setEngineId(Configuration.ENGINE_TYPE_SIDDHI);
             dist.getQueryAllocation().put(nodeQuery,targetNode);
             derivedQueries.add(nodeQuery);
 
             //add to dispatchers
-            Query dispQuery = new Query( "", null,null,"tempquery",CEPEngine.ENGINE_TYPE_DIRECT);
+            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT);
 
             for(String disp : dispatcherList)
             {
