@@ -3,7 +3,6 @@ package org.cse.visiri.algo;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 import org.cse.visiri.communication.Environment;
-import org.cse.visiri.engine.CEPEngine;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
