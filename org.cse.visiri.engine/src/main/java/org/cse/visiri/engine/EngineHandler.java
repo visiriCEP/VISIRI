@@ -1,5 +1,6 @@
 package org.cse.visiri.engine;
 
+import com.hazelcast.map.client.MapGetEntryViewRequest;
 import org.cse.visiri.algo.AlgoFactory;
 import org.cse.visiri.algo.QueryDistributionAlgo;
 import org.cse.visiri.communication.Environment;
@@ -91,19 +92,34 @@ public class EngineHandler {
 
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
+
+
+            //Add siddhiEngine to buffering list and remove engine from engineHandler
+            addToBufferingList(siddhiCEPEngine);
+
             String engine=(String)siddhiCEPEngine.saveState();
             transferbleEnginesMap.put(queryAllocation.get(query),engine);
+
+            siddhiCEPEngine.stop();
+
         }
+        //Sending buffering message to dispatcher
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED);
+
         return transferbleEnginesMap;
 
     }
 
-    private void removeEngine(){
+    private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
+        List<String> bufferingList=Environment.getInstance().getBufferingEventList();
+        List<StreamDefinition> strmDefs=siddhiCEPEngine.getInputStreamDefinitionList();
 
-        //1. add to dispatcher buffer
-        //2. remove from engine handler
-        throw new UnsupportedOperationException();
+        for(StreamDefinition strdrf : strmDefs){
+            bufferingList.add(strdrf.getStreamId());
+           // Environment.getInstance().getBufferingEventList().add(strdrf.getStreamId());
+        }
     }
+
 
 
     public void stop(){

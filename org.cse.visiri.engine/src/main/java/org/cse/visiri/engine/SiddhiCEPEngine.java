@@ -30,6 +30,7 @@ public class SiddhiCEPEngine extends CEPEngine {
         this.outputEventReceiver=outputEventReceiver;
         this.start();
 
+
     }
 
     public double getAvgEventRate(){
@@ -110,9 +111,7 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     @Override
     public Object saveState() {
-
-        return siddhiManager.persist();
-
+         return siddhiManager.persist();
     }
 
     @Override
@@ -124,6 +123,10 @@ public class SiddhiCEPEngine extends CEPEngine {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+    }
+
+    public List<StreamDefinition> getInputStreamDefinitionList(){
+        return query.getInputStreamDefinitionsList();
     }
 
 }

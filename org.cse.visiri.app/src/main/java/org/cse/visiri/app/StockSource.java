@@ -42,7 +42,7 @@ public class StockSource {
 
         try {
             System.out.println(System.getProperty("user.dir"));
-            EventClient client = new EventClient("localhost:6666",getDefinitions());
+            EventClient client = new EventClient("localhost:7211",getDefinitions());
 
             CsvEventReader reader = new CsvEventReader("eem_08jan_08mayy.csv"
                                 ,getDefinitions().get(0));
