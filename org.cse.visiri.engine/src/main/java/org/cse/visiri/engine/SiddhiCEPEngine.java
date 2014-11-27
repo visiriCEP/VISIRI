@@ -118,6 +118,7 @@ public class SiddhiCEPEngine extends CEPEngine {
     public void sendEvent(Event event) {
         eventRateStore.increment();
         InputHandler inputHandler=siddhiManager.getInputHandler(event.getStreamId());
+        //System.out.println(event.getStreamId());
         try {
             inputHandler.send(event.getData());
         }catch (InterruptedException e){
