@@ -6,7 +6,7 @@ import java.util.HashMap;
  * Created by Malinda Kumarasinghe on 11/12/2014.
  */
 public class EventRateStore {
-
+    //TODO check for accuracy of this results.
     private HashMap<Integer,Long> instantMap,avgMap;
     private int instantPos=-1;
     private int avgPos=-1;

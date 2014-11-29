@@ -58,7 +58,7 @@ public class EventSink {
 
         inputStreamDefinition1=new StreamDefinition();
         inputStreamDefinition1.setStreamId("outStock");
-        //inputStreamDefinition1.addAttribute("Index", StreamDefinition.Type.INTEGER);
+        inputStreamDefinition1.addAttribute("Index", StreamDefinition.Type.INTEGER);
         inputStreamDefinition1.addAttribute("Open", StreamDefinition.Type.FLOAT);
         inputStreamDefinition1.addAttribute("High", StreamDefinition.Type.FLOAT);
         inputStreamDefinition1.addAttribute("Low", StreamDefinition.Type.FLOAT);

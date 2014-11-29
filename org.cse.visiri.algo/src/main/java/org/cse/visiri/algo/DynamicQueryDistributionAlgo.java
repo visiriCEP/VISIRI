@@ -13,6 +13,7 @@ public class DynamicQueryDistributionAlgo extends QueryDistributionAlgo{
 
     @Override
     public QueryDistribution getQueryDistribution(List<Query> queries) {
+        //TODO implement dynamic query distribution algorithm
         return null;
     }
 }

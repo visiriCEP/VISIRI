@@ -53,6 +53,7 @@ public class StockSource {
             while((ev = reader.getNextEvent()) != null)
             {
                 client.sendEvent(ev);
+                System.out.println("sent: "+ev.getStreamId());
                 Thread.sleep(sleepTime);
             }
 
