@@ -139,26 +139,26 @@ public class NodeTest extends TestCase {
 ////        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
 //
 //
-//        String queryString5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
-//                "select max(Open) as maxPrice, avg(Open) as avgPrice "+
-//                " insert into outStock;";
-//        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
-//
-//
-//        String queryString6="from stock[Open > 250]#window.length(1000) "+
-//                "select max(Open) as maxPrice "+
-//                "insert into outStock;";
-//        Query query6=new Query(queryString6,defs,outputStreamDefinition,"6", Configuration.ENGINE_TYPE_SIDDHI);
-//
-//
-//        String queryString7=" from a1 = stock[Open >25] " +
-//                "       -> a2 = stock[High<50] " +
-//                "select a1.Index, a1.Open as action, a2.High as price " +
-//                "insert into outStock";
-//        Query query7=new Query(queryString7,defs,outputStreamDefinition,"7", Configuration.ENGINE_TYPE_SIDDHI);
+        String queryString5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
+                "select max(Open) as Open, avg(Open) as High "+
+                " insert into outStock2;";
+        Query query5=new Query(queryString5,defs,outputStreamDefinition2,"5", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        String queryString6="from stock[Open > 250]#window.length(1000) "+
+                "select max(Open) as Open, avg(High) as High "+
+                "insert into outStock2;";
+        Query query6=new Query(queryString6,defs,outputStreamDefinition2,"6", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        String queryString7=" from a1 = stock[Open >25] " +
+                "       -> a2 = stock[High<50] " +
+                "select a1.Open as Open, a2.High as High " +
+                "insert into outStock2";
+        Query query7=new Query(queryString7,defs,outputStreamDefinition2,"7", Configuration.ENGINE_TYPE_SIDDHI);
 
         //--- add queries
-        List<Query> queries = Arrays.asList(query1,query2,query3,query4);//,query5,query6,query7);
+        List<Query> queries = Arrays.asList(query1,query2,query3,query4,query5,query6,query7);
         node.addQueries(queries);
         node.subscribeToStream("outStock",Environment.getInstance().getNodeId()+":6666" );
         node.subscribeToStream("outStock2",Environment.getInstance().getNodeId()+":6666" );
