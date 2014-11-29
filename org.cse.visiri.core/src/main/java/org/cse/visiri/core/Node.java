@@ -54,7 +54,7 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
-        QueryDistributionAlgo algo = new RoundRobinDistributionAlgo();
+        QueryDistributionAlgo algo = new SCTXPFDistributionAlgo();
         QueryDistribution dist = algo.getQueryDistribution(queries);
         Environment.getInstance().addQueryDistribution(dist);
 

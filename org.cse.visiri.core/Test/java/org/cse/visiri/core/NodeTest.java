@@ -78,18 +78,22 @@ public class NodeTest extends TestCase {
         outputStreamDefinition.addAttribute("Index", StreamDefinition.Type.INTEGER);
         outputStreamDefinition.addAttribute("Open", StreamDefinition.Type.FLOAT);
         outputStreamDefinition.addAttribute("High", StreamDefinition.Type.FLOAT);
-        outputStreamDefinition.addAttribute("Volume", StreamDefinition.Type.FLOAT);
+        outputStreamDefinition.addAttribute("Low", StreamDefinition.Type.FLOAT);
+        outputStreamDefinition.addAttribute("Close", StreamDefinition.Type.FLOAT);
+        outputStreamDefinition.addAttribute("Volume", StreamDefinition.Type.INTEGER);
+        outputStreamDefinition.addAttribute("Date", StreamDefinition.Type.STRING);
 
         StreamDefinition outputStreamDefinition2=new StreamDefinition();
         outputStreamDefinition2.setStreamId("outStock2");
-        outputStreamDefinition2.addAttribute("Index", StreamDefinition.Type.INTEGER);
-        outputStreamDefinition2.addAttribute("Close", StreamDefinition.Type.FLOAT);
-        outputStreamDefinition2.addAttribute("Low", StreamDefinition.Type.FLOAT);
+        outputStreamDefinition2.addAttribute("Open", StreamDefinition.Type.FLOAT);
+        outputStreamDefinition2.addAttribute("High", StreamDefinition.Type.FLOAT);
 
 
-
-
-
+//        StreamDefinition outputStreamDefinition2=new StreamDefinition();
+//        outputStreamDefinition2.setStreamId("outStock2");
+//        outputStreamDefinition2.addAttribute("Index", StreamDefinition.Type.INTEGER);
+//        outputStreamDefinition2.addAttribute("Close", StreamDefinition.Type.FLOAT);
+//        outputStreamDefinition2.addAttribute("Low", StreamDefinition.Type.FLOAT);
         //query 2
 //        StreamDefinition def1=new StreamDefinition();
 //        def1.setStreamId("ABC");
@@ -104,55 +108,54 @@ public class NodeTest extends TestCase {
 //        outputDef.setStreamId("StockQuote");
 //        outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
 //        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-//
 
         String queryString="from stock " +
-                "[ Open <= 50 ]#window.time(1 min) select Index, sum(Open) as sum " +
+                "select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
 
         Query query1=new Query(queryString,defs,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI);
 
 
         String queryString2="from stock " +
-                "[ Open <= 50 ] select Index, Open" +
+                "[ Open <= 50 ] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
         Query query2=new Query(queryString2,defs,outputStreamDefinition,"2", Configuration.ENGINE_TYPE_SIDDHI);
 
         String queryString3="from stock " +
-                "[ Open <= 50 and Open>25] select Open " +
+                "[ Open <= 50 and Open>25] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
         Query query3=new Query(queryString3,defs,outputStreamDefinition,"3", Configuration.ENGINE_TYPE_SIDDHI);
 
         String queryString4="from stock[Open > 25]#window.timeBatch( 5 minutes ) "+
-                "Index, select max(Open) as maxPrice, avg(Open) as avgPrice, Volume"+
-                "insert into outStock;";
-        Query query4=new Query(queryString4,defs,outputStreamDefinition,"4", Configuration.ENGINE_TYPE_SIDDHI);
-
-
-//        String queryString5="from stock[Open>25]#window.length(2000) join"+
-//                "inputStream2#window.time(500)"+
-//                "select *"+
-//                "insert into outStock;";
-//        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
-
-
+                " select max(Open) as Open, avg(Open) as High "+
+                "insert into outStock2;";
+        Query query4=new Query(queryString4,defs,outputStreamDefinition2,"4", Configuration.ENGINE_TYPE_SIDDHI);
+//
+//
+////        String queryString5="from stock[Open>25]#window.length(2000) join"+
+////                "inputStream2#window.time(500)"+
+////                "select *"+
+////                "insert into outStock;";
+////        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
+//
+//
         String queryString5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
-                "select max(Open) as maxPrice, avg(Open) as avgPrice, Volume"+
-                "insert into outStock;";
-        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
+                "select max(Open) as Open, avg(Open) as High "+
+                " insert into outStock2;";
+        Query query5=new Query(queryString5,defs,outputStreamDefinition2,"5", Configuration.ENGINE_TYPE_SIDDHI);
 
 
         String queryString6="from stock[Open > 250]#window.length(1000) "+
-                "Index, select max(Open) as maxPrice "+
+                "select max(Open) as Open, avg(High) as High "+
                 "insert into outStock2;";
-        Query query6=new Query(queryString6,defs,outputStreamDefinition,"6", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query6=new Query(queryString6,defs,outputStreamDefinition2,"6", Configuration.ENGINE_TYPE_SIDDHI);
 
 
         String queryString7=" from a1 = stock[Open >25] " +
                 "       -> a2 = stock[High<50] " +
-                "select a1.Index, a1.Open as action, b1.High as price\n" +
-                "insert into outStock";
-        Query query7=new Query(queryString7,defs,outputStreamDefinition,"7", Configuration.ENGINE_TYPE_SIDDHI);
+                "select a1.Open as Open, a2.High as High " +
+                "insert into outStock2";
+        Query query7=new Query(queryString7,defs,outputStreamDefinition2,"7", Configuration.ENGINE_TYPE_SIDDHI);
 
         //--- add queries
         List<Query> queries = Arrays.asList(query1,query2,query3,query4,query5,query6,query7);
