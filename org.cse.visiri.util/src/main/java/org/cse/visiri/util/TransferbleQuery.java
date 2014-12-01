@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by visiri on 11/23/14.
  */
+//TODO have to optimize the query selection
 public class TransferbleQuery {
 
     private Query[] queryArray;

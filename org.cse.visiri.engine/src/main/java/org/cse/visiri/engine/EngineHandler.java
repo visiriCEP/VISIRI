@@ -26,6 +26,7 @@ public class EngineHandler {
     private EventServer eventServer;
     private TransferbleQuery transferbleQuery;
 
+
     public EngineHandler(){
 
         this.queryEngineMap=new HashMap<String, CEPEngine>();
@@ -35,7 +36,7 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
-       this.transferbleQuery=new TransferbleQuery();
+        this.transferbleQuery=new TransferbleQuery();
     }
 
     public void start() throws Exception {
@@ -171,7 +172,7 @@ public class EngineHandler {
     }
 
     public void dynamicAddQuery(String persistedEngine) throws Exception {
-        //Should be changed
+        //todo Should be changed
         //public void dynamicAddQuery(Query query) throws Exception {
         Query query=null;
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
@@ -220,7 +221,7 @@ public class EngineHandler {
     public void dynamicRemoveQuery(Query query){
         this.queryEngineMap.get(query.getQueryId()).stop();
         this.queryEngineMap.remove(query.getQueryId());
-        //have to implement persistent siddhi instance
+        //TODO have to implement persistent siddhi instance
     }
 
     public Map<String, CEPEngine> getQueryEngineMap() {

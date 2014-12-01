@@ -21,7 +21,7 @@ public class SiddhiCEPEngine extends CEPEngine {
     private SiddhiManager siddhiManager;
     private Query query;
     private OutputEventReceiver outputEventReceiver;
-    public EventRateStore eventRateStore;
+    public  EventRateStore eventRateStore;
 
 
     public SiddhiCEPEngine(Query query,OutputEventReceiver outputEventReceiver){
@@ -29,8 +29,6 @@ public class SiddhiCEPEngine extends CEPEngine {
         this.query=query;
         this.outputEventReceiver=outputEventReceiver;
         this.start();
-
-
     }
 
     public double getAvgEventRate(){

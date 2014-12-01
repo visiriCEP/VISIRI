@@ -13,7 +13,7 @@ import java.lang.management.ManagementFactory;
  * Created by visiri on 10/31/14.
  */
 public class UtilizationUpdater {
-        private Utilization utilization;
+    private Utilization utilization;
 
 
     public UtilizationUpdater(){
@@ -21,9 +21,7 @@ public class UtilizationUpdater {
     }
 
     public void start(){
-
         Environment.getInstance().setNodeUtilizations(utilization);
-
     }
 
     public Utilization update(){
@@ -37,7 +35,7 @@ public class UtilizationUpdater {
         utilization.setJVMCpuUtilization(jvmUsage);
         utilization.setAverageSystemLoad(systemRecentUsage);
 
-        double freeMemoryPercentage=getMemoryUingSigar();
+        double freeMemoryPercentage=getMemoryUsingSigar();
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
 
@@ -51,7 +49,6 @@ public class UtilizationUpdater {
 
 
     public void stop(){
-
     }
 
     private double getMemoryUsingMXBeans(){
@@ -68,7 +65,7 @@ public class UtilizationUpdater {
 
     }
 
-    private double getMemoryUingSigar()  {
+    private double getMemoryUsingSigar()  {
         Sigar sigar=new Sigar();
         Mem mem=null;
         try {

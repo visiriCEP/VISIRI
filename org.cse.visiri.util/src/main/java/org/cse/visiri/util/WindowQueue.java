@@ -17,7 +17,7 @@ public class WindowQueue {
     }
 
     public void add(double val){
-        if(pos==size-1) {
+        if(pos==size) {
             pos = 0;
         }
         valueArray[pos]=val;

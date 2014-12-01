@@ -95,7 +95,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
         // ************* ALLOCATE QUERIES ************
         for(Query q : queries)
         {
-            //take all noes as possible candidates
+            //take all nodes as possible candidates
             Set<String> candidateNodes = new HashSet<String>(nodeList);
 
             //minimum total cost

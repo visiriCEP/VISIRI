@@ -24,10 +24,9 @@ public class Node implements EnvironmentChangedCallback{
     private List<Query> queries;
     private EngineHandler engineHandler;
     public int recievedEvent=0;     // For testing only
-
     private UtilizationUpdater utilizationUpdater;
-
     private boolean started ;
+    private Agent agent;
 
 
     public  void initialize()
@@ -41,10 +40,12 @@ public class Node implements EnvironmentChangedCallback{
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
         engineHandler = new EngineHandler();
+        agent=new Agent(engineHandler);
     }
 
     public void start() throws Exception{
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_START);
+        agent.start();
     }
 
     public void stop() {
