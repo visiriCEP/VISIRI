@@ -2,18 +2,12 @@ package org.cse.visiri.algo;
 
 
 import org.cse.visiri.util.Query;
-import org.cse.visiri.util.QueryDistribution;
-
-import java.util.List;
 
 /**
  * Created by lasitha on 11/25/14.
  */
-public class DynamicQueryDistributionAlgo extends QueryDistributionAlgo{
+public abstract class DynamicQueryDistributionAlgo
+{
 
-    @Override
-    public QueryDistribution getQueryDistribution(List<Query> queries) {
-        //TODO implement dynamic query distribution algorithm
-        return null;
-    }
+    public abstract String getQueryDistribution(Query q) ;
 }

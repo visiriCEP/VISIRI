@@ -19,8 +19,8 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
-    public double costThreshold = 0.01;
-    public double utilizationThreshold = 0.01;
+    public double costThreshold = 10;
+    public double utilizationThreshold = 10;
 
 
     @Override
