@@ -19,6 +19,8 @@ import java.util.Map;
 /**
  * Created by Geeth on 2014-11-05.
  */
+
+//TODO how to receive Siddhi persist and restore
 public class Node implements EnvironmentChangedCallback{
 
     private List<Query> queries;
@@ -51,6 +53,7 @@ public class Node implements EnvironmentChangedCallback{
     public void stop() {
         engineHandler.stop();
         utilizationUpdater.stop();
+        agent.stop();
     }
 
     public void addQueries(List<Query> queries)

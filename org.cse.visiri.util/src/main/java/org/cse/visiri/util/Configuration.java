@@ -9,7 +9,7 @@ public class Configuration {
     public final static int INSTANT_EVENT_COUNT=20;
     public final static int AVERAGE_EVENT_COUNT=301;
     public final static int AGENT_UPDATE_PERIOD=10;
-    public final static Double UTILIZATION_THRESHOULD=5.5;
+    public final static Double UTILIZATION_THRESHOULD=800.0;
     public final static int ENGINE_TYPE_DIRECT=0;
     public final static int ENGINE_TYPE_SIDDHI=1;
 

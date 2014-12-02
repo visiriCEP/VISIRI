@@ -28,7 +28,6 @@ public class EngineHandler {
 
 
     public EngineHandler(){
-
         this.queryEngineMap=new HashMap<String, CEPEngine>();
         this.eventEngineMap=new HashMap<String, List<CEPEngine>>();
         this.outputEventReceiver=new OutputEventReceiver();
@@ -63,10 +62,10 @@ public class EngineHandler {
                 }
             }
         });
-
         eventServer.start();
 
     }
+
     public Map<String,String> getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
@@ -219,8 +218,10 @@ public class EngineHandler {
     }
 
     public void dynamicRemoveQuery(Query query){
-        this.queryEngineMap.get(query.getQueryId()).stop();
+
+        CEPEngine siddhiCepEngine=(SiddhiCEPEngine)this.queryEngineMap.get(query.getQueryId());
         this.queryEngineMap.remove(query.getQueryId());
+
         //TODO have to implement persistent siddhi instance
     }
 

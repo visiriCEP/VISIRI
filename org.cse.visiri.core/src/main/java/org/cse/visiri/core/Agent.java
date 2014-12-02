@@ -37,7 +37,7 @@ public class Agent extends Thread {
             double utilizationLevelAvg=windowQueue.getAverage();
 
             if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-                transferEngines();
+//                transferEngines();
             }
 
             try {
@@ -51,7 +51,7 @@ public class Agent extends Thread {
     private void transferEngines(){
             Map<String,String> transferableEngines=engineHandler.getTransferableEngines();
 
-            //Should Add internode communications
+            //TODO should Add inter node communications
             for(String engine : transferableEngines.keySet()){
                 environment.sendEngine(engine,transferableEngines.get(engine));
             }
