@@ -86,7 +86,7 @@ public class EventServerTest extends TestCase {
                 System.out.println("}");
 
             }
-        });
+        },"EventServer");
         System.out.println("Event sink started at port " + port);
         server.start();
 
