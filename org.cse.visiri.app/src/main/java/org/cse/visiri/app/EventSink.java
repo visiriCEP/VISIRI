@@ -96,11 +96,11 @@ public class EventSink {
                 }
                 System.out.println("}");
 
-                eventRateStore.increment();
+               // eventRateStore.increment();
 
 
             }
-        });
+        },"EventSink");
 
         System.out.println("Event sink started at port " + port);
         server.start();

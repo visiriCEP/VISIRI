@@ -31,9 +31,11 @@ public class EventServer {
     private HashMap<String,Queue> eventBufferQueueMap;
     private HashMap<String,Boolean> eventBufferConditionMap;
 
+    private String identifier;
 
-    public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback) {
 
+    public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback,String identifier) {
+        this.identifier=identifier;
         eventRateStore=new EventRateStore();
 
         this.eventServerConfig = eventServerConfig;
@@ -115,7 +117,7 @@ public class EventServer {
                                 eventStream.setStreamId(streamId);
                                 eventStream.setData(event);
 
-                                eventRateStore.increment("Server");
+                                eventRateStore.increment(identifier);
 
                                 if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);

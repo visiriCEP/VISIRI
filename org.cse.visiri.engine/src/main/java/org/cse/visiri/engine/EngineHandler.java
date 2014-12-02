@@ -61,7 +61,7 @@ public class EngineHandler {
                     cepEngineList.get(i).sendEvent(event);
                 }
             }
-        });
+        },"EngineHandler");
         eventServer.start();
 
     }
