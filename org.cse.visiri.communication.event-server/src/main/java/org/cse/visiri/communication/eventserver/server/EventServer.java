@@ -148,6 +148,13 @@ public class EventServer {
         }
     }
 
+    public double getAverageEventRate(){
+        return eventRateStore.getAverageRate();
+    }
+    public double getInstantEventRate(){
+        return eventRateStore.getInstantRate();
+    }
+
     public void bufferStateChanged(List<String> bufferingEventList){
         Iterator it = eventBufferQueueMap.entrySet().iterator();
         while (it.hasNext()) {
