@@ -25,9 +25,11 @@ public class EngineHandler {
     private List<Query> myQueryList;
     private EventServer eventServer;
     private TransferbleQuery transferbleQuery;
+    private String identifier;
 
 
-    public EngineHandler(){
+    public EngineHandler(String identifier){
+        this.identifier=identifier;
         this.queryEngineMap=new HashMap<String, CEPEngine>();
         this.eventEngineMap=new HashMap<String, List<CEPEngine>>();
         this.outputEventReceiver=new OutputEventReceiver();
@@ -61,7 +63,7 @@ public class EngineHandler {
                     cepEngineList.get(i).sendEvent(event);
                 }
             }
-        },"EngineHandler");
+        },identifier);
         eventServer.start();
 
     }

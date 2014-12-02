@@ -30,7 +30,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
-        engineHandler = new EngineHandler();
+        engineHandler = new EngineHandler("Dispatcher");
     }
 
 
