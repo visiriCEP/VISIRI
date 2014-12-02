@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class EventRateStore {
     //TODO check for accuracy of this results.
-    private HashMap<Integer,Long> instantMap,avgMap;
+    private Long[] instantMap,avgMap;
     private int instantPos=-1;
     private int avgPos=-1;
     private int instantMapSize,avgMapSize;
@@ -17,46 +17,43 @@ public class EventRateStore {
         instantMapSize=Configuration.INSTANT_EVENT_COUNT;
         avgMapSize=Configuration.AVERAGE_EVENT_COUNT;
 
-        instantMap=new HashMap<Integer, Long>();
-        avgMap=new HashMap<Integer, Long>();
+        instantMap=new Long[instantMapSize];
+        avgMap=new Long[avgMapSize];
 
         long startTime=System.currentTimeMillis();
 
         for(int i=0;i<instantMapSize;i++){
-            instantMap.put(i,startTime);
+            instantMap[i]=startTime;
         }
 
         for(int i=0;i<avgMapSize;i++){
-            avgMap.put(i,startTime);
+            avgMap[i]=startTime;
         }
 
     }
-    public void increment(){
+    public void increment(String message){
         Long mil=System.currentTimeMillis();
 
         instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
-        instantMap.put(instantPos,mil);
+        instantMap[instantPos]=mil;
 
         avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
-        avgMap.put(avgPos,mil);
+        avgMap[avgPos]=mil;
 
-        if(avgPos%100==0){
-            System.out.println("Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
+        if(avgPos%400==0){
+            System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
         }
     }
 
-    public void increment(String message){
-        System.err.print(message+"-");
-        increment();
-    }
+
 
     public double getInstantRate(){
 
         int idxLast=instantPos;
         int idxFirst=(instantPos + 1)%(instantMapSize);
 
-        long last=instantMap.get(idxLast);
-        long first=instantMap.get(idxFirst);
+        long last=instantMap[idxLast];
+        long first=instantMap[idxFirst];
 
         double avg=((double)instantMapSize)/(double)(last-first+1);
         return avg*1000;
@@ -66,8 +63,8 @@ public class EventRateStore {
         int idxLast=avgPos;
         int idxFirst=(avgPos + 1)%(avgMapSize);
 
-        long last=avgMap.get(idxLast);
-        long first=avgMap.get(idxFirst);
+        long last=avgMap[idxLast];
+        long first=avgMap[idxFirst];
 
         double avg=((double)avgMapSize)/(double)(last-first+1);
         return avg*1000;
