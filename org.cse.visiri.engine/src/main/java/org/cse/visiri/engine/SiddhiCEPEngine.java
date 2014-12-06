@@ -1,9 +1,9 @@
 package org.cse.visiri.engine;
 
-import com.hazelcast.core.Hazelcast;
-import org.apache.log4j.BasicConfigurator;
-import org.cse.visiri.communication.Environment;
-import org.cse.visiri.util.*;
+import org.cse.visiri.util.Event;
+import org.cse.visiri.util.EventRateStore;
+import org.cse.visiri.util.Query;
+import org.cse.visiri.util.StreamDefinition;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
@@ -109,6 +109,7 @@ public class SiddhiCEPEngine extends CEPEngine {
 
     @Override
     public Object saveState() {
+
          return siddhiManager.persist();
 
     }
