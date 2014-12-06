@@ -15,7 +15,7 @@ public class EngineHandlerTest extends TestCase {
     EngineHandler engineHandler;
     public void setUp() throws Exception {
         super.setUp();
-        engineHandler=new EngineHandler();
+        engineHandler=new EngineHandler("");
         StreamDefinition inputStreamDefinition1=new StreamDefinition();
         inputStreamDefinition1.setStreamId("car");
         inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
