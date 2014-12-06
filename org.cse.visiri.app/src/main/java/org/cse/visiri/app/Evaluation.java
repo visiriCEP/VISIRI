@@ -37,8 +37,8 @@ public class Evaluation {
         outputStreamdef1.addAttribute("v", StreamDefinition.Type.INTEGER);
         outputStreamdef1.addAttribute("a", StreamDefinition.Type.INTEGER);
 
-        String q1="from players[v<=1] " +
-                "select sid,x,y,z,v,a " +
+        String q1="from players[v<=1]" +
+                "select sid,x,y,z,v,a" +
                 "insert into stopplayer";
         Query query1=new Query(q1,inputStreamDefinitionList,outputStreamdef1,"1", Configuration.ENGINE_TYPE_SIDDHI);
 
@@ -117,6 +117,71 @@ public class Evaluation {
                 "insert into sprintplayer";
 
         Query query6=new Query(q6,inputStreamDefinitionList,outputStreamdef6,"6", Configuration.ENGINE_TYPE_SIDDHI);
+        StreamDefinition outputStreamdefAvgSpeedPlayer=new StreamDefinition();
+        outputStreamdefAvgSpeedPlayer.setStreamId("avgspeedplayers");
+        outputStreamdefAvgSpeedPlayer.addAttribute("sid", StreamDefinition.Type.INTEGER);
+        outputStreamdefAvgSpeedPlayer.addAttribute("avgV", StreamDefinition.Type.INTEGER);
+
+        String q15="from players#window.length(50) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers; ";
+        Query query15=new Query(q15,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"15", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q7="from players#window.length(100) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers; ";
+        Query query7=new Query(q7,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"7", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q8="from players#window.length(200) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers;";
+        Query query8=new Query(q8,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"8", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        StreamDefinition outputStreamdefHighSpeedPlayer=new StreamDefinition();
+        outputStreamdefHighSpeedPlayer.setStreamId("highspeedplayers");
+        outputStreamdefHighSpeedPlayer.addAttribute("sid", StreamDefinition.Type.INTEGER);
+        outputStreamdefHighSpeedPlayer.addAttribute("avgV", StreamDefinition.Type.INTEGER);
+
+        String q9="from players#window.length(50) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>17 " +
+                "insert into highspeedplayers;";
+        Query query9=new Query(q9,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"9", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q10="from players#window.length(100) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>17 " +
+                "insert into highspeedplayers;";
+        Query query10=new Query(q10,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"10", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q11="from players#window.length(200) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>17 " +
+                "insert into highspeedplayers;";
+        Query query11=new Query(q11,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"11", Configuration.ENGINE_TYPE_SIDDHI);
+        //////////////////////////////////////////////////////////// 11 end
+
+        String q12="from players#window.time(1sec) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers;";
+        Query query12=new Query(q12,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"12", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q13="from players#window.time(5sec) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers;";
+        Query query13=new Query(q13,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"13", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String q14="from players#window.time(10sec) " +
+                "select sid,avg(v) as avgV " +
+                "group by sid having avgV>12 " +
+                "insert into avgspeedplayers;";
+        Query query14=new Query(q14,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"14", Configuration.ENGINE_TYPE_SIDDHI);
 
 
 
