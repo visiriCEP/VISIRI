@@ -186,5 +186,81 @@ public class Evaluation {
 
 
 
+
+
+        /////////////////////////////////////
+
+        List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
+
+        StreamDefinition inputStreamDefinitionStock=new StreamDefinition();
+        inputStreamDefinitionStock.setStreamId("stock");
+        inputStreamDefinitionStock.addAttribute("Index", StreamDefinition.Type.INTEGER);
+        inputStreamDefinitionStock.addAttribute("Open", StreamDefinition.Type.FLOAT);
+        inputStreamDefinitionStock.addAttribute("High", StreamDefinition.Type.FLOAT);
+        inputStreamDefinitionStock.addAttribute("Low", StreamDefinition.Type.FLOAT);
+        inputStreamDefinitionStock.addAttribute("Close", StreamDefinition.Type.FLOAT);
+        inputStreamDefinitionStock.addAttribute("Volume", StreamDefinition.Type.INTEGER);
+        inputStreamDefinitionStock.addAttribute("Date", StreamDefinition.Type.STRING);
+        defs.add(inputStreamDefinitionStock);
+
+        StreamDefinition outputStreamDefinitionOutStock=new StreamDefinition();
+        outputStreamDefinitionOutStock.setStreamId("outStock");
+        outputStreamDefinitionOutStock.addAttribute("Index", StreamDefinition.Type.INTEGER);
+        outputStreamDefinitionOutStock.addAttribute("Open", StreamDefinition.Type.FLOAT);
+        outputStreamDefinitionOutStock.addAttribute("High", StreamDefinition.Type.FLOAT);
+        outputStreamDefinitionOutStock.addAttribute("Low", StreamDefinition.Type.FLOAT);
+        outputStreamDefinitionOutStock.addAttribute("Close", StreamDefinition.Type.FLOAT);
+        outputStreamDefinitionOutStock.addAttribute("Volume", StreamDefinition.Type.INTEGER);
+        outputStreamDefinitionOutStock.addAttribute("Date", StreamDefinition.Type.STRING);
+
+        StreamDefinition outputStreamDefinitionOutStock2=new StreamDefinition();
+        outputStreamDefinitionOutStock2.setStreamId("outStock2");
+        outputStreamDefinitionOutStock2.addAttribute("Open", StreamDefinition.Type.FLOAT);
+        outputStreamDefinitionOutStock2.addAttribute("High", StreamDefinition.Type.FLOAT);
+
+
+
+        String qa1="from stock " +
+                "select Index,Open,High,Low,Close,Volume,Date " +
+                "insert into outStock;";
+
+        Query querya1=new Query(qa1,defs,outputStreamDefinitionOutStock,"a1", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        String qa2="from stock " +
+                "[ Open <= 50 ] select Index,Open,High,Low,Close,Volume,Date " +
+                "insert into outStock;";
+        Query querya2=new Query(qa2,defs,outputStreamDefinitionOutStock,"a2", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String qa3="from stock " +
+                "[ Open <= 50 and Open>25] select Index,Open,High,Low,Close,Volume,Date " +
+                "insert into outStock;";
+        Query querya3=new Query(qa3,defs,outputStreamDefinitionOutStock,"a3", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String qa4="from stock[Open > 25]#window.timeBatch( 10 seconds ) "+
+                " select max(Open) as Open, avg(Open) as High "+
+                "insert into outStock2;";
+        Query querya4=new Query(qa4,defs,outputStreamDefinitionOutStock2,"a4", Configuration.ENGINE_TYPE_SIDDHI);
+
+        String qa5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
+                "select max(Open) as Open, avg(Open) as High "+
+                " insert into outStock2;";
+        Query querya5=new Query(qa5,defs,outputStreamDefinitionOutStock2,"a5", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        String qa6="from stock[Open > 250]#window.length(1000) "+
+                "select max(Open) as Open, avg(High) as High "+
+                "insert into outStock2;";
+        Query querya6=new Query(qa6,defs,outputStreamDefinitionOutStock2,"a6", Configuration.ENGINE_TYPE_SIDDHI);
+
+
+        String qa7=" from a1 = stock[Open >25] " +
+                "       -> a2 = stock[High<50] " +
+                "select a1.Open as Open, a2.High as High " +
+                "insert into outStock2";
+        Query querya7=new Query(qa7,defs,outputStreamDefinitionOutStock2,"a7", Configuration.ENGINE_TYPE_SIDDHI);
+
+        ///////////////////////////////////////////
+
     }
 }
