@@ -117,6 +117,7 @@ public class Evaluation {
                 "insert into sprintplayer";
 
         Query query6=new Query(q6,inputStreamDefinitionList,outputStreamdef6,"6", Configuration.ENGINE_TYPE_SIDDHI);
+
         StreamDefinition outputStreamdefAvgSpeedPlayer=new StreamDefinition();
         outputStreamdefAvgSpeedPlayer.setStreamId("avgspeedplayers");
         outputStreamdefAvgSpeedPlayer.addAttribute("sid", StreamDefinition.Type.INTEGER);
