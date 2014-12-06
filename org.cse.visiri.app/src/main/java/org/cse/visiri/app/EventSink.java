@@ -18,6 +18,12 @@ public class EventSink {
     private static int port = 6666;
     EventServer server;
     EventRateStore eventRateStore;
+    Writer writer;
+
+
+    public EventSink(){
+        writer=new Writer(100);
+    }
 
     private  List<StreamDefinition> getDefinitions()
     {
@@ -87,6 +93,8 @@ public class EventSink {
         server = new EventServer(conf,getDefinitions(), new StreamCallback() {
             @Override
             public void receive(Event event) {
+
+                writer.write();
                 System.out.printf("Event received : %s ", event.getStreamId());
 
                 for(Object o : event.getData())
@@ -111,4 +119,7 @@ public class EventSink {
         EventSink sink = new EventSink();
         sink.start();
     }
+
+
+
 }
