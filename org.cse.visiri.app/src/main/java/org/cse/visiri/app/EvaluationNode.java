@@ -35,6 +35,7 @@ public class EvaluationNode {
         queryList.addAll(debsQueryList);
         queryList.addAll(stockQueryList);
 
+        node.addQueries(queryList);
         HashMap<String,StreamDefinition> subscribeMap=new HashMap<String, StreamDefinition>();
 
         for(Query query:queryList){
