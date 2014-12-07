@@ -12,18 +12,27 @@ import java.util.List;
  */
 public class Evaluation {
 
-    public static void main(String[] args){
+
+    public List<Query> getDEBSQueries(){
+        List<Query> queryList=new ArrayList<Query>();
 
         StreamDefinition inputStreamDef=new StreamDefinition();
         inputStreamDef.setStreamId("players");
         List<StreamDefinition.Attribute> attributeList=new ArrayList<StreamDefinition.Attribute>();
 
         inputStreamDef.addAttribute("sid", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ts", StreamDefinition.Type.STRING);
         inputStreamDef.addAttribute("x", StreamDefinition.Type.INTEGER);
         inputStreamDef.addAttribute("y", StreamDefinition.Type.INTEGER);
         inputStreamDef.addAttribute("z", StreamDefinition.Type.INTEGER);
         inputStreamDef.addAttribute("v", StreamDefinition.Type.INTEGER);
         inputStreamDef.addAttribute("a", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vx", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vy", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vz", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ax", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ay", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("az", StreamDefinition.Type.INTEGER);
 
         List<StreamDefinition> inputStreamDefinitionList=new ArrayList<StreamDefinition>();
         inputStreamDefinitionList.add(inputStreamDef);
@@ -41,6 +50,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a" +
                 "insert into stopplayer";
         Query query1=new Query(q1,inputStreamDefinitionList,outputStreamdef1,"1", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query1);
 
         StreamDefinition outputStreamdef2=new StreamDefinition();
         outputStreamdef2.setStreamId("trotplayer");
@@ -56,6 +66,7 @@ public class Evaluation {
                 "insert into trotplayer";
 
         Query query2=new Query(q2,inputStreamDefinitionList,outputStreamdef2,"2", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query2);
 
         StreamDefinition outputStreamdef3=new StreamDefinition();
         outputStreamdef3.setStreamId("lowplayer");
@@ -71,6 +82,7 @@ public class Evaluation {
                 "insert into lowplayer";
 
         Query query3=new Query(q3,inputStreamDefinitionList,outputStreamdef3,"3", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query3);
 
         StreamDefinition outputStreamdef4=new StreamDefinition();
         outputStreamdef4.setStreamId("mediumplayer");
@@ -86,7 +98,7 @@ public class Evaluation {
                 "insert into mediumplayer";
 
         Query query4=new Query(q4,inputStreamDefinitionList,outputStreamdef4,"4", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queryList.add(query4);
 
         StreamDefinition outputStreamdef5=new StreamDefinition();
         outputStreamdef5.setStreamId("highplayer");
@@ -102,6 +114,7 @@ public class Evaluation {
                 "insert into highplayer";
 
         Query query5=new Query(q5,inputStreamDefinitionList,outputStreamdef5,"5", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query5);
 
         StreamDefinition outputStreamdef6=new StreamDefinition();
         outputStreamdef6.setStreamId("sprintplayer");
@@ -117,6 +130,7 @@ public class Evaluation {
                 "insert into sprintplayer";
 
         Query query6=new Query(q6,inputStreamDefinitionList,outputStreamdef6,"6", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query6);
 
         StreamDefinition outputStreamdefAvgSpeedPlayer=new StreamDefinition();
         outputStreamdefAvgSpeedPlayer.setStreamId("avgspeedplayers");
@@ -128,19 +142,22 @@ public class Evaluation {
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers; ";
         Query query15=new Query(q15,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"15", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query15);
 
         String q7="from players#window.length(100) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers; ";
         Query query7=new Query(q7,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"7", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query7);
+
 
         String q8="from players#window.length(200) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
         Query query8=new Query(q8,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"8", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queryList.add(query8);
 
         StreamDefinition outputStreamdefHighSpeedPlayer=new StreamDefinition();
         outputStreamdefHighSpeedPlayer.setStreamId("highspeedplayers");
@@ -152,18 +169,24 @@ public class Evaluation {
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
         Query query9=new Query(q9,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"9", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query9);
+
 
         String q10="from players#window.length(100) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
         Query query10=new Query(q10,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"10", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query10);
+
 
         String q11="from players#window.length(200) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
         Query query11=new Query(q11,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"11", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query11);
+
         //////////////////////////////////////////////////////////// 11 end
 
         String q12="from players#window.time(1sec) " +
@@ -171,25 +194,26 @@ public class Evaluation {
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
         Query query12=new Query(q12,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"12", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query12);
 
         String q13="from players#window.time(5sec) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
         Query query13=new Query(q13,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"13", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query13);
 
         String q14="from players#window.time(10sec) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
         Query query14=new Query(q14,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"14", Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query14);
 
-
-
-
+        return queryList;
     }
 
-    private ArrayList<Query> getStockQueries()
+    public List<Query> getStockQueries()
     {
         ArrayList<Query> queries = new ArrayList<Query>();
 
