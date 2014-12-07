@@ -3,18 +3,16 @@ package org.cse.visiri.app;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.core.Node;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.StreamDefinition;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by visiri on 12/7/14.
  */
 public class EvaluationNode {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         Environment environment;
         Evaluation evaluation=new Evaluation();
         Node node=new Node();
@@ -37,6 +35,26 @@ public class EvaluationNode {
         queryList.addAll(debsQueryList);
         queryList.addAll(stockQueryList);
 
+        HashMap<String,StreamDefinition> subscribeMap=new HashMap<String, StreamDefinition>();
 
+        for(Query query:queryList){
+            subscribeMap.put(query.getOutputStreamDefinition().getStreamId(),query.getOutputStreamDefinition());
+
+        }
+
+        Set<String> outputSet=subscribeMap.keySet();
+
+        for(String outputStream:outputSet){
+            node.subscribeToStream(outputStream,Environment.getInstance().getNodeId()+":6666");
+        }
+
+
+        System.out.println("Starting in 5 seconds");
+        Thread.sleep(5*1000);
+
+        node.start();
+
+        System.out.println("Started");
+        sc.next();
     }
 }
