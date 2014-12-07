@@ -5,9 +5,11 @@ import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.EventRateStore;
+import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -79,6 +81,27 @@ public class EventSink {
         inputStreamDefinition2.addAttribute("Open", StreamDefinition.Type.FLOAT);
         inputStreamDefinition2.addAttribute("High", StreamDefinition.Type.FLOAT);
         defs.add(inputStreamDefinition2);
+
+        //-- new
+
+        Evaluation evaluation=new Evaluation();
+        List<Query> debsQueryList=evaluation.getDEBSQueries();
+        List<Query> stockQueryList=evaluation.getStockQueries();
+
+        List<Query> queryList= new ArrayList<Query>();
+        queryList.addAll(debsQueryList);
+        queryList.addAll(stockQueryList);
+
+        HashMap<String,StreamDefinition> outDefs = new HashMap<String, StreamDefinition>();
+        for(Query q: queryList)
+        {
+            StreamDefinition outDef = q.getOutputStreamDefinition();
+            outDefs.put(outDef.getStreamId(),outDef);
+        }
+
+        defs.addAll(outDefs.values());
+
+
 
 //        StreamDefinition def1=new StreamDefinition();
 //        def1.setStreamId("ABC");
