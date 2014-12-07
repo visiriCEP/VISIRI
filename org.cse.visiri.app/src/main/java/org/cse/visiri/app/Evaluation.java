@@ -220,7 +220,8 @@ public class Evaluation {
         ArrayList<Query> queries = new ArrayList<Query>();
 
         StreamDefinition inputDef = new StreamDefinition();
-        inputDef.setStreamId("stockStream");
+        inputDef.setStreamId("stock");
+        inputDef.addAttribute("Index", StreamDefinition.Type.INTEGER);
         inputDef.addAttribute("Open", StreamDefinition.Type.DOUBLE);
         inputDef.addAttribute("High", StreamDefinition.Type.DOUBLE);
         inputDef.addAttribute("Low", StreamDefinition.Type.DOUBLE);
@@ -246,7 +247,7 @@ public class Evaluation {
         outAverages.setStreamId("averages");
         outStocks.addAttribute("avgs", StreamDefinition.Type.DOUBLE);
 
-        String queryStr = "from stockStream[Open < Close]\n" +
+        String queryStr = "from stock[Open < Close]\n" +
                 "select Date,Volume\n" +
                 "insert into stocks";
         Query query=new Query(queryStr,inputDefs,
@@ -254,7 +255,7 @@ public class Evaluation {
         queries.add(query);
 
 
-        queryStr = "from stockStream[High != Open]\n" +
+        queryStr = "from stock[High != Open]\n" +
                 "select Date,Volume\n" +
                 "insert into stocks";
 
@@ -262,14 +263,14 @@ public class Evaluation {
                 outStocks,"gt2", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Close < Open]\n" +
+        queryStr = "from stock[Close < Open]\n" +
                 "select Date,Volume\n" +
                 "insert into stocks";
         query=new Query(queryStr,inputDefs,
                 outStocks,"gt3", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[High != Close]\n" +
+        queryStr = "from stock[High != Close]\n" +
                 "select Date,Volume\n" +
                 "insert into stocks";
         query=new Query(queryStr,inputDefs,
@@ -277,28 +278,28 @@ public class Evaluation {
         queries.add(query);
 
         //--
-        queryStr = "from stockStream[Volume < 500000]\n" +
+        queryStr = "from stock[Volume < 500000]\n" +
                 "select Date,Volume\n" +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
                 outVolumes,"gt5", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Volume >= 500000 and Volume < 5000000]\n" +
+        queryStr = "from stock[Volume >= 500000 and Volume < 5000000]\n" +
                 "select Date,Volume\n" +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
                 outVolumes,"gt6", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Volume >= 5000000 and Volume < 10000000]\n" +
+        queryStr = "from stock[Volume >= 5000000 and Volume < 10000000]\n" +
                 "select Date,Volume\n" +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
                 outVolumes,"gt7", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Volume >= 10000000]\n" +
+        queryStr = "from stock[Volume >= 10000000]\n" +
                 "select Date,Volume\n" +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
@@ -306,21 +307,21 @@ public class Evaluation {
         queries.add(query);
 
         //----
-        queryStr = "from stockStream[Close < 20]\n" +
+        queryStr = "from stock[Close < 20]\n" +
                 "select Date,Volume,Close\n" +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
                 outStockValue,"gt9", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Close >= 20 and Close < 50]\n" +
+        queryStr = "from stock[Close >= 20 and Close < 50]\n" +
                 "select Date,Volume,Close\n" +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
                 outStockValue,"gs1", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream[Close >= 50]\n" +
+        queryStr = "from stock[Close >= 50]\n" +
                 "select Date,Volume,Close\n" +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
@@ -328,42 +329,42 @@ public class Evaluation {
         queries.add(query);
 
         //---------
-        queryStr = "from stockStream#window.lengthBatch(20) \n" +
+        queryStr = "from stock#window.lengthBatch(20) \n" +
                 "select avg(Close) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
                 outAverages,"gs3", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream#window.lengthBatch(10) \n" +
+        queryStr = "from stock#window.lengthBatch(10) \n" +
                 "select avg(Close) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
                 outAverages,"gs4", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream#window.lengthBatch(50) \n" +
+        queryStr = "from stock#window.lengthBatch(50) \n" +
                 "select avg(Close) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
                 outAverages,"gs5", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream#window.lengthBatch(20) \n" +
+        queryStr = "from stock#window.lengthBatch(20) \n" +
                 "select avg(Open) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
                 outAverages,"gs6", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream#window.lengthBatch(10) \n" +
+        queryStr = "from stock#window.lengthBatch(10) \n" +
                 "select avg(Open) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
                 outAverages,"gs7", Configuration.ENGINE_TYPE_SIDDHI);
         queries.add(query);
 
-        queryStr = "from stockStream#window.lengthBatch(50) \n" +
+        queryStr = "from stock#window.lengthBatch(50) \n" +
                 "select avg(Open) as avgs\n" +
                 "insert into averages  for expired-events";
         query=new Query(queryStr,inputDefs,
@@ -407,41 +408,44 @@ public class Evaluation {
                 "insert into outStock;";
 
         Query querya1=new Query(qa1,defs,outputStreamDefinitionOutStock,"a1", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queries.add(querya1);
 
         String qa2="from stock " +
                 "[ Open <= 50 ] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
         Query querya2=new Query(qa2,defs,outputStreamDefinitionOutStock,"a2", Configuration.ENGINE_TYPE_SIDDHI);
+        queries.add(querya2);
 
         String qa3="from stock " +
                 "[ Open <= 50 and Open>25] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
         Query querya3=new Query(qa3,defs,outputStreamDefinitionOutStock,"a3", Configuration.ENGINE_TYPE_SIDDHI);
+        queries.add(querya3);
 
         String qa4="from stock[Open > 25]#window.timeBatch( 10 seconds ) "+
                 " select max(Open) as Open, avg(Open) as High "+
                 "insert into outStock2;";
         Query querya4=new Query(qa4,defs,outputStreamDefinitionOutStock2,"a4", Configuration.ENGINE_TYPE_SIDDHI);
+        queries.add(querya4);
 
         String qa5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
                 "select max(Open) as Open, avg(Open) as High "+
                 " insert into outStock2;";
         Query querya5=new Query(qa5,defs,outputStreamDefinitionOutStock2,"a5", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queries.add(querya5);
 
         String qa6="from stock[Open > 250]#window.length(1000) "+
                 "select max(Open) as Open, avg(High) as High "+
                 "insert into outStock2;";
         Query querya6=new Query(qa6,defs,outputStreamDefinitionOutStock2,"a6", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queries.add(querya6);
 
         String qa7=" from a1 = stock[Open >25] " +
                 "       -> a2 = stock[High<50] " +
                 "select a1.Open as Open, a2.High as High " +
                 "insert into outStock2";
         Query querya7=new Query(qa7,defs,outputStreamDefinitionOutStock2,"a7", Configuration.ENGINE_TYPE_SIDDHI);
-
+        queries.add(querya7);
         ///////////////////////////////////////////
 
         return queries;
