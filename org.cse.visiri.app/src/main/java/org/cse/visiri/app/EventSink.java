@@ -22,6 +22,7 @@ public class EventSink {
     EventRateStore eventRateStore;
     Writer writer;
 
+    private long count;
 
     public EventSink(){
         writer=new Writer(100);
@@ -57,30 +58,30 @@ public class EventSink {
 //        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
 //        defs.add(outputDef);
 
-        StreamDefinition inputStreamDefinition1;//=new StreamDefinition();
+//        StreamDefinition inputStreamDefinition1;//=new StreamDefinition();
 //        inputStreamDefinition1.setStreamId("car");
 //        inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
 //        inputStreamDefinition1.addAttribute("Id", StreamDefinition.Type.INTEGER);
 //        inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
 //        defs.add(inputStreamDefinition1);
 
-        inputStreamDefinition1=new StreamDefinition();
-        inputStreamDefinition1.setStreamId("outStock");
-        inputStreamDefinition1.addAttribute("Index", StreamDefinition.Type.INTEGER);
-        inputStreamDefinition1.addAttribute("Open", StreamDefinition.Type.FLOAT);
-        inputStreamDefinition1.addAttribute("High", StreamDefinition.Type.FLOAT);
-        inputStreamDefinition1.addAttribute("Low", StreamDefinition.Type.FLOAT);
-        inputStreamDefinition1.addAttribute("Close", StreamDefinition.Type.FLOAT);
-        inputStreamDefinition1.addAttribute("Volume", StreamDefinition.Type.INTEGER);
-        inputStreamDefinition1.addAttribute("Date", StreamDefinition.Type.STRING);
-        defs.add(inputStreamDefinition1);
-
-
-        StreamDefinition inputStreamDefinition2=new StreamDefinition();
-        inputStreamDefinition2.setStreamId("outStock2");
-        inputStreamDefinition2.addAttribute("Open", StreamDefinition.Type.FLOAT);
-        inputStreamDefinition2.addAttribute("High", StreamDefinition.Type.FLOAT);
-        defs.add(inputStreamDefinition2);
+//        inputStreamDefinition1=new StreamDefinition();
+//        inputStreamDefinition1.setStreamId("outStock");
+//        inputStreamDefinition1.addAttribute("Index", StreamDefinition.Type.INTEGER);
+//        inputStreamDefinition1.addAttribute("Open", StreamDefinition.Type.FLOAT);
+//        inputStreamDefinition1.addAttribute("High", StreamDefinition.Type.FLOAT);
+//        inputStreamDefinition1.addAttribute("Low", StreamDefinition.Type.FLOAT);
+//        inputStreamDefinition1.addAttribute("Close", StreamDefinition.Type.FLOAT);
+//        inputStreamDefinition1.addAttribute("Volume", StreamDefinition.Type.INTEGER);
+//        inputStreamDefinition1.addAttribute("Date", StreamDefinition.Type.STRING);
+//        defs.add(inputStreamDefinition1);
+//
+//
+//        StreamDefinition inputStreamDefinition2=new StreamDefinition();
+//        inputStreamDefinition2.setStreamId("outStock2");
+//        inputStreamDefinition2.addAttribute("Open", StreamDefinition.Type.FLOAT);
+//        inputStreamDefinition2.addAttribute("High", StreamDefinition.Type.FLOAT);
+//        defs.add(inputStreamDefinition2);
 
         //-- new
 
@@ -97,6 +98,11 @@ public class EventSink {
         {
             StreamDefinition outDef = q.getOutputStreamDefinition();
             outDefs.put(outDef.getStreamId(),outDef);
+            System.out.print(outDef.getStreamId()+":::");
+            for(StreamDefinition.Attribute a:outDef.getAttributeList()){
+                System.out.print(a.getName()+",");
+            }
+            System.out.println();
         }
 
         defs.addAll(outDefs.values());
@@ -118,15 +124,17 @@ public class EventSink {
             public void receive(Event event) {
 
                 writer.write();
-                System.out.printf("Event received : %s ", event.getStreamId());
+                if(count%1000==0) {
+                    System.out.print(count);
+                    System.out.printf(":Event received : %s ", event.getStreamId());
 
-                for(Object o : event.getData())
-                {
-                    System.out.print(o.toString());
-                    System.out.print(",");
+                    for (Object o : event.getData()) {
+                        System.out.print(o.toString());
+                        System.out.print(",");
+                    }
+                    System.out.println("}");
                 }
-                System.out.println("}");
-
+                count++;
                // eventRateStore.increment();
 
 
