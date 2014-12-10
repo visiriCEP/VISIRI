@@ -67,7 +67,9 @@ public class EventClient {
     }
 
 
-    public void sendEvent(Event eventStream) throws IOException {
+    public synchronized void sendEvent(Event eventStream) throws IOException {
+
+
         StreamRuntimeInfo streamRuntimeInfo=streamRuntimeInfoHashMap.get(eventStream.getStreamId());
         Object[] event=eventStream.getData();
 
@@ -109,6 +111,7 @@ public class EventClient {
         }
         outputStream.flush();
     //    System.out.println("sent event : " + eventStream.getStreamId()+".");
+
     }
 
     public List<StreamDefinition> getStreamDefinitionsList(){

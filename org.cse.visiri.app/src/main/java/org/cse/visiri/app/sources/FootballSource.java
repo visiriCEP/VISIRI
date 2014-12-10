@@ -1,5 +1,6 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sources;
 
+import org.cse.visiri.app.util.CsvEventReader;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.EventRateStore;
@@ -14,7 +15,7 @@ import java.util.List;
 public class FootballSource {
 
     //events per second
-    public final int frequency = 5000;
+    public final int frequency = 50000;
     EventRateStore eventRateStore;
     public static void main(String[] arg) throws Exception {
         FootballSource sink = new FootballSource();
@@ -56,19 +57,31 @@ public class FootballSource {
 
 
 
-            long sleepTime = (1000)/frequency;
-            for(int i=0;i<20;i++){
-                CsvEventReader reader = new CsvEventReader("../full-game"
-                        ,getDefinitions().get(0));
 
-                Event ev;
-                while((ev = reader.getNextEvent()) != null)
-                {
-                    client.sendEvent(ev);
-                    eventRateStore.increment("players");
-                    Thread.sleep(sleepTime);
+            CsvEventReader reader = new CsvEventReader("../full-game"
+                    ,getDefinitions().get(0));
+
+            Event ev;
+
+            int sent =0;
+            while((ev = reader.getNextEvent()) != null)
+            {
+                client.sendEvent(ev);
+                eventRateStore.increment("players");
+
+                sent++;
+                if(sent % 1000 == 0) {
+                    Thread.sleep(1000);
+                    System.out.println("Sent " + sent);
                 }
+
+                if(sent == 50*1000)
+                {
+                    break;
+                }
+
             }
+            System.out.println("Finished!");
 
         } catch (Exception e) {
 
