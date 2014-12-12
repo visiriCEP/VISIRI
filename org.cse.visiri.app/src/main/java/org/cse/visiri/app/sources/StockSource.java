@@ -1,5 +1,6 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sources;
 
+import org.cse.visiri.app.util.CsvEventReader;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.EventRateStore;
@@ -7,13 +8,14 @@ import org.cse.visiri.util.StreamDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Geeth on 2014-11-25.
  */
 public class StockSource {
     //events per second
-    public final int frequency = 5000;
+    public final int frequency = 10000;
     EventRateStore eventRateStore;
     public static void main(String[] arg) throws Exception {
         StockSource sink = new StockSource();
@@ -48,7 +50,7 @@ public class StockSource {
 
 
 
-            long sleepTime = (1000)/frequency;
+            int sent =0;
             for(int i=0;i<20;i++){
                 CsvEventReader reader = new CsvEventReader("eem_08jan_08mayy.csv"
                         ,getDefinitions().get(0));
@@ -58,9 +60,17 @@ public class StockSource {
                 {
                     client.sendEvent(ev);
                     eventRateStore.increment("StockSource");
-                    Thread.sleep(sleepTime);
+
+                    if(sent % 1000 == 0) {
+                        Thread.sleep(1000);
+                        sent = 0;
+                    }
+                    sent++;
                 }
             }
+
+            System.out.println("Finished. Press enter");
+            new Scanner(System.in).next();
 
         } catch (Exception e) {
 

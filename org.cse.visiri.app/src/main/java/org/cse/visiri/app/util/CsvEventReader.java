@@ -1,4 +1,4 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.util;
 
 
 import au.com.bytecode.opencsv.CSVReader;

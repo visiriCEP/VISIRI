@@ -1,4 +1,4 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sources;
 
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.util.Event;

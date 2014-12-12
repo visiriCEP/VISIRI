@@ -1,4 +1,4 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.util;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

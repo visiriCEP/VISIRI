@@ -1,5 +1,6 @@
 package org.cse.visiri.app;
 
+import org.cse.visiri.app.util.Writer;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
