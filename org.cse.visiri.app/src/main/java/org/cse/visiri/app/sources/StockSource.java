@@ -46,9 +46,7 @@ public class StockSource {
 
         try {
             System.out.println(System.getProperty("user.dir"));
-            EventClient client = new EventClient("localhost:7211",getDefinitions());
-
-
+            EventClient client = new EventClient("localhost:6666",getDefinitions());
 
             int sent =0;
             for(int i=0;i<20;i++){

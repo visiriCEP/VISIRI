@@ -14,7 +14,6 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -51,12 +50,14 @@ public class EventClient {
         //clientSocket = new Socket("10.219.122.189", 5180);
         outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
         blockingQueue=new LinkedBlockingQueue<Event>();
+        start();
         System.out.print("Event Client started :" + host + " :" + port + " ;");
         for(StreamDefinition sd: streamDefinitionsList)
         {
             System.out.print(sd.getStreamId() + ", ");
         }
         System.out.println();
+
     }
 
     public void start(){
@@ -64,49 +65,51 @@ public class EventClient {
             @Override
             public void run() {
                 try {
-                    Event eventStream = (Event) blockingQueue.take();
+                    while (true) {
+                        Event eventStream = (Event) blockingQueue.take();
 
-                    StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(eventStream.getStreamId());
-                    Object[] event = eventStream.getData();
+                        StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(eventStream.getStreamId());
+                        Object[] event = eventStream.getData();
 
-                    outputStream.write((byte) streamRuntimeInfo.getStreamId().length());
-                    outputStream.write((streamRuntimeInfo.getStreamId()).getBytes("UTF-8"));
+                        outputStream.write((byte) streamRuntimeInfo.getStreamId().length());
+                        outputStream.write((streamRuntimeInfo.getStreamId()).getBytes("UTF-8"));
 
-                    ByteBuffer buf = ByteBuffer.allocate(streamRuntimeInfo.getFixedMessageSize());
-                    int[] stringDataIndex = new int[streamRuntimeInfo.getNoOfStringAttributes()];
-                    int stringIndex = 0;
-                    StreamDefinition.Type[] types = streamRuntimeInfo.getAttributeTypes();
-                    for (int i = 0, typesLength = types.length; i < typesLength; i++) {
-                        StreamDefinition.Type type = types[i];
-                        switch (type) {
-                            case INTEGER:
-                                buf.putInt((Integer) event[i]);
-                                continue;
-                            case LONG:
-                                buf.putLong((Long) event[i]);
-                                continue;
-                            case BOOLEAN:
-                                buf.put((byte) (((Boolean) event[i]) ? 1 : 0));
-                                continue;
-                            case FLOAT:
-                                buf.putFloat((Float) event[i]);
-                                continue;
-                            case DOUBLE:
-                                buf.putDouble((Double) event[i]);
-                                continue;
-                            case STRING:
-                                buf.putShort((short) ((String) event[i]).length());
-                                stringDataIndex[stringIndex] = i;
-                                stringIndex++;
+                        ByteBuffer buf = ByteBuffer.allocate(streamRuntimeInfo.getFixedMessageSize());
+                        int[] stringDataIndex = new int[streamRuntimeInfo.getNoOfStringAttributes()];
+                        int stringIndex = 0;
+                        StreamDefinition.Type[] types = streamRuntimeInfo.getAttributeTypes();
+                        for (int i = 0, typesLength = types.length; i < typesLength; i++) {
+                            StreamDefinition.Type type = types[i];
+                            switch (type) {
+                                case INTEGER:
+                                    buf.putInt((Integer) event[i]);
+                                    continue;
+                                case LONG:
+                                    buf.putLong((Long) event[i]);
+                                    continue;
+                                case BOOLEAN:
+                                    buf.put((byte) (((Boolean) event[i]) ? 1 : 0));
+                                    continue;
+                                case FLOAT:
+                                    buf.putFloat((Float) event[i]);
+                                    continue;
+                                case DOUBLE:
+                                    buf.putDouble((Double) event[i]);
+                                    continue;
+                                case STRING:
+                                    buf.putShort((short) ((String) event[i]).length());
+                                    stringDataIndex[stringIndex] = i;
+                                    stringIndex++;
+                            }
                         }
-                    }
 
-                    outputStream.write(buf.array());
-                    for (int aStringIndex : stringDataIndex) {
-                        outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
+                        outputStream.write(buf.array());
+                        for (int aStringIndex : stringDataIndex) {
+                            outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
+                        }
+                        outputStream.flush();
+                      //      System.out.println("sent event-- : " + eventStream.getStreamId()+".");
                     }
-                    outputStream.flush();
-                    //    System.out.println("sent event : " + eventStream.getStreamId()+".");
                 }catch(Exception e){
                     e.printStackTrace();
                 }

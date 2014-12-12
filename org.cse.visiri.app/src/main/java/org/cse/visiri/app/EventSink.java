@@ -107,9 +107,6 @@ public class EventSink {
         }
 
         defs.addAll(outDefs.values());
-
-
-
 //        StreamDefinition def1=new StreamDefinition();
 //        def1.setStreamId("ABC");
 //        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);

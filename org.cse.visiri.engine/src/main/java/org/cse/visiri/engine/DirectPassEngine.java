@@ -37,7 +37,11 @@ public class DirectPassEngine extends CEPEngine {
     @Override
     public void sendEvent(Event event) {
         try {
-            outputEventReceiver.sendEvents(event);
+            try {
+                outputEventReceiver.sendEvents(event);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

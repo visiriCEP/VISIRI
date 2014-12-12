@@ -63,11 +63,9 @@ public class OutputEventReceiver {
             for (int i = 0; i < eventClientList.size(); i++) {
                 EventClient eventClient = eventClientList.get(i);
                 eventClient.sendEvent(event);
-
             }
         }else{
             System.out.println("eventClientList is null");
-
         }
 
     }
