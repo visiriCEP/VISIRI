@@ -19,7 +19,7 @@ public class EmptyNode {
         node.initialize();
 
         Scanner sc = new Scanner(System.in);
-        node.start();
+
 
         System.out.println("Started");
         sc.next();

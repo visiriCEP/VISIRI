@@ -56,7 +56,7 @@ public class OutputEventReceiver {
         this.destinationToClientMap = destinationToClientMap;
     }
 
-    public void sendEvents(Event event) throws IOException {
+    public void sendEvents(Event event) throws IOException, InterruptedException {
        // System.out.println(event.getStreamId()+ " : "+event.getData()); //for test
         List<EventClient> eventClientList= eventToClientsMap.get(event.getStreamId());
         if(eventClientList!=null) {
