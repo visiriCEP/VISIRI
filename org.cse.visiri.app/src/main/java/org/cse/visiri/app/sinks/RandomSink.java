@@ -49,7 +49,7 @@ public class RandomSink {
             public void receive(Event event) {
                 count++;
                 writer.write();
-                if(count%1000==0) {
+                if(count%100000==0) {
                     System.out.print("Received :");
                     System.out.println(count);
                  //   System.out.printf(" :Event received : %s ", event.getStreamId());

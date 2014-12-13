@@ -13,8 +13,8 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by visiri on 10/28/14.
@@ -30,6 +30,7 @@ public class EventClient {
     private OutputStream outputStream;
     private Socket clientSocket;
     private BlockingQueue blockingQueue;
+    private final int queueCapacity = 1000*1000;
 
 
     public EventClient(String hostUrl, List<StreamDefinition> streamDefinitions) throws Exception {
@@ -51,6 +52,10 @@ public class EventClient {
         //clientSocket = new Socket("10.219.122.189", 5180);
         outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
 
+       blockingQueue = new ArrayBlockingQueue(queueCapacity);
+       // blockingQueue =new LinkedBlockingQueue();
+        start();
+
         System.out.print("Event Client started :" + host + " :" + port + " ;");
         for(StreamDefinition sd: streamDefinitionsList)
         {
@@ -66,12 +71,12 @@ public class EventClient {
                 try {
                     while (true) {
                         Event eventStream = (Event) blockingQueue.take();
-
-                        StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(eventStream.getStreamId());
+                        String streamID = eventStream.getStreamId();
+                        StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(streamID);
                         Object[] event = eventStream.getData();
 
-                        outputStream.write((byte) streamRuntimeInfo.getStreamId().length());
-                        outputStream.write((streamRuntimeInfo.getStreamId()).getBytes("UTF-8"));
+                        outputStream.write((byte) streamID.length());
+                        outputStream.write(streamID.getBytes("UTF-8"));
 
                         ByteBuffer buf = ByteBuffer.allocate(streamRuntimeInfo.getFixedMessageSize());
                         int[] stringDataIndex = new int[streamRuntimeInfo.getNoOfStringAttributes()];
@@ -106,7 +111,7 @@ public class EventClient {
                         for (int aStringIndex : stringDataIndex) {
                             outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
                         }
-                        outputStream.flush();
+                      //  outputStream.flush();
                       //      System.out.println("sent event-- : " + eventStream.getStreamId()+".");
                     }
                 }catch(Exception e){
@@ -138,13 +143,13 @@ public class EventClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        outputStream.write(buf.array());
-        for (int aStringIndex : stringDataIndex) {
-            outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
-        }
-        outputStream.flush();
-    //    System.out.println("sent event : " + eventStream.getStreamId()+".");
+//
+//        outputStream.write(buf.array());
+//        for (int aStringIndex : stringDataIndex) {
+//            outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
+//        }
+//        outputStream.flush();
+//    //    System.out.println("sent event : " + eventStream.getStreamId()+".");
 
     }
 
