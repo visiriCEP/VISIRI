@@ -1,4 +1,4 @@
-package org.cse.visiri.app.sinks;
+package org.cse.visiri.app;
 
 import org.cse.visiri.app.Evaluation;
 import org.cse.visiri.app.util.Writer;
@@ -136,7 +136,7 @@ public class EventSink {
             public void receive(Event event) {
 
                 writer.write();
-                if(count%1000==0) {
+                //if(count%1000==0) {
                     System.out.print(count);
                     System.out.printf(":Event received : %s ", event.getStreamId());
 
@@ -145,7 +145,7 @@ public class EventSink {
                         System.out.print(",");
                     }
                     System.out.println("}");
-                }
+            //    }
                 count++;
                // eventRateStore.increment();
 

@@ -31,19 +31,19 @@ public class Agent extends Thread {
         while(true){
 
             //Double utilizationLevel=utilizationUpdater.getUtilizationLevel();
-            Utilization utilization=utilizationUpdater.update();
-            double utilizationLevel=utilization.getOverallUtilizationValue();
-            windowQueue.add(utilizationLevel);
-            double utilizationLevelAvg=windowQueue.getAverage();
-            if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-//                transferEngines();
-            }
-
-            try {
-                sleep(Configuration.AGENT_UPDATE_PERIOD);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            Utilization utilization=utilizationUpdater.update();
+//            double utilizationLevel=utilization.getOverallUtilizationValue();
+//            windowQueue.add(utilizationLevel);
+//            double utilizationLevelAvg=windowQueue.getAverage();
+//            if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
+////                transferEngines();
+//            }
+//
+//            try {
+//                sleep(Configuration.AGENT_UPDATE_PERIOD);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

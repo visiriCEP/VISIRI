@@ -92,7 +92,11 @@ public class SiddhiCEPEngine extends CEPEngine {
                     event.setStreamId(events[i].getStreamId());
                     event.setData(events[i].getData());
                     try {
-                        outputEventReceiver.sendEvents(event);
+                        try {
+                            outputEventReceiver.sendEvents(event);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
