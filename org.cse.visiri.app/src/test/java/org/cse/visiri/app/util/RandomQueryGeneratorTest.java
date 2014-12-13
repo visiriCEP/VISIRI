@@ -35,7 +35,7 @@ public class RandomQueryGeneratorTest extends TestCase {
 
     public void testGenereateQueries() throws Exception
     {
-        List<StreamDefinition> indefs = qg.generateDefinitions(150,2,6);
+        List<StreamDefinition> indefs = qg.generateDefinitions(150,4,6);
         List<StreamDefinition> outdefs = qg.generateDefinitions(100,2,4);
 
         List<Query> queries = qg.generateQueries(200,indefs,outdefs);

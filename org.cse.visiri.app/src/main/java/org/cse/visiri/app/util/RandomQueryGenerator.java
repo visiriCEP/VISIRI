@@ -87,8 +87,9 @@ public class RandomQueryGenerator {
             //Query types
             // 0: filter 1
             // 1: filter 2
+            // 2,3: window
 
-            int queryType = randomizer.nextInt(2);
+            int queryType = randomizer.nextInt(4);
 
             String template = "from %s%s%s " +
                     " select %s " +
@@ -130,6 +131,23 @@ public class RandomQueryGenerator {
                     for (int i = 0; i < outAttrs.size(); i++) {
                         int attrPos = i;
                         String attr = inAttrs.get(attrPos).getName();
+                        inps.add(attr);
+                    }
+                    varInAttr = StringUtils.join(inps, ",");
+                    break;
+                }
+                case 2:
+                case 3:
+                {
+                    String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
+                    int batchCount = 5 + randomizer.nextInt(10*1000);
+                    varWindow="#window."+type+"("+batchCount+") ";
+
+                    List<String> inps = new ArrayList<String>();
+                    for (int i = 0; i < outAttrs.size(); i++) {
+                        int attrPos = i;
+                        String attr = " max(" + inAttrs.get(attrPos).getName() +
+                                        ") as " +inAttrs.get(attrPos).getName();
                         inps.add(attr);
                     }
                     varInAttr = StringUtils.join(inps, ",");
