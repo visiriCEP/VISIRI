@@ -1,6 +1,6 @@
 package org.cse.visiri.app.sinks;
 
-import org.cse.visiri.app.util.RandomQueryGenerator;
+import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.util.Writer;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
@@ -24,22 +24,18 @@ public class RandomSink {
     private long count;
 
     public RandomSink(){
-        writer=new Writer(400*1000);
+        writer=new Writer(100*1000);
     }
 
     private  List<StreamDefinition> getDefinitions()
     {
         eventRateStore=new EventRateStore();
 
-        RandomQueryGenerator qg = new RandomQueryGenerator(1);
-        final int inDefCount = 100, outDefCount = 50;
-        final int attrCntMin = 2, attrCntMax= 4;
+        RandomEvaluation ev=  new RandomEvaluation();
+        List<StreamDefinition> inDefs = ev.getInputDefinitions();
+        List<StreamDefinition> outDefs = ev.getOutputDefinitions();
 
-        List<StreamDefinition> inDefs = qg.generateDefinitions(inDefCount,attrCntMin,attrCntMax);
-        List<StreamDefinition> outDefs = qg.generateDefinitions(outDefCount,attrCntMin,attrCntMax);
-
-
-        return inDefs;
+        return outDefs;
     }
 
     public void start() throws Exception {
@@ -49,7 +45,7 @@ public class RandomSink {
             public void receive(Event event) {
                 count++;
                 writer.write();
-                if(count%100000==0) {
+                if(count%20000==0) {
                     System.out.print("Received :");
                     System.out.println(count);
                  //   System.out.printf(" :Event received : %s ", event.getStreamId());

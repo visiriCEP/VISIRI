@@ -1,6 +1,6 @@
 package org.cse.visiri.app.sources;
 
-import org.cse.visiri.app.util.RandomQueryGenerator;
+import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.util.Event;
 import org.cse.visiri.util.StreamDefinition;
@@ -15,16 +15,12 @@ import java.util.Scanner;
 public class RandomSource {
 
     EventClient cl;
-    Random r = new Random();
+    Random r = new Random(1);
     private List<StreamDefinition> getDefinitions()
     {
-        RandomQueryGenerator qg = new RandomQueryGenerator(1);
-        final int inDefCount = 100, outDefCount = 50;
-        final int attrCntMin = 2, attrCntMax= 4;
+        RandomEvaluation ev = new RandomEvaluation();
 
-        List<StreamDefinition> inDefs = qg.generateDefinitions(inDefCount,attrCntMin,attrCntMax);
-        List<StreamDefinition> outDefs = qg.generateDefinitions(outDefCount,attrCntMin,attrCntMax);
-
+        List<StreamDefinition> inDefs = ev.getInputDefinitions();
 
         return inDefs;
     }
@@ -33,7 +29,7 @@ public class RandomSource {
     {
 
         cl =// new EventClient("169.254.190.2:6666",getDefinitions());
-        new EventClient("localhost:6666",getDefinitions());
+        new EventClient("localhost:7211",getDefinitions());
         //7211
     }
 
@@ -76,7 +72,7 @@ public class RandomSource {
     {
         System.out.println("Started");
         List<StreamDefinition> defs = getDefinitions();
-        int count = 3* 1000* 1000;
+        int count = 2* 1000* 1000;
         int freq = 100*1000;
         int defCount = defs.size();
         for(int i=1;i <= count; i++)

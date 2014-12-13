@@ -61,9 +61,9 @@ public class RandomQueryGenerator {
             StreamDefinition def = new StreamDefinition();
             def.setStreamId(newStreamName());
             int attrCount = queryAttrMin+randomizer.nextInt(queryAttrMax-queryAttrMin + 1);
-            for(int attrId= 0 ; attrId< attrCount ; attrId++)
+            for(int attrId= 1 ; attrId<= attrCount ; attrId++)
             {
-                def.addAttribute(newAttributeName(), StreamDefinition.Type.FLOAT);
+                def.addAttribute("attr" + attrId, StreamDefinition.Type.FLOAT);
             }
 
             defs.add(def);
@@ -90,7 +90,7 @@ public class RandomQueryGenerator {
 
             int queryType = randomizer.nextInt(2);
 
-            String template = "from %s %s %s " +
+            String template = "from %s%s%s " +
                     " select %s " +
                     " insert into %s ";
 
@@ -113,7 +113,7 @@ public class RandomQueryGenerator {
 
                     for(int i=0; i < outAttrs.size(); i++)
                     {
-                        int attrPos = randomizer.nextInt(inAttrs.size());
+                        int attrPos =i;
                         String attr = inAttrs.get(attrPos).getName();
                         inps.add(attr);
                     }
@@ -128,7 +128,7 @@ public class RandomQueryGenerator {
 
                     List<String> inps = new ArrayList<String>();
                     for (int i = 0; i < outAttrs.size(); i++) {
-                        int attrPos = randomizer.nextInt(inAttrs.size());
+                        int attrPos = i;
                         String attr = inAttrs.get(attrPos).getName();
                         inps.add(attr);
                     }
