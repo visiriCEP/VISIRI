@@ -31,6 +31,7 @@ public class EventClient {
     private Socket clientSocket;
     private BlockingQueue blockingQueue;
 
+
     public EventClient(String hostUrl, List<StreamDefinition> streamDefinitions) throws Exception {
         this.hostUrl = hostUrl;
         this.streamDefinitionsList = streamDefinitions;
@@ -49,15 +50,13 @@ public class EventClient {
         clientSocket = new Socket(host, port);
         //clientSocket = new Socket("10.219.122.189", 5180);
         outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
-        blockingQueue=new LinkedBlockingQueue<Event>();
-        start();
+
         System.out.print("Event Client started :" + host + " :" + port + " ;");
         for(StreamDefinition sd: streamDefinitionsList)
         {
             System.out.print(sd.getStreamId() + ", ");
         }
         System.out.println();
-
     }
 
     public void start(){
