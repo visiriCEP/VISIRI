@@ -24,7 +24,7 @@ public class RandomSink {
     private long count;
 
     public RandomSink(){
-        writer=new Writer(100);
+        writer=new Writer(400*1000);
     }
 
     private  List<StreamDefinition> getDefinitions()
@@ -54,7 +54,7 @@ public class RandomSink {
                     System.out.println(count);
                  //   System.out.printf(" :Event received : %s ", event.getStreamId());
 
-                   
+
                 }
 
                // eventRateStore.increment();

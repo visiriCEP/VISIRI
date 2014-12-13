@@ -74,8 +74,9 @@ public class RandomSource {
 
     public void sendEvents() throws Exception
     {
+        System.out.println("Started");
         List<StreamDefinition> defs = getDefinitions();
-        int count = 500* 1000;
+        int count = 3* 1000* 1000;
         int freq = 100*1000;
         int defCount = defs.size();
         for(int i=1;i <= count; i++)
