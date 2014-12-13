@@ -1,6 +1,7 @@
 package org.cse.visiri.app.util;
 
 import junit.framework.TestCase;
+import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.util.List;
@@ -30,5 +31,27 @@ public class RandomQueryGeneratorTest extends TestCase {
             }
             System.out.println();
         }
+    }
+
+    public void testGenereateQueries() throws Exception
+    {
+        List<StreamDefinition> indefs = qg.generateDefinitions(150,2,6);
+        List<StreamDefinition> outdefs = qg.generateDefinitions(100,2,4);
+
+        List<Query> queries = qg.generateQueries(200,indefs,outdefs);
+
+        for(Query q: queries)
+        {
+            System.out.print(q.getQueryId() +":\n" );
+            for(StreamDefinition  d :q.getInputStreamDefinitionsList())
+            {
+                System.out.print(d.getStreamId() + " ");
+            }
+
+            System.out.println(" -> " + q.getOutputStreamDefinition().getStreamId());
+            System.out.println(q.getQuery());
+            System.out.println();
+        }
+        assertEquals(200,queries.size());
     }
 }

@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class StockSource {
     //events per second
-    public final int frequency = 10000;
+    public final int frequency = 80000;
     EventRateStore eventRateStore;
     public static void main(String[] arg) throws Exception {
         StockSource sink = new StockSource();
@@ -46,7 +46,7 @@ public class StockSource {
 
         try {
             System.out.println(System.getProperty("user.dir"));
-            EventClient client = new EventClient("localhost:7211",getDefinitions());
+            EventClient client = new EventClient("localhost:6666",getDefinitions());
 
 
 
@@ -61,7 +61,7 @@ public class StockSource {
                     client.sendEvent(ev);
                     eventRateStore.increment("StockSource");
 
-                    if(sent % 1000 == 0) {
+                    if(sent % frequency == 0) {
                         Thread.sleep(1000);
                         sent = 0;
                     }

@@ -1,5 +1,6 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sinks;
 
+import org.cse.visiri.app.Evaluation;
 import org.cse.visiri.app.util.Writer;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
@@ -109,6 +110,16 @@ public class EventSink {
         defs.addAll(outDefs.values());
 
 
+        StreamDefinition inputStreamDefinition1=new StreamDefinition();
+        inputStreamDefinition1.setStreamId("stock");
+        inputStreamDefinition1.addAttribute("Index", StreamDefinition.Type.INTEGER);
+        inputStreamDefinition1.addAttribute("Open", StreamDefinition.Type.FLOAT);
+        inputStreamDefinition1.addAttribute("High", StreamDefinition.Type.FLOAT);
+        inputStreamDefinition1.addAttribute("Low", StreamDefinition.Type.FLOAT);
+        inputStreamDefinition1.addAttribute("Close", StreamDefinition.Type.FLOAT);
+        inputStreamDefinition1.addAttribute("Volume", StreamDefinition.Type.INTEGER);
+        inputStreamDefinition1.addAttribute("Date", StreamDefinition.Type.STRING);
+        defs.add(inputStreamDefinition1);
 
 //        StreamDefinition def1=new StreamDefinition();
 //        def1.setStreamId("ABC");

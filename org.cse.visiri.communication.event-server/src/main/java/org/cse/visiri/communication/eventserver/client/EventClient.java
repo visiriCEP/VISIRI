@@ -109,7 +109,7 @@ public class EventClient {
         for (int aStringIndex : stringDataIndex) {
             outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
         }
-        outputStream.flush();
+     //   outputStream.flush();
     //    System.out.println("sent event : " + eventStream.getStreamId()+".");
 
     }
