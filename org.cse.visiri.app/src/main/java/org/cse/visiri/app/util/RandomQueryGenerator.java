@@ -76,6 +76,9 @@ public class RandomQueryGenerator {
     {
         List<Query> allQueries= new ArrayList<Query>(queryCount);
 
+        int numTypes = 5;
+        int[] typeFreq = new int[numTypes];
+
         for(int qIndex = 0; qIndex < queryCount ; qIndex++)
         {
             int inputIndex= randomizer.nextInt(inputs.size());
@@ -88,8 +91,10 @@ public class RandomQueryGenerator {
             // 0: filter 1
             // 1: filter 2
             // 2,3: window
+            // 4: window + filter 1
 
-            int queryType = randomizer.nextInt(4);
+            int queryType = randomizer.nextInt(numTypes);
+            typeFreq[queryType]++;
 
             String template = "from %s%s%s " +
                     " select %s " +
@@ -106,7 +111,7 @@ public class RandomQueryGenerator {
 
             switch (queryType)
             {
-                case 0:
+                case 0: //filter 1
                 {
                    String cond = newCondition(inAttrs);
                     varCondition = "[" + cond +"]";
@@ -121,7 +126,7 @@ public class RandomQueryGenerator {
                     varInAttr= StringUtils.join(inps,",");
                     break;
                 }
-                case 1:
+                case 1: //filter 2
                 {
                     String cond1 = newCondition(inAttrs);
                     String cond2 = newCondition(inAttrs);
@@ -136,7 +141,7 @@ public class RandomQueryGenerator {
                     varInAttr = StringUtils.join(inps, ",");
                     break;
                 }
-                case 2:
+                case 2: //window
                 case 3:
                 {
                     String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
@@ -154,6 +159,26 @@ public class RandomQueryGenerator {
                     break;
                 }
 
+                case 4: //window + 1 filter
+                {
+                    String cond = newCondition(inAttrs);
+                    varCondition = "[" + cond +"]";
+                    String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
+                    int batchCount = 5 + randomizer.nextInt(5000);
+                    varWindow="#window."+type+"("+batchCount+") ";
+
+                    List<String> inps = new ArrayList<String>();
+
+                    for (int i = 0; i < outAttrs.size(); i++) {
+                        int attrPos = i;
+                        String attr = " max(" + inAttrs.get(attrPos).getName() +
+                                ") as " +inAttrs.get(attrPos).getName();
+                        inps.add(attr);
+                    }
+                    varInAttr= StringUtils.join(inps,",");
+                    break;
+                }
+
             }
 
             String queryString = String.format(template,varInput, varCondition,varWindow, varInAttr, varOutput);
@@ -162,6 +187,13 @@ public class RandomQueryGenerator {
             Query query = new Query( queryString,inputDefList,outputDef,newQueryID(), Configuration.ENGINE_TYPE_SIDDHI);
             allQueries.add(query);
         }
+
+        System.out.print("Types :");
+        for(int i=0; i < numTypes; i++)
+        {
+            System.out.print(typeFreq[i]+" ");
+        }
+        System.out.println();
 
         return allQueries;
     }
