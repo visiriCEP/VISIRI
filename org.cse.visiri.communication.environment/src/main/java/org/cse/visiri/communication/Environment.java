@@ -32,6 +32,9 @@ public class Environment implements MessageListener {
     private final String ORIGINAL_TO_DEPLOYED_MAP = "ORIGINAL_TO_DEPLOYED_MAP";
     private final String SUBSCRIBER_MAP = "SUBSCRIBER_MAP";
     private final String NODE_LIST = "NODE_LIST";
+    private final String PERSISTENCE_MAP = "persistenceMap";
+    private final String REVISION_MAP = "revisionMap";
+
 
     private List<String> bufferingEventList = null;
     private EnvironmentChangedCallback changedCallback = null;
@@ -120,6 +123,14 @@ public class Environment implements MessageListener {
 
     public Map<Query, List<Query>> getOriginalToDeployedQueriesMapping() {
         return hzInstance.getMap(ORIGINAL_TO_DEPLOYED_MAP);
+    }
+
+    public Map<String, Map<String, byte[]>> getPersistenceMapping() {
+        return hzInstance.getMap(PERSISTENCE_MAP);
+    }
+
+    public Map<String, List<String>> getRevisionMapping() {
+        return hzInstance.getMap(REVISION_MAP);
     }
 
     public void stop(){
