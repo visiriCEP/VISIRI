@@ -19,7 +19,8 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
-    public double costThreshold = 10;
+    public double costThreshold = 5000;
+    public final double queryCountThreshold = 80;
     public double utilizationThreshold = 10;
 
 
@@ -98,6 +99,33 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             //take all nodes as possible candidates
             Set<String> candidateNodes = new HashSet<String>(nodeList);
 
+
+            //---------- STEP 1------------
+            //filter out nodes having too many queries
+            {
+                Collection<List<Query>> querySets = nodeQueryTable.values();
+
+                int minQueries = querySets.iterator().next().size();
+
+                for(List<Query> set: querySets)
+                {
+                    if(minQueries > set.size())
+                    {
+                        minQueries = set.size();
+                    }
+                }
+
+                //filter ones above threshold
+                for (Iterator<String> iter = candidateNodes.iterator(); iter.hasNext(); ) {
+                    String nodeId = iter.next();
+                    if ( nodeQueryTable.get(nodeId).size() > minQueries + queryCountThreshold) {
+                        iter.remove();
+                    }
+                }
+            }
+
+
+            //------------ STEP 2---------
             //minimum total cost
             double minCost = Collections.min(costs.values());
 
@@ -126,6 +154,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             */
 
             //types of events used
+            //------------- STEP 3 ------------------
             Set<String> usedEventTypes = new HashSet<String>();
             for(StreamDefinition def : q.getInputStreamDefinitionsList())
             {

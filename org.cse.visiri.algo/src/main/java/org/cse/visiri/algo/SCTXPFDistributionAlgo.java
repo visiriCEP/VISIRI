@@ -99,6 +99,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             //take all nodes as possible candidates
             Set<String> candidateNodes = new HashSet<String>(nodeList);
 
+            // -------------- STEP 1--------
             //filter out nodes having too many queries
             {
                 Collection<List<Query>> querySets = nodeQueryTable.values();
@@ -129,6 +130,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
                 usedEventTypes.add(def.getStreamId());
             }
 
+            /// ------------- STEP 2 -----
             //number of common event streams
             int commonMax = 0;
             List<String> maximumCommonEventNodes = new ArrayList<String>();
