@@ -19,8 +19,8 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
-    public double costThreshold = 10;
-    public double utilizationThreshold = 10;
+    public final double queryCountThreshold = 80;
+    public final double utilizationThreshold = 10;
 
 
     @Override
@@ -47,6 +47,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             //calculate costs of each node
             double cost = 0.0;
 
+            // put an empty list to empty nodes
             if(!nodeQueryTable.containsKey(str))
             {
                 nodeQueryTable.put(str,new ArrayList<Query>());
@@ -98,32 +99,28 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             //take all nodes as possible candidates
             Set<String> candidateNodes = new HashSet<String>(nodeList);
 
-            //minimum total cost
-            double minCost = Collections.min(costs.values());
-
-            //filter ones above threshold
-            for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
+            //filter out nodes having too many queries
             {
-                String nodeId = iter.next();
-                if(costs.get(nodeId) > minCost + costThreshold)
+                Collection<List<Query>> querySets = nodeQueryTable.values();
+
+                int minQueries = querySets.iterator().next().size();
+
+                for(List<Query> set: querySets)
                 {
-                    iter.remove();
+                    if(minQueries > set.size())
+                    {
+                        minQueries = set.size();
+                    }
+                }
+
+                //filter ones above threshold
+                for (Iterator<String> iter = candidateNodes.iterator(); iter.hasNext(); ) {
+                    String nodeId = iter.next();
+                    if ( nodeQueryTable.get(nodeId).size() > minQueries + queryCountThreshold) {
+                        iter.remove();
+                    }
                 }
             }
-
-            /*
-            // min cpu utilization
-            double minUtil = Collections.min(utilizations.values());
-            //filter ones above utilization threshold
-            for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
-            {
-                String nodeId = iter.next();
-                if(utilizations.get(nodeId) > minUtil + utilizationThreshold)
-                {
-                    iter.remove();
-                }
-            }
-            */
 
             //types of events used
             Set<String> usedEventTypes = new HashSet<String>();
@@ -159,7 +156,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
             //select one node randomly
             int randIndex = randomizer.nextInt(candidateNodes.size());
-            String targetNode = candidateNodes.toArray(new String[candidateNodes.size()])[randIndex];
+            String targetNode = new ArrayList<String>(candidateNodes).get(randIndex);
 
 
             // *********** Add to distribution *************
