@@ -38,9 +38,10 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
 
         SiddhiConfiguration configuration = new SiddhiConfiguration();
-        configuration.setQueryPlanIdentifier("Test");
+        configuration.setQueryPlanIdentifier("QP1");
         configuration.setAsyncProcessing(false);
         SiddhiManager siddhiManager = new SiddhiManager(configuration);
+//        SiddhiManager siddhiManager = new SiddhiManager();
         siddhiManager.setPersistStore(persistenceStore);
         InputHandler inputHandler = siddhiManager.defineStream(streamDefinition);
 
@@ -59,6 +60,7 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
         System.out.println("revision id:::::::::::::"+revision);
 
+
         inputHandler.send(new Object[]{"IBM", 75.6f, 100});
         inputHandler.send(new Object[]{"WSO2", 75.6f, 100});
 
@@ -69,8 +71,9 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
         ////////////////////////////////////////////////////////////////////////////////////
         configuration = new SiddhiConfiguration();
-        configuration.setQueryPlanIdentifier("Test");
+        configuration.setQueryPlanIdentifier("QP1");
         siddhiManager = new SiddhiManager(configuration);
+//        siddhiManager = new SiddhiManager();
         siddhiManager.setPersistStore(persistenceStore);
 
         inputHandler = siddhiManager.defineStream(streamDefinition);
@@ -78,13 +81,16 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
         siddhiManager.addCallback(queryReference2, callback);
 
         //loading
-        siddhiManager.restoreLastRevision();
+        //siddhiManager.restoreLastRevision();
+        siddhiManager.restoreRevision(revision);
 
-        inputHandler.send(new Object[]{"IBM", 75.6f, 100});
-        inputHandler.send(new Object[]{"WSO2", 75.6f, 100});
+        inputHandler.send(new Object[]{"IBM", 75.6f, 150});
+        inputHandler.send(new Object[]{"WSO2", 75.6f, 150});
 
-        Thread.sleep(50000);
+        siddhiManager.persist();
         siddhiManager.shutdown();
+        Thread.sleep(500000);
+
 
         //Because of the use of in memory persistence store
         Hazelcast.shutdownAll();
@@ -116,8 +122,8 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
 
         SiddhiConfiguration configuration = new SiddhiConfiguration();
-        configuration.setQueryPlanIdentifier("Test");
-        configuration.setAsyncProcessing(false);
+//        configuration.setQueryPlanIdentifier("QP1");
+//        configuration.setAsyncProcessing(false);
         SiddhiManager siddhiManager;// = new SiddhiManager(configuration);
         //siddhiManager.setPersistStore(persistenceStore);
         InputHandler inputHandler; //= siddhiManager.defineStream(streamDefinition);
@@ -147,8 +153,9 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
         /*///////////////////////////////////////////////////////////////////////////////////
         configuration = new SiddhiConfiguration();
-        configuration.setQueryPlanIdentifier("Test");
+        configuration.setQueryPlanIdentifier("QP1");
         siddhiManager = new SiddhiManager(configuration);
+//        siddhiManager = new SiddhiManager();
         siddhiManager.setPersistStore(persistenceStore);
 
         inputHandler = siddhiManager.defineStream(streamDefinition);
