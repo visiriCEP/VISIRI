@@ -44,8 +44,8 @@ public class Environment implements MessageListener {
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
 
-    private static TransactionOptions options=null;
-    private static TransactionContext transaction =null;
+   // private static TransactionOptions options=null;
+  //  private static TransactionContext transaction =null;
 
 
 
@@ -85,16 +85,16 @@ public class Environment implements MessageListener {
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
-        options = new TransactionOptions().setTransactionType( TransactionOptions.TransactionType.LOCAL );
-        transaction= hzInstance.newTransactionContext(options);
-        transaction.beginTransaction();
+       // options = new TransactionOptions().setTransactionType( TransactionOptions.TransactionType.LOCAL );
+        //transaction= hzInstance.newTransactionContext(options);
+        //transaction.beginTransaction();
         //Adding to originalQueryToDeployedQueryM
 
         Map<Query, List<Query>> generatedQueries = queryDistribution.getGeneratedQueries();
         int xx = 0;
         System.out.print("adding query map....");
         for (Query query : generatedQueries.keySet()) {
-            transaction.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
+            hzInstance.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
             if(++xx % 10 == 0)
             {
                 System.out.print(xx+ " ");
@@ -106,7 +106,7 @@ public class Environment implements MessageListener {
         System.out.print("put query allocation map....");
         xx =0;
 
-        Map<String,List<Query>> nodeQueryMap = new HashMap<String, List<Query>>((Map<String,List<Query>>) transaction.getMap(NODE_QUERY_MAP));
+        Map<String,List<Query>> nodeQueryMap = new HashMap<String, List<Query>>(hzInstance.<String, List<Query>>getMap(NODE_QUERY_MAP));
 
         for (Query query : queryAllocation.keySet()) {
             String ip = queryAllocation.get(query);
@@ -117,16 +117,16 @@ public class Environment implements MessageListener {
             }
 
             queryList.add(query);
-            transaction.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
             if(++xx % 10 == 0)
             {
                 System.out.print(xx+ " ");
             }
         }
         System.out.println(" done.");
-        transaction.commitTransaction();
+       // transaction.commitTransaction();
         System.out.println("-- commited---");
-        transaction = null;
+       // transaction = null;
     }
 
     /**
@@ -196,9 +196,9 @@ public class Environment implements MessageListener {
 
     public Map<String, List<String>> getEventNodeMapping() {
 
-        transaction.beginTransaction();
+       // transaction.beginTransaction();
 
-        TransactionalMap<String,List<Query>> nodeQueryMap=transaction.getMap(NODE_QUERY_MAP);
+        Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
         Map<String,Set<String>> eventNodeMap=new HashMap<String, Set<String>>();
         Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
@@ -229,7 +229,7 @@ public class Environment implements MessageListener {
             eventNodeMap2.put(stream,iplist);
         }
 
-        transaction.commitTransaction();
+      // transaction.commitTransaction();
         return eventNodeMap2;
     }
 
