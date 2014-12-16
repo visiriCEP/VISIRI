@@ -8,7 +8,6 @@ public class AlgoFactory {
     public AlgoFactory(){};
 
     public static QueryDistributionAlgo createAlgorithm(int type){
-
             if(type==QueryDistributionAlgo.SCTXPF_ALGO){
                 return new SCTXPFDistributionAlgo();
             }
