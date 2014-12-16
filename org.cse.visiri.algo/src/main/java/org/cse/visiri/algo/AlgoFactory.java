@@ -11,7 +11,11 @@ public class AlgoFactory {
 
             if(type==QueryDistributionAlgo.SCTXPF_ALGO){
                 return new SCTXPFDistributionAlgo();
-            }else if(type==QueryDistributionAlgo.ROUNDROBIN_ALGO){
+            }
+            if(type==QueryDistributionAlgo.SCTXPF_PLUS_ALGO){
+                return new SCTXPFPlusDistributionAlgo();
+            }
+            else if(type==QueryDistributionAlgo.ROUNDROBIN_ALGO){
                 return new RoundRobinDistributionAlgo();
             }else if(type==QueryDistributionAlgo.RANDOM_DISTRIBUTOR_ALGO){
                 return new RandomDistributionAlgo();
