@@ -104,7 +104,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void newEngineRecieved(String persistedEngine) {
+    public void newEngineRecieved(Query query) {
 
     }
+
 }
