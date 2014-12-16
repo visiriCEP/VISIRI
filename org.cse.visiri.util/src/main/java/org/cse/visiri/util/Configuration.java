@@ -13,6 +13,8 @@ public class Configuration {
     public final static int ENGINE_TYPE_DIRECT=0;
     public final static int ENGINE_TYPE_SIDDHI=1;
 
+    public final static int EVENT_RATE_FREQ=10000;
+
 
     public static int getNodeType() {
         return nodeType;

@@ -40,7 +40,7 @@ public class EventRateStore {
         avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
         avgMap[avgPos]=mil;
 
-        if(avgPos%400==0){
+        if(avgPos%Configuration.EVENT_RATE_FREQ==0){
             System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
         }
     }
