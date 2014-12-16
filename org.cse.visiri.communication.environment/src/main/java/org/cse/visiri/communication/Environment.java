@@ -3,6 +3,8 @@ package org.cse.visiri.communication;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
 
+import com.hazelcast.transaction.TransactionContext;
+import com.hazelcast.transaction.impl.Transaction;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -40,12 +42,17 @@ public class Environment implements MessageListener {
     private EnvironmentChangedCallback changedCallback = null;
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
+    private static TransactionContext transaction =null;
+
+
 
     private ITopic<Object> topic;
 
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
+        transaction= hzInstance.newTransactionContext();
+
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -75,8 +82,8 @@ public class Environment implements MessageListener {
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
 
-        //Adding to originalQueryToDeployedQueryMap
-
+        transaction.beginTransaction();
+        //Adding to originalQueryToDeployedQueryM
         Map<Query, List<Query>> generatedQueries = queryDistribution.getGeneratedQueries();
 
         for (Query query : generatedQueries.keySet()) {
@@ -96,6 +103,8 @@ public class Environment implements MessageListener {
             queryList.add(query);
             hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
         }
+
+        transaction.commitTransaction();
     }
 
     /**
@@ -237,8 +246,8 @@ public class Environment implements MessageListener {
        topic.publish(new MessageObject(eventType));
     }
 
-    public void sendEngine(String engine,String destination){
-        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,engine,destination));
+    public void sendEngine(Query query,String destination){
+        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,query,destination));
     }
 
 
