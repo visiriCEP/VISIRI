@@ -5,6 +5,8 @@ import org.cse.visiri.util.EventRateStore;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 import org.wso2.siddhi.core.SiddhiManager;
+import org.wso2.siddhi.core.config.SiddhiConfiguration;
+import org.wso2.siddhi.core.persistence.PersistenceStore;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.query.api.definition.Attribute;
@@ -42,7 +44,14 @@ public class SiddhiCEPEngine extends CEPEngine {
     @Override
     public void start() {
 
-        this.siddhiManager=new SiddhiManager();
+        SiddhiConfiguration configuration = new SiddhiConfiguration();
+        configuration.setQueryPlanIdentifier(query.getQueryId());
+        configuration.setAsyncProcessing(false);
+        this.siddhiManager=new SiddhiManager(configuration);
+        PersistenceStore persistenceStore = new SiddhiDistributedPersistenceHandler();
+        siddhiManager.setPersistStore(persistenceStore);
+
+
         List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
         String queryString=query.getQuery();
         String outputStreamId=query.getOutputStreamDefinition().getStreamId();

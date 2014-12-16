@@ -33,6 +33,7 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
         cost+=calcFilteringCost(q.getQuery(), tokenList);
         cost+=calcStreamCountCost(siddhiQuery);
         cost+=calcTimeWindowCost(q.getQuery(), tokenList);
+        cost=Math.log(cost);
         return cost;
     }
 
@@ -89,7 +90,7 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
                 if (tokenList.get(windowIdx).getType()==21){
                     timeUnitVal=calcTimeUnitValue(timeUnit);
                 }
-                cost+=Math.pow(windowVal*timeUnitVal,2);
+                cost+=Math.pow(windowVal*timeUnitVal,1.5);
                 //break;
             }
         }

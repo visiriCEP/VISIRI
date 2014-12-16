@@ -24,7 +24,7 @@ public class CostModelCalculatorTest extends TestCase {
         String queryString=//"from cseEventStream[price==foo.price and foo.try>5 in foo] " +
                 //"select symbol, avg(price) as avgPrice ";
 
-                "from car [Id>=10]#window.time(1000) select brand,Id insert into filterCar;";
+                "from car [Id>=10]#window.length(10000) select brand,Id insert into filterCar;";
 
 //        "from ABC " +
 //                "[ Att1 >= 50 ] select Att1 " +

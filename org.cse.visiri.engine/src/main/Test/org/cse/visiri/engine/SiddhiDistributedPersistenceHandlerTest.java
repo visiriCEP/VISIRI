@@ -89,7 +89,7 @@ public class SiddhiDistributedPersistenceHandlerTest extends TestCase {
 
         siddhiManager.persist();
         siddhiManager.shutdown();
-        Thread.sleep(500000);
+        Thread.sleep(50000);
 
 
         //Because of the use of in memory persistence store
