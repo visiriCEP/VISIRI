@@ -140,7 +140,7 @@ public class EngineHandler {
        CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
        queryEngineMap.put(query.getQueryId(),cepEngine);
 
-        System.out.print("Adding new query :");
+       System.out.print("Adding new query :");
 
        List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
        for(int i=0;i<inputStreamDefinitionList.size();i++){

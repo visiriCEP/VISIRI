@@ -115,12 +115,15 @@ public class Environment implements MessageListener {
             }
 
             queryList.add(query);
-            hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            //hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            nodeQueryMap.put(ip, queryList);
             if(++xx % 100 == 0)
             {
                 System.out.print(xx+ " ");
             }
         }
+        getNodeQueryMap().putAll(nodeQueryMap);
+
         System.out.println(" done.");
        // transaction.commitTransaction();
         System.out.println("-- commited---");
