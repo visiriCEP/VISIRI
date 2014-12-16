@@ -48,11 +48,11 @@ public class Agent extends Thread {
     }
 
     private void transferEngines(){
-            Map<String,String> transferableEngines=engineHandler.getTransferableEngines();
+            Map<Query,String> transferableEngines=engineHandler.getTransferableEngines();
 
             //TODO should Add inter node communications
-            for(String engine : transferableEngines.keySet()){
-                environment.sendEngine(engine,transferableEngines.get(engine));
+            for(Query query : transferableEngines.keySet()){
+                environment.sendEngine(query,transferableEngines.get(query));
             }
 
         //Notification to dispatcher

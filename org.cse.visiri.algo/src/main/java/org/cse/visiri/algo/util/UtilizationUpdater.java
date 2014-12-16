@@ -38,7 +38,7 @@ public class UtilizationUpdater {
         double freeMemoryPercentage=getMemoryUsingSigar();
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
-
+        utilization.setAverageSystemLoad(cpuUsage);
         return utilization;
 
     }

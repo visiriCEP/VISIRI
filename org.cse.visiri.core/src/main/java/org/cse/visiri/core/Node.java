@@ -141,9 +141,9 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void newEngineRecieved(String persistedEngine) {
+    public void newEngineRecieved(Query query) {
         try {
-            engineHandler.dynamicAddQuery(persistedEngine);
+            engineHandler.dynamicAddQuery(query);
         } catch (Exception e) {
             System.err.println("Failed to add new Engine");
         }

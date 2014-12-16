@@ -1,5 +1,7 @@
 package org.cse.visiri.communication;
 
+import org.cse.visiri.util.Query;
+
 import java.io.Serializable;
 
 /**
@@ -7,12 +9,12 @@ import java.io.Serializable;
  */
 public class MessageObject implements Serializable {
     private int eventType;
-    private String persistedEngine;
+    private Query query;
     private String destination;
 
-    public MessageObject(int eventType,String persistedEngine,String destination){
+    public MessageObject(int eventType,Query query,String destination){
         this.eventType=eventType;
-        this.persistedEngine=persistedEngine;
+        this.query=query;
         this.destination=destination;
     }
 
@@ -25,8 +27,8 @@ public class MessageObject implements Serializable {
         return eventType;
     }
 
-    public String getPersistedEngine() {
-        return persistedEngine;
+    public Query getPersistedEngine() {
+        return query;
     }
     public String getDestination(){
         return destination;

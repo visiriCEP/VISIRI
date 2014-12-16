@@ -83,9 +83,7 @@ public class SiddhiCEPEngine extends CEPEngine {
                 }
 
                 streamDefinition.attribute(attributeList.get(j).getName(),type1 );
-
             }
-
            siddhiManager.defineStream(streamDefinition);
 
         }
@@ -116,15 +114,18 @@ public class SiddhiCEPEngine extends CEPEngine {
     }
 
     @Override
+    public void restoreEngine(){
+        siddhiManager.restoreLastRevision();
+    }
+
+    @Override
     public void stop() {
         siddhiManager.shutdown();
     }
 
     @Override
     public Object saveState() {
-
          return siddhiManager.persist();
-
     }
 
     @Override

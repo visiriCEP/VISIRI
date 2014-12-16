@@ -3,6 +3,9 @@ package org.cse.visiri.communication;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
 
+import com.hazelcast.transaction.TransactionContext;
+import com.hazelcast.transaction.TransactionOptions;
+import com.hazelcast.transaction.impl.Transaction;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -41,11 +44,20 @@ public class Environment implements MessageListener {
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
 
+    private static TransactionOptions options=null;
+    private static TransactionContext transaction =null;
+
+
+
     private ITopic<Object> topic;
 
     private Environment() {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
+
+        options = new TransactionOptions().setTransactionType( TransactionOptions.TransactionType.LOCAL );
+        transaction= hzInstance.newTransactionContext(options);
+
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -75,12 +87,12 @@ public class Environment implements MessageListener {
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
 
-        //Adding to originalQueryToDeployedQueryMap
-
+        transaction.beginTransaction();
+        //Adding to originalQueryToDeployedQueryM
         Map<Query, List<Query>> generatedQueries = queryDistribution.getGeneratedQueries();
 
         for (Query query : generatedQueries.keySet()) {
-            hzInstance.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
+            transaction.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
         }
 
         //Adding to nodeToQueriesMap
@@ -88,14 +100,16 @@ public class Environment implements MessageListener {
 
         for (Query query : queryAllocation.keySet()) {
             String ip = queryAllocation.get(query);
-            List<Query> queryList = (List<Query>) (hzInstance.getMap(NODE_QUERY_MAP).get(ip));//.get(ip);
+            List<Query> queryList = (List<Query>) (transaction.getMap(NODE_QUERY_MAP).get(ip));//.get(ip);
 
             if (queryList == null) {
                 queryList = new ArrayList<Query>();
             }
             queryList.add(query);
-            hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            transaction.getMap(NODE_QUERY_MAP).put(ip, queryList);
         }
+
+        transaction.commitTransaction();
     }
 
     /**
@@ -165,7 +179,9 @@ public class Environment implements MessageListener {
 
     public Map<String, List<String>> getEventNodeMapping() {
 
-        Map<String,List<Query>> nodeQueryMap=hzInstance.getMap(NODE_QUERY_MAP);
+        transaction.beginTransaction();
+
+        TransactionalMap<String,List<Query>> nodeQueryMap=transaction.getMap(NODE_QUERY_MAP);
         Map<String,Set<String>> eventNodeMap=new HashMap<String, Set<String>>();
         Map<String,List<String>> eventNodeMap2=new HashMap<String, List<String>>();
 
@@ -196,6 +212,7 @@ public class Environment implements MessageListener {
             eventNodeMap2.put(stream,iplist);
         }
 
+        transaction.commitTransaction();
         return eventNodeMap2;
     }
 
@@ -237,8 +254,8 @@ public class Environment implements MessageListener {
        topic.publish(new MessageObject(eventType));
     }
 
-    public void sendEngine(String engine,String destination){
-        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,engine,destination));
+    public void sendEngine(Query query,String destination){
+        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,query,destination));
     }
 
 
