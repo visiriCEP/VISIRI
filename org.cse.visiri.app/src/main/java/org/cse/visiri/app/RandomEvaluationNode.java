@@ -38,8 +38,8 @@ public class RandomEvaluationNode {
             node.subscribeToStream(outputStream,Environment.getInstance().getNodeId()+":6666");
         }
 
-        System.out.println("Starting in 5 seconds");
-        Thread.sleep(5*1000);
+        System.out.println("Starting in 30 seconds");
+        Thread.sleep(30*1000);
 
         node.start();
 

@@ -140,16 +140,16 @@ public class EngineHandler {
        CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
        queryEngineMap.put(query.getQueryId(),cepEngine);
 
-       System.out.print("Adding new query :");
+    //   System.out.print("Adding new query :");
 
        List<StreamDefinition> inputStreamDefinitionList=query.getInputStreamDefinitionsList();
        for(int i=0;i<inputStreamDefinitionList.size();i++){
            StreamDefinition streamDefinition=inputStreamDefinitionList.get(i);
            setEnginesToEvents(streamDefinition.getStreamId(),cepEngine);
            streamDefinitionMap.put(streamDefinition.getStreamId(), streamDefinition);
-           System.out.print(" In:"+inputStreamDefinitionList.get(i).getStreamId());
+   //        System.out.print(" In:"+inputStreamDefinitionList.get(i).getStreamId());
        }
-        System.out.println(" Out:"+query.getOutputStreamDefinition().getStreamId());
+   //     System.out.println(" Out:"+query.getOutputStreamDefinition().getStreamId());
         this.myQueryList.add(query);
     }
 

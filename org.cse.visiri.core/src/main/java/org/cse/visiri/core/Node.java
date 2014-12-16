@@ -94,12 +94,17 @@ public class Node implements EnvironmentChangedCallback{
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
 
+        int count =0;
         for(Query q : addedQueries)
         {
-            queries.add(q);
             engineHandler.addQuery(q);
+            if(++count % 20 == 0)
+            {
+                System.out.print(count+" ");
+            }
         }
-        System.out.println("Queries changed. added " + addedQueries.size() + " queries" );
+        queries.addAll(addedQueries);
+        System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
     }
 
     @Override

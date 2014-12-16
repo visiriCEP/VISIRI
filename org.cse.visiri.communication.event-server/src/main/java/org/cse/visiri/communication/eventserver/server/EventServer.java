@@ -117,7 +117,7 @@ public class EventServer {
                                 eventStream.setStreamId(streamId);
                                 eventStream.setData(event);
 
-                               eventRateStore.increment(identifier);
+                                eventRateStore.increment(identifier);
 //                                System.out.println("event received "+streamId);
                                 if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
