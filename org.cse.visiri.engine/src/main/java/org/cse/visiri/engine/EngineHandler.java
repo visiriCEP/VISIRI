@@ -68,7 +68,7 @@ public class EngineHandler {
 
     }
 
-    public Map<String,String> getTransferableEngines(){
+    public Map<Query,String> getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
@@ -90,17 +90,19 @@ public class EngineHandler {
         QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(transferbleQueryList);
 
         Map<Query,String> queryAllocation=queryDistribution.getQueryAllocation();
-        Map<String,String> transferbleEnginesMap=new HashMap<String, String>();
+        Map<Query,String> transferbleEnginesMap=new HashMap<Query, String>();
 
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
 
-
             //Add siddhiEngine to buffering list and remove engine from engineHandler
             addToBufferingList(siddhiCEPEngine);
 
-            String engine=(String)siddhiCEPEngine.saveState();
-            transferbleEnginesMap.put(queryAllocation.get(query),engine);
+            //persist the siddhi engine
+            //TODO use revision key
+            String revisionKey=(String)siddhiCEPEngine.saveState();
+
+            transferbleEnginesMap.put(query,queryAllocation.get(query));
 
             siddhiCEPEngine.stop();
 
@@ -172,11 +174,12 @@ public class EngineHandler {
         }
     }
 
-    public void dynamicAddQuery(String persistedEngine) throws Exception {
-        //todo Should be changed
-        //public void dynamicAddQuery(Query query) throws Exception {
-        Query query=null;
+
+
+    public void dynamicAddQuery(Query query) throws Exception {
+
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
+        cepEngine.restoreEngine();
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
 

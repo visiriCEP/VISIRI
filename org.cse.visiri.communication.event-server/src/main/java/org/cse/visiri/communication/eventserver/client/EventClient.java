@@ -1,6 +1,5 @@
 package org.cse.visiri.communication.eventserver.client;
 
-
 import org.cse.visiri.communication.eventserver.server.EventServerUtils;
 import org.cse.visiri.communication.eventserver.server.StreamRuntimeInfo;
 import org.cse.visiri.util.Event;
@@ -19,7 +18,6 @@ import java.util.concurrent.BlockingQueue;
 /**
  * Created by visiri on 10/28/14.
  */
-
 
 public class EventClient {
 

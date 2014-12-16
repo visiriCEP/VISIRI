@@ -12,4 +12,5 @@ public abstract class CEPEngine {
     public abstract void stop();
     public abstract Object saveState();
     public abstract void sendEvent(Event e);
+    public abstract void restoreEngine();
 }

@@ -46,4 +46,9 @@ public class DirectPassEngine extends CEPEngine {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void restoreEngine() {
+
+    }
 }
