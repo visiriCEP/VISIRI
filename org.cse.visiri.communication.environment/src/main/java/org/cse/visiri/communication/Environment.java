@@ -106,11 +106,11 @@ public class Environment implements MessageListener {
         System.out.print("put query allocation map....");
         xx =0;
 
-        Map<String,List<Query>> nodeQueryMap = new HashMap<String, List<Query>>( transaction.getMap(NODE_QUERY_MAP));
+        Map<String,List<Query>> nodeQueryMap = new HashMap<String, List<Query>>((Map<String,List<Query>>) transaction.getMap(NODE_QUERY_MAP));
 
         for (Query query : queryAllocation.keySet()) {
             String ip = queryAllocation.get(query);
-            List<Query> queryList = (List<Query>) nodeQueryMap.get(ip));//.get(ip);
+            List<Query> queryList = (List<Query>) nodeQueryMap.get(ip);//.get(ip);
 
             if (queryList == null) {
                 queryList = new ArrayList<Query>();
