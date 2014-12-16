@@ -15,10 +15,10 @@ public class RandomEvaluation {
     private  List<Query> queries;
     public RandomEvaluation()
     {
-        final int seed = 5;
+        final int seed = 12;
 
         RandomQueryGenerator qg = new RandomQueryGenerator(seed);
-        final int inDefCount = 100, outDefCount = 50,queryCount=500;
+        final int inDefCount = 30, outDefCount = 50,queryCount=2000;
        // final int inDefCount = 1, outDefCount = 1,queryCount=1;
         final int inAttrCntMin = 3, inAttrCntMax= 5;
         final int outAttrCntMin = 1, outAttrCntMax= 3;

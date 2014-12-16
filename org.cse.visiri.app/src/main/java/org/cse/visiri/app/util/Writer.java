@@ -44,6 +44,7 @@ public class Writer {
                 out.print(time);
                 out.println(" : " + count);
                 out.close();
+                System.out.println("Received :"+count);
             } catch (IOException e) {
                e.printStackTrace();
             }
