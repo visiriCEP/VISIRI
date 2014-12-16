@@ -1,9 +1,6 @@
 package org.cse.visiri.algo;
 
-import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
-
-import java.util.List;
 
 /**
  * Created by Geeth on 2014-11-04.
@@ -15,5 +12,5 @@ public abstract class QueryDistributionAlgo {
     public final static int ROUNDROBIN_ALGO=2;
     public final static int RANDOM_DISTRIBUTOR_ALGO=3;
 
-    public abstract QueryDistribution getQueryDistribution(List<Query> queries);
+    public abstract QueryDistribution getQueryDistribution(QueryDistributionParam param);
 }

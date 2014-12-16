@@ -1,15 +1,14 @@
 package org.cse.visiri.engine;
 
-import com.hazelcast.map.client.MapGetEntryViewRequest;
 import org.cse.visiri.algo.AlgoFactory;
 import org.cse.visiri.algo.QueryDistributionAlgo;
+import org.cse.visiri.algo.QueryDistributionParam;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
 import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.*;
-
 
 import java.util.*;
 
@@ -87,7 +86,9 @@ public class EngineHandler {
 
         List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
         QueryDistributionAlgo queryDistributionAlgo= AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
-        QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(transferbleQueryList);
+        QueryDistributionParam param = QueryDistributionParam.fromEnvironment();
+        param.setQueries(transferbleQueryList);
+        QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(param);
 
         Map<Query,String> queryAllocation=queryDistribution.getQueryAllocation();
         Map<Query,String> transferbleEnginesMap=new HashMap<Query, String>();

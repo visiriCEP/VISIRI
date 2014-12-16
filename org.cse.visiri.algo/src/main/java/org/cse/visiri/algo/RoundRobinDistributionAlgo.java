@@ -1,6 +1,6 @@
 package org.cse.visiri.algo;
 
-import org.cse.visiri.communication.Environment;
+
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 
@@ -11,17 +11,19 @@ import java.util.*;
  */
 public class RoundRobinDistributionAlgo extends QueryDistributionAlgo{
     @Override
-    public QueryDistribution getQueryDistribution(List<Query> queries) {
+    public QueryDistribution getQueryDistribution(QueryDistributionParam param) {
         QueryDistribution dist = new QueryDistribution();
-        Environment env = Environment.getInstance();
+
 
         Random randomizer = new Random();
 
-        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());//node IP-> list of queries
-        List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));//list of ips of processing nodes
-        List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));//dispatcher ip list
+        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(param.getNodeQueryTable());//node IP-> list of queries
+        List<String> nodeList = new ArrayList<String>(param.getNodeList());//list of ips of processing nodes
+        List<String> dispatcherList = new ArrayList<String>(param.getDispatcherList());//dispatcher ip list
 
         List<Query> queryToQueryList=new LinkedList<Query>();
+
+        List<Query> queries = param.getQueries();
 
         int querycount=0;
         while(querycount<queries.size()) {

@@ -1,6 +1,6 @@
 package org.cse.visiri.algo;
 
-import org.cse.visiri.communication.Environment;
+
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
@@ -25,21 +25,22 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
 
     @Override
-    public QueryDistribution getQueryDistribution(List<Query> queries) {
+    public QueryDistribution getQueryDistribution(QueryDistributionParam param) {
 
         QueryDistribution dist = new QueryDistribution();
-        Environment env = Environment.getInstance();
+
 
         Random randomizer = new Random();
 
         CostModelCalculator costCal = new CostModelCalculator();
 
-        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
-        List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
+        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(param.getNodeQueryTable());
+        List<String> nodeList = new ArrayList<String>(param.getNodeList());
         // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
-        List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
+        List<String> dispatcherList = new ArrayList<String>(param.getDispatcherList());
+        List<Query> queries = param.getQueries();
 
 
         // Store types of events in node list and their costs
@@ -104,15 +105,16 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             //---------- STEP 1------------
             //filter out nodes having too many queries
             {
-                Collection<List<Query>> querySets = nodeQueryTable.values();
+                //Collection<List<Query>> querySets = nodeQueryTable.values();
 
-                int minQueries = querySets.iterator().next().size();
+                int minQueries = 10000000;
 
-                for(List<Query> set: querySets)
+                for(String cand : candidateNodes)
                 {
-                    if(minQueries > set.size())
+                    int thisCount = nodeQueryTable.get(cand).size();
+                    if(minQueries > thisCount)
                     {
-                        minQueries = set.size();
+                        minQueries = thisCount;
                     }
                 }
 
@@ -120,7 +122,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
                 for (Iterator<String> iter = candidateNodes.iterator(); iter.hasNext(); ) {
                     String nodeId = iter.next();
                     if ( nodeQueryTable.get(nodeId).size() > minQueries + queryCountThreshold) {
-                        iter.remove();
+                        iter.remove(); // Error line
                     }
                 }
             }
