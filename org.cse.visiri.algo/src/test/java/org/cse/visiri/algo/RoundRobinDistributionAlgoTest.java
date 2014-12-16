@@ -34,7 +34,9 @@ public class RoundRobinDistributionAlgoTest extends TestCase {
         queryList.add(query2);
 
         RoundRobinDistributionAlgo rrdAlgo=new RoundRobinDistributionAlgo();
-        QueryDistribution qd=rrdAlgo.getQueryDistribution(queryList);
+        QueryDistributionParam param = QueryDistributionParam.fromEnvironment();
+        param.setQueries(queryList);
+        QueryDistribution qd=rrdAlgo.getQueryDistribution(param);
         Iterator i=qd.getQueryAllocation().entrySet().iterator();
         System.out.println("distributed");
         while(i.hasNext()){

@@ -55,8 +55,6 @@ public class Environment implements MessageListener {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
 
-
-
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -95,7 +93,7 @@ public class Environment implements MessageListener {
         System.out.print("adding query map....");
         for (Query query : generatedQueries.keySet()) {
             hzInstance.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
-            if(++xx % 10 == 0)
+            if(++xx % 100 == 0)
             {
                 System.out.print(xx+ " ");
             }
@@ -117,12 +115,15 @@ public class Environment implements MessageListener {
             }
 
             queryList.add(query);
-            hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
-            if(++xx % 10 == 0)
+            //hzInstance.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            nodeQueryMap.put(ip, queryList);
+            if(++xx % 100 == 0)
             {
                 System.out.print(xx+ " ");
             }
         }
+        getNodeQueryMap().putAll(nodeQueryMap);
+
         System.out.println(" done.");
        // transaction.commitTransaction();
         System.out.println("-- commited---");

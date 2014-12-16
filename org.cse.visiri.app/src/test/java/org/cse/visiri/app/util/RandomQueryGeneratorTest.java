@@ -1,9 +1,16 @@
 package org.cse.visiri.app.util;
 
 import junit.framework.TestCase;
+import org.cse.visiri.algo.AlgoFactory;
+import org.cse.visiri.algo.QueryDistributionAlgo;
+import org.cse.visiri.algo.QueryDistributionParam;
+import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,5 +60,38 @@ public class RandomQueryGeneratorTest extends TestCase {
             System.out.println();
         }
         assertEquals(200,queries.size());
+    }
+
+
+
+    public  void testDistribution()
+    {
+        RandomEvaluation re = new RandomEvaluation();
+
+        QueryDistributionParam param = new QueryDistributionParam();
+        param.setDispatcherList(Arrays.asList("1.1.1.1"));
+        param.setNodeList(Arrays.asList("2.1.1.1", "2.1.1.2", "2.1.1.3"));
+        param.setQueries(re.getQueries());
+        param.setNodeQueryTable(new HashMap<String, List<Query>>());
+
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
+        QueryDistribution dist = algo.getQueryDistribution(param);
+
+        HashMap<String,Integer> counts = new HashMap<String, Integer>();
+        counts.put("2.1.1.1",0);
+        counts.put("2.1.1.2",0);
+        counts.put("2.1.1.3",0);
+        counts.put("1.1.1.1",0);
+
+        for(String s :dist.getQueryAllocation().values())
+        {
+            counts.put(s,counts.get(s) +1);
+        }
+
+        for(String s: counts.keySet())
+        {
+            System.out.println(s +" : " +counts.get(s));
+        }
+
     }
 }

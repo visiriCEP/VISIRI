@@ -2,7 +2,7 @@ package org.cse.visiri.algo;
 
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
-import org.cse.visiri.communication.Environment;
+
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -24,22 +24,21 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
 
     @Override
-    public QueryDistribution getQueryDistribution(List<Query> queries) {
+    public QueryDistribution getQueryDistribution(QueryDistributionParam param) {
 
         QueryDistribution dist = new QueryDistribution();
-        Environment env = Environment.getInstance();
 
         Random randomizer = new Random();
 
         CostModelCalculator costCal = new CostModelCalculator();
 
-        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
-        List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
+        Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(param.getNodeQueryTable());
+        List<String> nodeList = new ArrayList<String>(param.getNodeList());
         // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
-        List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
-
+        List<String> dispatcherList = new ArrayList<String>(param.getDispatcherList());
+        List<Query> queries = param.getQueries();
 
         // Store types of events in node list and their costs
         for(String str: nodeList)
