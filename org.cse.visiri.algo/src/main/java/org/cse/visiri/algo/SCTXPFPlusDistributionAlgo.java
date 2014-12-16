@@ -94,8 +94,9 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
         }
 
         // ************* ALLOCATE QUERIES ************
-        for(Query q : queries)
+        for(int qIndex =0 ; qIndex < queries.size(); qIndex++)
         {
+            Query q = queries.get(qIndex);
             //take all nodes as possible candidates
             Set<String> candidateNodes = new HashSet<String>(nodeList);
 
@@ -226,6 +227,8 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             // update calculated tables for allocation of next queries
             nodeQueryTable.get(targetNode).add(q);
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
+
+            System.out.println(qIndex);
             costs.put(targetNode, costs.get(targetNode) + costCal.calculateCost(q));
         }
 

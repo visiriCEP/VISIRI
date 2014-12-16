@@ -55,8 +55,7 @@ public class Environment implements MessageListener {
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
 
-        options = new TransactionOptions().setTransactionType( TransactionOptions.TransactionType.LOCAL );
-        transaction= hzInstance.newTransactionContext(options);
+
 
         bufferingEventList = new ArrayList<String>();
 
@@ -86,30 +85,48 @@ public class Environment implements MessageListener {
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
-
+        options = new TransactionOptions().setTransactionType( TransactionOptions.TransactionType.LOCAL );
+        transaction= hzInstance.newTransactionContext(options);
         transaction.beginTransaction();
         //Adding to originalQueryToDeployedQueryM
-        Map<Query, List<Query>> generatedQueries = queryDistribution.getGeneratedQueries();
 
+        Map<Query, List<Query>> generatedQueries = queryDistribution.getGeneratedQueries();
+        int xx = 0;
+        System.out.print("adding query map....");
         for (Query query : generatedQueries.keySet()) {
             transaction.getMap(ORIGINAL_TO_DEPLOYED_MAP).put(query, generatedQueries.get(query));
+            if(++xx % 10 == 0)
+            {
+                System.out.print(xx+ " ");
+            }
         }
-
-        //Adding to nodeToQueriesMap
+        System.out.println(" done.");
+        //Adding to nodeT7oQueriesMap
         Map<Query, String> queryAllocation = queryDistribution.getQueryAllocation();
+        System.out.print("put query allocation map....");
+        xx =0;
+
+        Map<String,List<Query>> nodeQueryMap = new HashMap<String, List<Query>>( transaction.getMap(NODE_QUERY_MAP));
 
         for (Query query : queryAllocation.keySet()) {
             String ip = queryAllocation.get(query);
-            List<Query> queryList = (List<Query>) (transaction.getMap(NODE_QUERY_MAP).get(ip));//.get(ip);
+            List<Query> queryList = (List<Query>) nodeQueryMap.get(ip));//.get(ip);
 
             if (queryList == null) {
                 queryList = new ArrayList<Query>();
             }
+
             queryList.add(query);
             transaction.getMap(NODE_QUERY_MAP).put(ip, queryList);
+            if(++xx % 10 == 0)
+            {
+                System.out.print(xx+ " ");
+            }
         }
-
+        System.out.println(" done.");
         transaction.commitTransaction();
+        System.out.println("-- commited---");
+        transaction = null;
     }
 
     /**
