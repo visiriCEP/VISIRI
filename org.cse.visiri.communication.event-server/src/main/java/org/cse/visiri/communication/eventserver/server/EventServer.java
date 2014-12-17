@@ -118,10 +118,10 @@ public class EventServer {
                                 eventStream.setData(event);
 
                                 eventRateStore.increment(identifier);
-//                                System.out.println("event received "+streamId);
+                              //  System.out.println("event received "+streamId);
                                 if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
-//                                    System.out.println("event received "+streamId);
+                                   // System.out.println("event received "+streamId);
                                 }else{
                                     Queue<Object> tmpQ= eventBufferQueueMap.get(streamId);
                                     tmpQ.add(eventStream);

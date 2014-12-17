@@ -4,6 +4,8 @@ import org.cse.visiri.app.util.RandomQueryGenerator;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ public class RandomEvaluation {
         final int seed = 12;
 
         RandomQueryGenerator qg = new RandomQueryGenerator(seed);
-        final int inDefCount = 30, outDefCount = 50,queryCount=1000;
+        final int inDefCount = 300, outDefCount = 50,queryCount=1000;
        // final int inDefCount = 1, outDefCount = 1,queryCount=1;
         final int inAttrCntMin = 3, inAttrCntMax= 5;
         final int outAttrCntMin = 1, outAttrCntMax= 3;
@@ -30,7 +32,21 @@ public class RandomEvaluation {
 
     public List<StreamDefinition> getInputDefinitions()
     {
-        return in;
+        List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
+        HashSet<String> ids = new HashSet<String>();
+        for(Query q : queries)
+        {
+            for(StreamDefinition def : q.getInputStreamDefinitionsList())
+            {
+                String id = def.getStreamId();
+                if(!ids.contains(id))
+                {
+                    ids.add(id);
+                    defs.add(def);
+                }
+            }
+        }
+        return defs;
     }
 
     public List<StreamDefinition> getOutputDefinitions()

@@ -57,7 +57,7 @@ public class EventClient {
         System.out.print("Event Client started :" + host + " :" + port + " ;");
         for(StreamDefinition sd: streamDefinitionsList)
         {
-            System.out.print(sd.getStreamId() + ", ");
+            System.out.print(sd.getStreamId() + ",");
         }
         System.out.println();
     }
@@ -110,7 +110,7 @@ public class EventClient {
                             outputStream.write(((String) event[aStringIndex]).getBytes("UTF-8"));
                         }
                       //  outputStream.flush();
-                      //      System.out.println("sent event-- : " + eventStream.getStreamId()+".");
+                    //        System.out.println("sent event-- : " + eventStream.getStreamId()+".");
                     }
                 }catch(Exception e){
                     e.printStackTrace();
