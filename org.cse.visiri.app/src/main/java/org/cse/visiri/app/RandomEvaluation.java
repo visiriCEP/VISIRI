@@ -51,7 +51,21 @@ public class RandomEvaluation {
 
     public List<StreamDefinition> getOutputDefinitions()
     {
-        return out;
+        List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
+        HashSet<String> ids = new HashSet<String>();
+        for(Query q : queries)
+        {
+            StreamDefinition def = q.getOutputStreamDefinition();
+
+            String id = def.getStreamId();
+            if(!ids.contains(id))
+            {
+                ids.add(id);
+                defs.add(def);
+            }
+
+        }
+        return defs;
     }
 
     public List<Query> getQueries(){
