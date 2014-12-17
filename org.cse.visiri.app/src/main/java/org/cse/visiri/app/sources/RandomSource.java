@@ -16,6 +16,8 @@ public class RandomSource {
 
     EventClient cl;
     Random r = new Random(1);
+    private final int EVENT_COUNT = 500* 1000;
+
     private List<StreamDefinition> getDefinitions()
     {
         RandomEvaluation ev = new RandomEvaluation();
@@ -72,7 +74,7 @@ public class RandomSource {
     {
         System.out.println("Started");
         List<StreamDefinition> defs = getDefinitions();
-        int count = 2000* 1000;
+        int count = EVENT_COUNT;
         int freq = 100*1000;
         int defCount = defs.size();
         for(int i=1;i <= count; i++)

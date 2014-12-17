@@ -20,7 +20,7 @@ public class RandomEvaluation {
         final int seed = 12;
 
         RandomQueryGenerator qg = new RandomQueryGenerator(seed);
-        final int inDefCount = 300, outDefCount = 50,queryCount=1000;
+        final int inDefCount = 500, outDefCount = 50,queryCount=1000;
        // final int inDefCount = 1, outDefCount = 1,queryCount=1;
         final int inAttrCntMin = 3, inAttrCntMax= 5;
         final int outAttrCntMin = 1, outAttrCntMax= 3;

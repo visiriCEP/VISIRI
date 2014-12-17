@@ -28,7 +28,7 @@ public class EventClient {
     private OutputStream outputStream;
     private Socket clientSocket;
     private BlockingQueue blockingQueue;
-    private final int queueCapacity = 1000*1000;
+    private final int queueCapacity = 100*1000;
 
 
     public EventClient(String hostUrl, List<StreamDefinition> streamDefinitions) throws Exception {
