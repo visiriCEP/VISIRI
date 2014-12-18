@@ -30,6 +30,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_NODE_STOP = 6;
     public static final int EVENT_TYPE_ENGINE_PASS = 7;
 
+    private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
     private final String ORIGINAL_TO_DEPLOYED_MAP = "ORIGINAL_TO_DEPLOYED_MAP";
@@ -60,7 +61,32 @@ public class Environment implements MessageListener {
         topic = hzInstance.getTopic ("VISIRI");
         topic.addMessageListener(this);
 
+
+        hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),false);
     }
+
+    public void setReady(){
+        hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),true);
+    }
+    
+    public boolean checkReadyAllNodes(){
+
+        List<String> nodes=instance.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE);
+        Map readyMap=hzInstance.getMap(NODE_READY_MAP);
+
+        for(String ip :  nodes){
+            if(readyMap.get(ip)==null){
+                return false;
+            }
+            if(!(boolean)readyMap.get(ip)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     public void setNodeType(int nodeType){
         hzInstance.getMap(NODE_LIST).put(getNodeId(),nodeType);
     }
