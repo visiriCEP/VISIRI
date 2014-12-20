@@ -68,7 +68,7 @@ public class Environment implements MessageListener {
     public void setReady(){
         hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),true);
     }
-    
+
     public boolean checkReadyAllNodes(){
 
         List<String> nodes=instance.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE);
