@@ -43,6 +43,10 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     public void start() throws Exception{
+        while(!Environment.getInstance().checkReadyAllNodes())
+        {
+            Thread.sleep(2000);
+        }
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_START);
         agent.start();
     }
@@ -104,6 +108,8 @@ public class Node implements EnvironmentChangedCallback{
             }
         }
         queries.addAll(addedQueries);
+//        send ready message
+        Environment.getInstance().setReady();
         System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
     }
 
@@ -122,11 +128,10 @@ public class Node implements EnvironmentChangedCallback{
         recievedEvent=4;
     }
 
+
     @Override
     public void startNode() {
         recievedEvent=5;
-        System.out.println("Node started");
-
         if(!started)
         {
             try {
@@ -138,6 +143,7 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
+        System.out.println("Node started");
     }
     @Override
     public void stopNode()

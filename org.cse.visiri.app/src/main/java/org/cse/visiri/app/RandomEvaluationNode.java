@@ -39,7 +39,6 @@ public class RandomEvaluationNode {
         }
 
         System.out.println("Starting in 30 seconds");
-        Thread.sleep(30*1000);
 
         node.start();
 
