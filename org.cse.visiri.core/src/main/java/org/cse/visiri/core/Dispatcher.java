@@ -82,7 +82,14 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void startNode() {
+    public void startNode()  {
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("Disp started");
         if(!started)
         {
