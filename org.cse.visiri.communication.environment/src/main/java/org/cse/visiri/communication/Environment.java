@@ -78,7 +78,8 @@ public class Environment implements MessageListener {
             if(readyMap.get(ip)==null){
                 return false;
             }
-            if(!(boolean)readyMap.get(ip)){
+
+            else if(!(Boolean)readyMap.get(ip)){
                 return false;
             }
         }
