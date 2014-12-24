@@ -33,7 +33,7 @@ public class Writer {
 
     public void write(){
 
-        if(count%period == 0){
+        if(count % period == 0){
             if(count == 0)
             {
                 startTime = System.currentTimeMillis();

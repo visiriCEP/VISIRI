@@ -113,8 +113,12 @@ public class RandomQueryGenerator {
             {
                 case 0: //filter 1
                 {
-                   String cond = newCondition(inAttrs);
-                    varCondition = "[" + cond +"]";
+                    String cond1 = newCondition(inAttrs);
+                    String cond2 = newCondition(inAttrs);
+                    varCondition = "[" + cond1 + " and " + cond2 + "]";
+
+
+
                     List<String> inps = new ArrayList<String>();
 
                     for(int i=0; i < outAttrs.size(); i++)
@@ -130,7 +134,10 @@ public class RandomQueryGenerator {
                 {
                     String cond1 = newCondition(inAttrs);
                     String cond2 = newCondition(inAttrs);
-                    varCondition = "[" + cond1 + " and " + cond2 + "]";
+                    String cond3 = newCondition(inAttrs);
+                    String cond4 = newCondition(inAttrs);
+                    varCondition = "[" + cond1 + " and " + cond2 +
+                                        " and " + cond3 + " and " +cond4 + "]";
 
                     List<String> inps = new ArrayList<String>();
                     for (int i = 0; i < outAttrs.size(); i++) {
@@ -142,9 +149,9 @@ public class RandomQueryGenerator {
                     break;
                 }
                 case 2: //window
-                case 3:
+
                 {
-                    String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
+                    String type = randomizer.nextFloat() < 0.75 ? "lengthBatch" : "length";
                     int batchCount = 5 + randomizer.nextInt(10*1000);
                     varWindow="#window."+type+"("+batchCount+") ";
 
@@ -158,11 +165,12 @@ public class RandomQueryGenerator {
                     varInAttr = StringUtils.join(inps, ",");
                     break;
                 }
-
-                case 4: //window + 1 filter
+                case 3:
+                case 4: //window +  filter
                 {
-                    String cond = newCondition(inAttrs);
-                    varCondition = "[" + cond +"]";
+                    String cond1 = newCondition(inAttrs);
+                    String cond2 = newCondition(inAttrs);
+                    varCondition = "[" + cond1 + " and "+ cond2 + "]";
                     String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
                     int batchCount = 5 + randomizer.nextInt(5000);
                     varWindow="#window."+type+"("+batchCount+") ";

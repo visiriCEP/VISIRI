@@ -7,6 +7,7 @@ public class EventServerConfig {
 
     private int numberOfThreads=10;
     private int port;
+    private int eventRateStoreFrequency = 10000;
 
     public EventServerConfig(int port) {
         this.port = port;
@@ -22,5 +23,13 @@ public class EventServerConfig {
 
     public int getPort() {
         return port;
+    }
+
+    public int getEventRateStoreFrequency() {
+        return eventRateStoreFrequency;
+    }
+
+    public void setEventRateStoreFrequency(int eventRateStoreFrequency) {
+        this.eventRateStoreFrequency = eventRateStoreFrequency;
     }
 }
