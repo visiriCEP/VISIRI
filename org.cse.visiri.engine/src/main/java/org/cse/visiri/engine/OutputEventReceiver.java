@@ -65,6 +65,7 @@ public class OutputEventReceiver {
             }
         }else{
             System.out.println("eventClientList is null for "+event.getStreamId());
+            throw new NullPointerException("eventClientList is null");
         }
 
     }
