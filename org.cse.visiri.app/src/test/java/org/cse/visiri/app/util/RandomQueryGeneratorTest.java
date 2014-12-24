@@ -70,19 +70,19 @@ public class RandomQueryGeneratorTest extends TestCase {
 
         QueryDistributionParam param = new QueryDistributionParam();
         param.setDispatcherList(Arrays.asList("1.1.1.1"));
-        param.setNodeList(Arrays.asList("2.1.1.1", "2.1.1.2", "2.1.1.3"));
+        param.setNodeList(Arrays.asList("2.1.1.1", "2.1.1.2", "2.1.1.3","2.1.1.4"));
         param.setQueries(re.getQueries());
         param.setNodeQueryTable(new HashMap<String, List<Query>>());
 
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
         QueryDistribution dist = algo.getQueryDistribution(param);
 
         HashMap<String,Integer> counts = new HashMap<String, Integer>();
         counts.put("2.1.1.1",0);
         counts.put("2.1.1.2",0);
         counts.put("2.1.1.3",0);
+        counts.put("2.1.1.4",0);
         counts.put("1.1.1.1",0);
-
         for(String s :dist.getQueryAllocation().values())
         {
             counts.put(s,counts.get(s) +1);

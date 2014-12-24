@@ -23,6 +23,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
     public final double queryCountThreshold = 80;
     public final double utilizationThreshold = 10;
 
+    private final int randSeed = 1;
 
     @Override
     public QueryDistribution getQueryDistribution(QueryDistributionParam param) {
@@ -30,7 +31,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
         QueryDistribution dist = new QueryDistribution();
 
 
-        Random randomizer = new Random();
+        Random randomizer = new Random(randSeed);
 
         CostModelCalculator costCal = new CostModelCalculator();
 
