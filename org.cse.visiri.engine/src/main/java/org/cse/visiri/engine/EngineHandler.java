@@ -34,18 +34,13 @@ public class EngineHandler {
         this.outputEventReceiver=new OutputEventReceiver();
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
-        this.outputEventReceiver=new OutputEventReceiver();
+   //     this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
     }
 
     public void start() throws Exception {
 
-        try {
-            this.configureOutputEventReceiver();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
         Set<String> streamIdSet=streamDefinitionMap.keySet();
@@ -64,6 +59,12 @@ public class EngineHandler {
             }
         },identifier);
         eventServer.start();
+
+        try {
+            this.configureOutputEventReceiver();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
