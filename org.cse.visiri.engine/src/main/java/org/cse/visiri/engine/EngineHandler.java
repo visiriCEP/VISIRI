@@ -41,6 +41,11 @@ public class EngineHandler {
 
     public void start() throws Exception {
 
+        try {
+            this.configureOutputEventReceiver();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
         Set<String> streamIdSet=streamDefinitionMap.keySet();
@@ -60,11 +65,6 @@ public class EngineHandler {
         },identifier);
         eventServer.start();
 
-        try {
-            this.configureOutputEventReceiver();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
