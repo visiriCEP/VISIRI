@@ -74,7 +74,7 @@ public class RandomQueryGeneratorTest extends TestCase {
         param.setQueries(re.getQueries());
         param.setNodeQueryTable(new HashMap<String, List<Query>>());
 
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
         QueryDistribution dist = algo.getQueryDistribution(param);
 
         HashMap<String,Integer> counts = new HashMap<String, Integer>();
