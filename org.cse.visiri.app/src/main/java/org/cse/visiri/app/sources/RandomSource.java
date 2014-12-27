@@ -16,12 +16,11 @@ public class RandomSource {
 
     EventClient cl;
     Random r = new Random(1);
-    private final int EVENT_COUNT = 500* 1000;
+    private final int EVENT_COUNT = 5000* 1000;
+    RandomEvaluation ev = new RandomEvaluation();
 
     private List<StreamDefinition> getDefinitions()
     {
-        RandomEvaluation ev = new RandomEvaluation();
-
         List<StreamDefinition> inDefs = ev.getInputDefinitions();
 
         return inDefs;

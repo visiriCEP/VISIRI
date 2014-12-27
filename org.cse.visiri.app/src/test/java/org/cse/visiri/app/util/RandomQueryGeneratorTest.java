@@ -20,7 +20,7 @@ public class RandomQueryGeneratorTest extends TestCase {
     RandomQueryGenerator qg;
     public void setUp() throws Exception {
         super.setUp();
-        qg = new RandomQueryGenerator(3);
+        qg = new FilteredQueryGenerator(12);
     }
 
     public void testGenerateDefinitions() throws Exception {
