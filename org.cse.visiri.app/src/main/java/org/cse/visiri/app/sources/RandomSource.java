@@ -16,7 +16,7 @@ public class RandomSource {
 
     EventClient cl;
     Random r = new Random(1);
-    private final int EVENT_COUNT = 500* 1000;
+    private final int EVENT_COUNT = 500* 10000;
 
     private List<StreamDefinition> getDefinitions()
     {

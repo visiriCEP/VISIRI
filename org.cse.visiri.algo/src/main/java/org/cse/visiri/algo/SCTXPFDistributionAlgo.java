@@ -103,13 +103,14 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             {
                 Collection<List<Query>> querySets = nodeQueryTable.values();
 
-                int minQueries = querySets.iterator().next().size();
+                int minQueries = 10000000;
 
-                for(List<Query> set: querySets)
+                for(String cand : candidateNodes)
                 {
-                    if(minQueries > set.size())
+                    int thisCount = nodeQueryTable.get(cand).size();
+                    if(minQueries > thisCount)
                     {
-                        minQueries = set.size();
+                        minQueries = thisCount;
                     }
                 }
 

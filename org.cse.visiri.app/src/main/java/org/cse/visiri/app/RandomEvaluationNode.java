@@ -22,6 +22,9 @@ public class RandomEvaluationNode {
         node.initialize();
 
         Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the sink Ip :");
+        String sinkIp=sc.nextLine();
+
 
         RandomEvaluation ev = new RandomEvaluation();
         List<Query> queryList= ev.getQueries();
@@ -35,7 +38,7 @@ public class RandomEvaluationNode {
         Set<String> outputSet=subscribeMap.keySet();
 
         for(String outputStream:outputSet){
-            node.subscribeToStream(outputStream,Environment.getInstance().getNodeId()+":6666");
+            node.subscribeToStream(outputStream,sinkIp+":6666");
         }
 
         System.out.println("Starting in 30 seconds");

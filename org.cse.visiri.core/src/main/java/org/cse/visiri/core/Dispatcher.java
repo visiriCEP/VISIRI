@@ -90,7 +90,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
             e.printStackTrace();
         }
 
-        System.out.println("Disp started");
+
         if(!started)
         {
             try {
@@ -102,6 +102,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
                 e.printStackTrace();
             }
         }
+        System.out.println("Disp started");
     }
 
     @Override

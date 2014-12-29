@@ -24,7 +24,7 @@ public class RandomSink {
     private long count;
 
     public RandomSink(){
-        writer=new Writer(100*1000);
+        writer=new Writer(1000*1000);
     }
 
     private  List<StreamDefinition> getDefinitions()
@@ -40,18 +40,19 @@ public class RandomSink {
 
     public void start() throws Exception {
         EventServerConfig conf = new EventServerConfig(port);
+        conf.setEventRateStoreFrequency(100*1000);
         server = new EventServer(conf,getDefinitions(), new StreamCallback() {
             @Override
             public void receive(Event event) {
-                count++;
+//                count++;
                 writer.write();
-                if(count%20000==0) {
-                    System.out.print("Received :");
-                    System.out.println(count);
-                 //   System.out.printf(" :Event received : %s ", event.getStreamId());
-
-
-                }
+//                if(count%20000==0) {
+//                    System.out.print("Received :");
+//                    System.out.println(count);
+//                 //   System.out.printf(" :Event received : %s ", event.getStreamId());
+//
+//
+//                }
 
                // eventRateStore.increment();
 

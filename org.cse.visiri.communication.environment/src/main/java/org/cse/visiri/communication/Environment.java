@@ -66,6 +66,7 @@ public class Environment implements MessageListener {
     }
 
     public void setReady(){
+        System.out.println("Sent ready message to environment");
         hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),true);
     }
 
@@ -84,6 +85,7 @@ public class Environment implements MessageListener {
             }
         }
 
+        System.out.println("All nodes are ready");
         return true;
     }
 

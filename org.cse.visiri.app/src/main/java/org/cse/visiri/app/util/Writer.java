@@ -1,9 +1,6 @@
 package org.cse.visiri.app.util;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -31,9 +28,10 @@ public class Writer {
         }
     }
 
+
     public void write(){
 
-        if(count%period == 0){
+        if(count % period == 0){
             if(count == 0)
             {
                 startTime = System.currentTimeMillis();

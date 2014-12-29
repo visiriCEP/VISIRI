@@ -1,7 +1,5 @@
 package org.cse.visiri.util;
 
-import java.util.HashMap;
-
 /**
  * Created by Malinda Kumarasinghe on 11/12/2014.
  */
@@ -35,6 +33,7 @@ public class EventRateStore {
     }
     public void increment(String message){
         totalReceived ++;
+        /*
         Long mil=System.currentTimeMillis();
 
         instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
@@ -46,6 +45,11 @@ public class EventRateStore {
         if(avgPos%Configuration.EVENT_RATE_FREQ==0){
             System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate()
                 +" Total: " + totalReceived);
+        }
+        */
+       // --------------------------------
+        if(totalReceived%Configuration.EVENT_RATE_FREQ==0){
+            System.out.println(message+" : "+ totalReceived);
         }
     }
 

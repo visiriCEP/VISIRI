@@ -34,7 +34,7 @@ public class EngineHandler {
         this.outputEventReceiver=new OutputEventReceiver();
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
-        this.outputEventReceiver=new OutputEventReceiver();
+   //     this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
     }
@@ -64,6 +64,7 @@ public class EngineHandler {
             }
         },identifier);
         eventServer.start();
+
 
     }
 

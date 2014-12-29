@@ -75,7 +75,7 @@ public class SiddhiCostModelCalculator extends CostModelCalculator {
                 while(tokenList.get(windowIdx).getType()!=45){
                     windowIdx++;
                 }
-                System.out.println(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
+              //  System.out.println(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
                 double windowVal=Integer.parseInt(query.substring(tokenList.get(windowIdx).getStartIndex(),tokenList.get(windowIdx).getStopIndex()+1));
                 //windowVal/=10000;
                 while(tokenList.get(windowIdx).getType()!=21){
