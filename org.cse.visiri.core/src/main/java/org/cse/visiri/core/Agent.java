@@ -43,6 +43,8 @@ public class Agent extends Thread {
                 if(Environment.getInstance().checkDynamic()){
                        transferEngines();
                        break;
+                }else{
+                    System.out.println("check . . .");
                 }
                 /*
                     Utilization utilization=utilizationUpdater.update();

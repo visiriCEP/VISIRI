@@ -318,16 +318,16 @@ public class Environment implements MessageListener {
     }
 
     public Boolean checkDynamic(){
-       Boolean temp= (Boolean) hzInstance.getMap("DD").get("dd");
+       String temp= (String) hzInstance.getMap("DD").get("dd");
 
-        if(temp!=null && temp==true)
+        if(temp!=null && temp.equals(getNodeId()))
             return true;
         else
             return false;
     }
 
     public void addDynamic(){
-        hzInstance.getMap("DD").put("dd",true);
+        hzInstance.getMap("DD").put("dd",getNodeId());
     }
 
 
