@@ -149,7 +149,9 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
-        agent.start();
+        if(!agent.isAlive()){
+            agent.start();
+        }
         System.out.println("Node started");
     }
     @Override
