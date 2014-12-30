@@ -20,7 +20,7 @@ public class RandomEvaluation {
     public RandomEvaluation()
     {
         final int seed = 12;
-        final double filteringLevel = 4.0;
+        final double filteringLevel = 5.0;
 
         int inDefCount = Reader.readConfig().get("input_def_count"), outDefCount = Reader.readConfig().get("output_def_count"),queryCount=Reader.readConfig().get("query_count");
 

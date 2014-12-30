@@ -90,7 +90,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             }
             case 2: //window
             {
-                String type = randomizer.nextFloat() < 0.80 ? "lengthBatch" : "length";
+                String type = randomizer.nextFloat() < 0.85 ? "lengthBatch" : "length";
                 int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
@@ -111,7 +111,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             {
                 String cond = generateMultipleConditions(inAttrs,4);
                 varCondition = "[" + cond + "]";
-                String type = randomizer.nextFloat() < 0.75 ? "lengthBatch" : "length";
+                String type = randomizer.nextFloat() < 0.85 ? "lengthBatch" : "length";
                 int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
