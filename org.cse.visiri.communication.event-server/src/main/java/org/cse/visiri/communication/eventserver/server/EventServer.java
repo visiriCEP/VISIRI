@@ -49,7 +49,7 @@ public class EventServer {
         for(int i=0;i<streamDefinitions.size();i++){
             // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
             streamRuntimeInfoHashMap.put(streamDefinitions.get(i).getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions.get(i)));
-            eventBufferQueueMap.put(streamDefinitions.get(i).getStreamId(),new LinkedList());
+            //eventBufferQueueMap.put(streamDefinitions.get(i).getStreamId(),new LinkedList());
             //eventBufferConditionMap.put(streamDefinitions.get(i).getStreamId(),false);
         }
         pool = Executors.newFixedThreadPool(eventServerConfig.getNumberOfThreads());
