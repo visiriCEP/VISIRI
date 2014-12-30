@@ -1,6 +1,5 @@
 package org.cse.visiri.app;
 
-import org.cse.visiri.app.util.FilteredQueryGenerator;
 import org.cse.visiri.app.util.RandomQueryGenerator;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
@@ -20,6 +19,8 @@ public class RandomEvaluation {
     {
         final int seed = 12;
 
+        RandomQueryGenerator qg = new RandomQueryGenerator(seed);
+        int inDefCount = Reader.readConfig().get("input_def_count"), outDefCount = Reader.readConfig().get("output_def_count"),queryCount=Reader.readConfig().get("query_count");
         RandomQueryGenerator qg ;//= new RandomQueryGenerator(seed);
         qg = new FilteredQueryGenerator(seed,3);
         final int inDefCount = 500, outDefCount = 50,queryCount=4000;

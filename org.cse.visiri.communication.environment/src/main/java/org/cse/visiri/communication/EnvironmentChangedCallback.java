@@ -9,7 +9,8 @@ public interface EnvironmentChangedCallback {
 
     public void queriesChanged();
     public void nodesChanged();
-    public void bufferingStateChanged();
+    public void bufferingStart();
+    public void bufferingStop();
     public void eventSubscriberChanged();
     public void startNode();
     public void stopNode();

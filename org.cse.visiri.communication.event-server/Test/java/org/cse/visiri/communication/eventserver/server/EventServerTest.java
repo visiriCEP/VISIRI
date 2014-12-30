@@ -28,13 +28,13 @@ public class EventServerTest extends TestCase {
 
         List<String> tmpQ=new LinkedList<String>();
         tmpQ.add("fire");
-        server.bufferStateChanged(tmpQ);
+        server.bufferingStart(tmpQ);
 
         System.out.println("timer started");
         Thread.sleep(10000);
         System.out.println("timeout");
-        tmpQ.remove("fire");
-        server.bufferStateChanged(tmpQ);
+        //tmpQ.remove("fire");
+        server.bufferingStop();
     }
 
 

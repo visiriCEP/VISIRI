@@ -208,9 +208,9 @@ public class NodeTest extends TestCase {
        assertEquals(Environment.EVENT_TYPE_QUERIES_CHANGED,node.recievedEvent);
 
         node.recievedEvent=0;
-        environment.sendEvent(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED);
+        environment.sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
         while(node.recievedEvent==0){}
-        assertEquals(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED,node.recievedEvent);
+        assertEquals(Environment.EVENT_TYPE_BUFFERING_START,node.recievedEvent);
 
         node.recievedEvent=0;
         environment.sendEvent(Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED);
