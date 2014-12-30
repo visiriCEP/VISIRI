@@ -27,7 +27,6 @@ public class Node implements EnvironmentChangedCallback{
     private boolean started ;
     private Agent agent;
 
-
     public  void initialize()
     {
         queries = new ArrayList<Query>();

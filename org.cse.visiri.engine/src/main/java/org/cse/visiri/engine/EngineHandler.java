@@ -108,7 +108,7 @@ public class EngineHandler {
 
         }
         //Sending buffering message to dispatcher
-        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED);
+        Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
 
         return transferbleEnginesMap;
 
@@ -152,8 +152,11 @@ public class EngineHandler {
         this.myQueryList.add(query);
     }
 
-    public void eventServerBufferChanged(List<String> bufferingEventList){
-        eventServer.bufferStateChanged(bufferingEventList);
+    public void eventServerBufferStart(List<String> bufferingEventList){
+        eventServer.bufferingStart(bufferingEventList);
+    }
+    public void eventServerBufferStop(){
+        eventServer.bufferingStop();
     }
 
     public void addQueryList(List<Query> queryList){

@@ -71,10 +71,21 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void bufferingStateChanged() {
+    public void bufferingStart() {
         List<String> bufList=Environment.getInstance().getBufferingEventList();
-        engineHandler.eventServerBufferChanged(bufList);
+        engineHandler.eventServerBufferStart(bufList);
     }
+
+    @Override
+    public void bufferingStop() {
+        engineHandler.eventServerBufferStop();
+    }
+
+//    @Override
+//    public void bufferingStateChanged() {
+//        List<String> bufList=Environment.getInstance().getBufferingEventList();
+//        engineHandler.eventServerBufferChanged(bufList);
+//    }
 
     @Override
     public void eventSubscriberChanged() {
