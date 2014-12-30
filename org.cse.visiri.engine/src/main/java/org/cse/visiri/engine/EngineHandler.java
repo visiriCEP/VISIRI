@@ -35,7 +35,6 @@ public class EngineHandler {
         this.outputEventReceiver=new OutputEventReceiver();
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
-   //     this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
     }
@@ -105,6 +104,10 @@ public class EngineHandler {
             transferbleEnginesMap.put(query,dynamicQueryDistribution.getQueryDistribution(query));
 
             siddhiCEPEngine.stop();
+            //removing query from all the lists and maps in EngineHandler
+            queryList.remove(query);
+            queryEngineMap.remove(query.getQueryId());
+            myQueryList.remove(query);
 
         }
         //Sending buffering message to dispatcher
@@ -123,8 +126,6 @@ public class EngineHandler {
            // Environment.getInstance().getBufferingEventList().add(strdrf.getStreamId());
         }
     }
-
-
 
     public void stop(){
 
@@ -203,7 +204,6 @@ public class EngineHandler {
         }else {
             destinationNodeMap=Environment.getInstance().getSubscriberMapping();
         }
-
 
         StreamDefinition outputStreamDefiniton=query.getOutputStreamDefinition();
         String streamId=outputStreamDefiniton.getStreamId();
