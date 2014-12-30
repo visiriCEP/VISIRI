@@ -22,7 +22,6 @@ public class Node implements EnvironmentChangedCallback{
 
     private List<Query> queries;
     private EngineHandler engineHandler;
-    public int recievedEvent=0;     // For testing only
     private UtilizationUpdater utilizationUpdater;
     private boolean started ;
     private Agent agent;
@@ -88,7 +87,7 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void queriesChanged() {
-        recievedEvent=1;
+
         String nodeID = Environment.getInstance().getNodeId();
         List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
         if(newQuerySet == null)
@@ -115,7 +114,7 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void nodesChanged() {
-        recievedEvent=2;
+
     }
 
     @Override
@@ -131,13 +130,13 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void eventSubscriberChanged() {
-        recievedEvent=4;
+
     }
 
 
     @Override
     public void startNode() {
-        recievedEvent=5;
+
         if(!started)
         {
             try {
@@ -155,7 +154,6 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void stopNode()
     {
-        recievedEvent=6;
         engineHandler.stop();
         utilizationUpdater.stop();
     }
