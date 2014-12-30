@@ -12,6 +12,6 @@ import java.util.Map;
 public abstract class DynamicQueryDistributionAlgo
 {
 
-    public abstract Map<Query,String> getQueryDistribution(List<Query> queries);
+    public abstract Map<String,List<Query>> getQueryDistribution(List<Query> queries);
     public abstract String getQueryDistribution(Query q) ;
 }

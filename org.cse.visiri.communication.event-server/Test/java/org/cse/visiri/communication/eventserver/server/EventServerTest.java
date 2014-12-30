@@ -27,18 +27,18 @@ public class EventServerTest extends TestCase {
         Thread.sleep(1000);
 
         List<String> tmpQ=new LinkedList<String>();
-        tmpQ.add("fire");
+        tmpQ.add("car");
         server.bufferingStart(tmpQ);
 
         System.out.println("timer started");
-        Thread.sleep(10000);
+        Thread.sleep(20000);
         System.out.println("timeout");
         //tmpQ.remove("fire");
         server.bufferingStop();
     }
 
 
-    private static int port = 6666;
+    private static int port = 7211;
     EventServer server;
 
     private List<StreamDefinition> getDefinitions()
@@ -56,18 +56,20 @@ public class EventServerTest extends TestCase {
         sd.addAttribute("fighters", StreamDefinition.Type.INTEGER);
         sd.addAttribute("deaths", StreamDefinition.Type.INTEGER);
         sd.addAttribute("duration", StreamDefinition.Type.DOUBLE);
+        defs.add(sd);
 
-        StreamDefinition outputStreamDefinition=new StreamDefinition();
-        outputStreamDefinition.setStreamId("filterCar");
-        outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
-        outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
-        defs.add(outputStreamDefinition);
+        StreamDefinition inputStreamDefinition1=new StreamDefinition();
+        inputStreamDefinition1.setStreamId("car");
+        inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
+        inputStreamDefinition1.addAttribute("Id", StreamDefinition.Type.INTEGER);
+        inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
+        defs.add(inputStreamDefinition1);
 
-        StreamDefinition outputDef=new StreamDefinition();
-        outputDef.setStreamId("StockQuote");
-        outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
-        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-        defs.add(outputDef);
+        StreamDefinition def1=new StreamDefinition();
+        def1.setStreamId("ABC");
+        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
+        def1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
+        defs.add(def1);
 
         return defs;
     }

@@ -19,12 +19,19 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
 
     @Override
-    public Map<Query, String> getQueryDistribution(List<Query> queries) {
-        Map<Query,String> dist = new HashMap<Query, String>();
+    public Map<String,List<Query> > getQueryDistribution(List<Query> queries) {
+        Map<String,List<Query>> dist = new HashMap<String,List<Query>>();
         for(Query q: queries)
         {
             String node = getQueryDistribution(q);
-            dist.put(q,node);
+            List<Query> nodeQuery;
+            if(!dist.containsKey(node))
+            {
+                dist.put(node, new ArrayList<Query>());
+            }
+            nodeQuery = dist.get(node);
+
+            nodeQuery.add(q);
         }
 
         return dist;
