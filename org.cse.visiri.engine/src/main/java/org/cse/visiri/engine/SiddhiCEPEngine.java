@@ -27,7 +27,7 @@ public class SiddhiCEPEngine extends CEPEngine {
 
 
     public SiddhiCEPEngine(Query query,OutputEventReceiver outputEventReceiver){
-        eventRateStore=new EventRateStore();
+        eventRateStore=EventRateStore.getInstance();
         this.query=query;
         this.outputEventReceiver=outputEventReceiver;
         this.start();

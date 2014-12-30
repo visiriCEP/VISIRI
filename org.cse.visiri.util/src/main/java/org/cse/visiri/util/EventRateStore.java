@@ -93,7 +93,7 @@ public class EventRateStore {
     public static void main(String[] args){
 
         EventRateStore eventRateStore=new EventRateStore();
-
+        eventRateStore.getAverageRate();
 
         for(int i=0;i<5000000;i++){
             eventRateStore.increment(i+" dd");
