@@ -102,7 +102,7 @@ public class Node implements EnvironmentChangedCallback{
         for(Query q : addedQueries)
         {
             engineHandler.addQuery(q);
-            if(++count % 20 == 0)
+            if(++count % 20 > 0)
             {
                 System.out.print(count+" ");
             }
@@ -138,7 +138,7 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void startNode() {
-
+        System.out.println("Node trying to start. . . . .");
         if(!started)
         {
             try {
