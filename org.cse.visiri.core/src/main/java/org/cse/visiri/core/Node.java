@@ -39,6 +39,7 @@ public class Node implements EnvironmentChangedCallback{
         utilizationUpdater.start();
         engineHandler = new EngineHandler("Node");
         agent=new Agent(engineHandler);
+
     }
 
     public void start() throws Exception{

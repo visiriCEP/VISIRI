@@ -175,6 +175,7 @@ public class NodeTest extends TestCase {
 
     public void testSubNode() throws Exception {
         node.initialize();
+        node.start();
         System.out.println("Subnode started");
         Scanner sc = new Scanner(System.in);
         sc.next();

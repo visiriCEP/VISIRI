@@ -6,6 +6,10 @@ import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -29,22 +33,29 @@ public class Agent extends Thread {
     }
 
     public void run(){
+        System.out.println("Agent started");
         while(true){
 
 
             if(!Environment.getInstance().checkTransferInprogress()){
 
-            }
 
-            //Double utilizationLevel=utilizationUpdater.getUtilizationLevel();
-//            Utilization utilization=utilizationUpdater.update();
-//            double utilizationLevel=utilization.getOverallUtilizationValue();
-//            windowQueue.add(utilizationLevel);
-//            double utilizationLevelAvg=windowQueue.getAverage();
-//            if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-////                transferEngines();
-//            }
-//
+                if(Environment.getInstance().checkDynamic()){
+                       transferEngines();
+                       break;
+                }
+                /*
+                    Utilization utilization=utilizationUpdater.update();
+
+                    double utilizationLevel=utilization.getOverallUtilizationValue();
+                    windowQueue.add(utilizationLevel);
+                    double utilizationLevelAvg=windowQueue.getAverage();
+
+                    if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
+                       transferEngines();
+                    }
+*/
+            }
             try {
                 sleep(Configuration.AGENT_UPDATE_PERIOD);
             } catch (InterruptedException e) {

@@ -317,6 +317,21 @@ public class Environment implements MessageListener {
 
     }
 
+    public Boolean checkDynamic(){
+       Boolean temp= (Boolean) hzInstance.getMap("DD").get("dd");
+
+        if(temp!=null && temp==true)
+            return true;
+        else
+            return false;
+    }
+
+    public void addDynamic(){
+        hzInstance.getMap("DD").put("dd",true);
+    }
+
+
+
     public Boolean checkTransferInprogress(){
         if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
             return false;
