@@ -1,4 +1,4 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sinks;
 
 import org.cse.visiri.app.Evaluation;
 import org.cse.visiri.app.util.Writer;
@@ -32,7 +32,7 @@ public class EventSink {
 
     private  List<StreamDefinition> getDefinitions()
     {
-        eventRateStore=new EventRateStore();
+        eventRateStore=EventRateStore.getInstance();
 
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 

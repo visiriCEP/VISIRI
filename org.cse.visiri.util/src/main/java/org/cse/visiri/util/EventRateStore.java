@@ -11,8 +11,9 @@ public class EventRateStore {
     private int instantPos=-1;
     private int avgPos=-1;
     private int instantMapSize,avgMapSize;
+    private static EventRateStore instance;
 
-    public EventRateStore(){
+    private EventRateStore(){
 
         instantMapSize=Configuration.INSTANT_EVENT_COUNT;
         avgMapSize=Configuration.AVERAGE_EVENT_COUNT;
@@ -30,6 +31,15 @@ public class EventRateStore {
             avgMap[i]=startTime;
         }
 
+    }
+
+
+    public static EventRateStore getInstance(){
+        if(instance==null){
+            instance=new EventRateStore();
+        }
+
+        return instance;
     }
     public void increment(String message){
         Long mil=System.currentTimeMillis();
@@ -79,29 +89,34 @@ public class EventRateStore {
 
 
 
-/*
+
     public static void main(String[] args){
 
         EventRateStore eventRateStore=new EventRateStore();
 
-        for(int i=0;i<25;i++){
-            eventRateStore.increment();
+
+        for(int i=0;i<5000000;i++){
+            eventRateStore.increment(i+" dd");
             try {
                 if(i>5 && i<10)    {
-                    Thread.sleep(50);
+                   // Thread.sleep(50);
                 }
                 else {
-                    Thread.sleep(500);
+                   // Thread.sleep(500);
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            System.out.print(i+"\t"+eventRateStore.getAverageRate()*1000);
-            System.out.println("\t\t"+i+"\t"+eventRateStore.getInstantRate()*1000);
+           // System.out.print(i+"\t"+eventRateStore.getAverageRate()*1000);
+            //System.out.println("\t\t"+i+"\t"+eventRateStore.getInstantRate()*1000);
 
         }
 
+        for(int i=0;i<25;i++){
+            eventRateStore.getAverageRate();
+        }
+
     }
-*/
+
 }

@@ -36,7 +36,7 @@ public class EventServer {
 
     public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback,String identifier) {
         this.identifier=identifier;
-        eventRateStore=new EventRateStore();
+        eventRateStore=EventRateStore.getInstance();
 
         this.eventServerConfig = eventServerConfig;
         this.streamDefinitionList = streamDefinitions;

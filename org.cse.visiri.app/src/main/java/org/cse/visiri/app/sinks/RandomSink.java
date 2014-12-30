@@ -29,7 +29,7 @@ public class RandomSink {
 
     private  List<StreamDefinition> getDefinitions()
     {
-        eventRateStore=new EventRateStore();
+        eventRateStore=EventRateStore.getInstance();
 
         RandomEvaluation ev=  new RandomEvaluation();
         List<StreamDefinition> inDefs = ev.getInputDefinitions();
