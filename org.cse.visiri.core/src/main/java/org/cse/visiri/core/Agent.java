@@ -30,6 +30,11 @@ public class Agent extends Thread {
     public void run(){
         while(true){
 
+
+            if(!Environment.getInstance().checkTransferInprogress()){
+
+            }
+
             //Double utilizationLevel=utilizationUpdater.getUtilizationLevel();
 //            Utilization utilization=utilizationUpdater.update();
 //            double utilizationLevel=utilization.getOverallUtilizationValue();
@@ -48,15 +53,17 @@ public class Agent extends Thread {
     }
 
     private void transferEngines(){
-            Map<Query,String> transferableEngines=engineHandler.getTransferableEngines();
+            Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
+            Environment.getInstance().createNewTransferable(transferableEngines);
 
-            //TODO should Add inter node communications
-            for(Query query : transferableEngines.keySet()){
-                environment.sendEngine(query,transferableEngines.get(query));
-            }
-
-        //Notification to dispatcher
-        throw new UnsupportedOperationException();
+            Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
+//            //TODO should Add inter node communications
+//            for(Query query : transferableEngines.keySet()){
+//                environment.sendEngine(query,transferableEngines.get(query));
+//            }
+//
+//        //Notification to dispatcher
+ //       throw new UnsupportedOperationException();
     }
 
 }

@@ -320,6 +320,24 @@ public class Environment implements MessageListener {
         //hzInstance.getMap(NEW_DISTRIBUTION).
     }
 
+    public Boolean checkTransferInprogress(){
+        if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+    public void clearNewAddedQueries(){
+        hzInstance.getMap(NEW_DISTRIBUTION).remove(getNodeId());
+    }
+
+    public List<Query> getAdditionalQueries(){
+        return (List<Query>) hzInstance.getMap(NEW_DISTRIBUTION).get(getNodeId());
+    }
+
+
 
 
 

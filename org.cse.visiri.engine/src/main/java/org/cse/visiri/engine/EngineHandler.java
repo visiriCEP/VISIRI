@@ -181,7 +181,18 @@ public class EngineHandler {
         }
     }
 
+    public void addNewQueries(List<Query> queries){
+        for(Query query : queries){
+            try {
+                dynamicAddQuery(query);
+            } catch (Exception e) {
+                System.err.println("Dynamic : Failed to add new query" );
+                //e.printStackTrace();
+            }
+        }
 
+        Environment.getInstance().clearNewAddedQueries();
+    }
 
     public void dynamicAddQuery(Query query) throws Exception {
 
