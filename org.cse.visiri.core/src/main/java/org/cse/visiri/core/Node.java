@@ -162,6 +162,7 @@ public class Node implements EnvironmentChangedCallback{
     public void newEnginesRecieved() {
         List<Query> queries=Environment.getInstance().getAdditionalQueries();
         if(queries!=null){
+            System.out.println("----New engines received to Node");
             engineHandler.addNewQueries(queries);
         }
     }

@@ -1,5 +1,6 @@
 package org.cse.visiri.core;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
@@ -44,26 +45,21 @@ public class Agent extends Thread {
 ////                transferEngines();
 //            }
 //
-//            try {
-//                sleep(Configuration.AGENT_UPDATE_PERIOD);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                sleep(Configuration.AGENT_UPDATE_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void transferEngines(){
+            System.out.println("----Started Transferring Engines");
             Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
             Environment.getInstance().createNewTransferable(transferableEngines);
 
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
-//            //TODO should Add inter node communications
-//            for(Query query : transferableEngines.keySet()){
-//                environment.sendEngine(query,transferableEngines.get(query));
-//            }
-//
-//        //Notification to dispatcher
- //       throw new UnsupportedOperationException();
+            System.out.println("----EVENT_TYPE_ENGINE_PASS Message sent");
     }
 
 }

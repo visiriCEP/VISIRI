@@ -119,6 +119,7 @@ public class EngineHandler {
     }
 
     private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
+
         List<String> bufferingList=Environment.getInstance().getBufferingEventList();
         List<StreamDefinition> strmDefs=siddhiCEPEngine.getInputStreamDefinitionList();
 
@@ -126,6 +127,8 @@ public class EngineHandler {
             bufferingList.add(strdrf.getStreamId());
            // Environment.getInstance().getBufferingEventList().add(strdrf.getStreamId());
         }
+
+        System.out.println("----Added transferable queries to Buffering list");
     }
 
 
@@ -192,6 +195,7 @@ public class EngineHandler {
         }
 
         Environment.getInstance().clearNewAddedQueries();
+        System.out.println("\n----Query adding completed and environment cleared");
     }
 
     public void dynamicAddQuery(Query query) throws Exception {
@@ -237,6 +241,8 @@ public class EngineHandler {
                 outputEventReceiver.addDestinationIp(nodeIp,eventClient);
             }
         }
+
+        System.out.println("----"+query.getQuery()+" added");
 
     }
 

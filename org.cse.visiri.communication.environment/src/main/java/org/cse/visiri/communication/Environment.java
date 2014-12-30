@@ -295,7 +295,6 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                //if(messageObject.getDestination().equals(getNodeId()))
                 changedCallback.newEnginesRecieved();
                 break;
         }
@@ -312,12 +311,10 @@ public class Environment implements MessageListener {
 
     public void createNewTransferable(Map<String,List<Query>> transferableEngines){
 
-//        hzInstance.getMap(NEW_DISTRIBUTION).clear();
-
         for(String ip : transferableEngines.keySet()) {
             hzInstance.getMap(NEW_DISTRIBUTION).put(ip, transferableEngines.get(ip));
         }
-        //hzInstance.getMap(NEW_DISTRIBUTION).
+
     }
 
     public Boolean checkTransferInprogress(){
