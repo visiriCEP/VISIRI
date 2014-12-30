@@ -138,13 +138,14 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void startNode() {
-        System.out.println("Node trying to start. . . . .");
+        agent.start();
+       // System.out.println("Node trying to start. . . . .");
         if(!started)
         {
             try {
-                System.out.println("EH");
+              //  System.out.println("EH");
                 engineHandler.start();
-                System.out.println("EH2");
+              //  System.out.println("EH2");
                 started = true;
             }
             catch(Exception e)
@@ -152,9 +153,9 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
-        System.out.println("Before agent started");
-        agent.start();
-        System.out.println("Node started");
+       // System.out.println("Before agent started");
+
+       // System.out.println("Node started");
     }
 
     @Override

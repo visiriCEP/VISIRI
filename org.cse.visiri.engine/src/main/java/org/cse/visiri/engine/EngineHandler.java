@@ -60,6 +60,7 @@ public class EngineHandler {
                 }
             }
         },identifier);
+        System.out.println("ES trying to start. . .");
         eventServer.start();
 
     }
