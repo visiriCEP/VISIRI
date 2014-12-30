@@ -24,7 +24,7 @@ public class RandomSink {
     private long count;
 
     public RandomSink(){
-        writer=new Writer(1000*1000);
+        writer=new Writer(100*1000);
     }
 
     private  List<StreamDefinition> getDefinitions()

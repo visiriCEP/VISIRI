@@ -17,6 +17,19 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
     public final double costThreshold = 10;
     public final double utilizationThreshold = 10;
 
+
+    @Override
+    public Map<Query, String> getQueryDistribution(List<Query> queries) {
+        Map<Query,String> dist = new HashMap<Query, String>();
+        for(Query q: queries)
+        {
+            String node = getQueryDistribution(q);
+            dist.put(q,node);
+        }
+
+        return dist;
+    }
+
     @Override
     public String getQueryDistribution(Query query) {
         DynamicQueryDistribution dist = new DynamicQueryDistribution();

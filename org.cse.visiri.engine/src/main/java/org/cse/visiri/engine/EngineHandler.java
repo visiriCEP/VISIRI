@@ -35,7 +35,6 @@ public class EngineHandler {
         this.outputEventReceiver=new OutputEventReceiver();
         this.streamDefinitionMap=new HashMap<String, StreamDefinition>();
         this.eventServerConfig=new EventServerConfig(7211);
-   //     this.outputEventReceiver=new OutputEventReceiver();
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
     }
@@ -105,6 +104,10 @@ public class EngineHandler {
             transferbleEnginesMap.put(query,dynamicQueryDistribution.getQueryDistribution(query));
 
             siddhiCEPEngine.stop();
+            //removing query from all the lists and maps in EngineHandler
+            queryList.remove(query);
+            nodeQueryMap.put(myNode,queryList);
+            this.removeQueries(query,siddhiCEPEngine);
 
         }
         //Sending buffering message to dispatcher
@@ -130,8 +133,6 @@ public class EngineHandler {
 
         System.out.println("----Added transferable queries to Buffering list");
     }
-
-
 
     public void stop(){
 
@@ -223,7 +224,6 @@ public class EngineHandler {
             destinationNodeMap=Environment.getInstance().getSubscriberMapping();
         }
 
-
         StreamDefinition outputStreamDefiniton=query.getOutputStreamDefinition();
         String streamId=outputStreamDefiniton.getStreamId();
         List<String> nodeIpList=destinationNodeMap.get(streamId);
@@ -252,6 +252,20 @@ public class EngineHandler {
         this.queryEngineMap.remove(query.getQueryId());
 
         //TODO have to implement persistent siddhi instance
+    }
+
+    private void removeQueries(Query query,CEPEngine cEPEngine){
+        queryEngineMap.remove(query.getQueryId());
+        myQueryList.remove(query);
+
+        List<StreamDefinition> inputStreams=query.getInputStreamDefinitionsList();
+
+        for(StreamDefinition streamDefinition:inputStreams){
+            List<CEPEngine> cepEngineList=eventEngineMap.get(streamDefinition.getStreamId());
+            cepEngineList.remove(cEPEngine);
+            eventEngineMap.put(streamDefinition.getStreamId(),cepEngineList);
+        }
+
     }
 
     public Map<String, CEPEngine> getQueryEngineMap() {

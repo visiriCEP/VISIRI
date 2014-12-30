@@ -88,10 +88,17 @@ public class RandomSingleNode implements StreamCallback {
             siddhiManager.defineStream(streamDefinition);
         }
 
+        int added =0;
+        System.out.println("Adding queries");
         for(Query q: queries)
         {
             siddhiManager.addQuery(q.getQuery());
+            if(++added % 100 ==0)
+            {
+                System.out.print(added + " ");
+            }
         }
+        System.out.println("Done!");
         org.wso2.siddhi.core.stream.output.StreamCallback callback = new org.wso2.siddhi.core.stream.output.StreamCallback() {
             @Override
             public void receive(org.wso2.siddhi.core.event.Event[] events) {

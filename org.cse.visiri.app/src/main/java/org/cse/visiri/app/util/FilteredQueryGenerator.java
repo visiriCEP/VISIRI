@@ -5,88 +5,28 @@ import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
- * Created by Geeth on 2014-12-11.
+ * Created by Geeth on 2014-12-27.
  */
-public class RandomQueryGenerator {
+public class FilteredQueryGenerator extends RandomQueryGenerator{
 
-    private int _lastAttrID = 1;
-    private int _lastStreamID = 1;
-    private int _lastQueryID = 1;
-
-    protected Random randomizer;
-
-    protected String newStreamName()
+    private double complexity = 2;
+    public  FilteredQueryGenerator(int seed)
     {
-        return "stream"+ (_lastStreamID++);
+        super(seed);
     }
-    protected String newQueryID()
+    public  FilteredQueryGenerator(int seed,double complexity)
     {
-        return "query"+ (_lastQueryID++);
+        super(seed);
+        this.complexity = complexity;
     }
-    protected String newAttributeName()
-    {
-        return "attr" + (_lastAttrID++);
-    }
-
-    protected String newCondition(List<StreamDefinition.Attribute> attrs)
-    {
-        int attrIdx =  randomizer.nextInt(attrs.size());
-        String attrName = attrs.get(attrIdx).getName();
-        String op = randomizer.nextBoolean() ? ">" : "<";
-        float value = randomizer.nextFloat() * 100;
-        String valStr = new DecimalFormat("#0.0#").format(value);
-        String cond = String.format("%s %s %s",attrName,op,valStr);
-
-        return cond;
-    }
-
-    protected String generateMultipleConditions(List<StreamDefinition.Attribute> attrs,
-                                                int count)
-    {
-        String[] conds = new String[count];
-        for(int i=0; i < count ; i++)
-        {
-            conds[i] = newCondition(attrs);
-        }
-        String complete = StringUtils.join(conds," and ");
-        return complete;
-    }
-
-    public RandomQueryGenerator(int seed)
-    {
-        randomizer = new Random(seed);
-    }
-
-    public List<StreamDefinition> generateDefinitions(int defCount,int queryAttrMin, int queryAttrMax)
-    {
-        List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
-
-        for(int defIdx =0 ; defIdx < defCount ; defIdx++ )
-        {
-            StreamDefinition def = new StreamDefinition();
-            def.setStreamId(newStreamName());
-            int attrCount = queryAttrMin+randomizer.nextInt(queryAttrMax-queryAttrMin + 1);
-            for(int attrId= 1 ; attrId<= attrCount ; attrId++)
-            {
-                def.addAttribute("attr" + attrId, StreamDefinition.Type.FLOAT);
-            }
-
-            defs.add(def);
-        }
-
-        return defs;
-    }
-
+    @Override
     protected Query generateQuery(List<StreamDefinition> inputs, List<StreamDefinition> outputs)
     {
-
         int inputIndex= randomizer.nextInt(inputs.size());
         int outputIndex = randomizer.nextInt(outputs.size());
 
@@ -120,7 +60,7 @@ public class RandomQueryGenerator {
         {
             case 0: //filter 1
             {
-                String conds = generateMultipleConditions(inAttrs,1);
+                String conds = generateMultipleConditions(inAttrs,(int)(2*complexity));
                 varCondition = "[" + conds + "]";
 
                 List<String> inps = new ArrayList<String>();
@@ -130,12 +70,12 @@ public class RandomQueryGenerator {
                     String attr = inAttrs.get(attrPos).getName();
                     inps.add(attr);
                 }
-                varInAttr= StringUtils.join(inps,",");
+                varInAttr= StringUtils.join(inps, ",");
                 break;
             }
             case 1: //filter 2
             {
-                String cond = generateMultipleConditions(inAttrs, 2);
+                String cond = generateMultipleConditions(inAttrs,(int)(4*complexity));
 
                 varCondition = "[" + cond + "]";
 
@@ -149,10 +89,9 @@ public class RandomQueryGenerator {
                 break;
             }
             case 2: //window
-            case 3:
             {
-                String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
-                int batchCount = 5 + randomizer.nextInt(10*1000);
+                String type = randomizer.nextFloat() < 0.80 ? "lengthBatch" : "length";
+                int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
                 List<String> inps = new ArrayList<String>();
@@ -166,12 +105,14 @@ public class RandomQueryGenerator {
                 break;
             }
 
+
+            case 3:
             case 4: //window +  filter
             {
-                String cond = generateMultipleConditions(inAttrs, 1);
+                String cond = generateMultipleConditions(inAttrs,4);
                 varCondition = "[" + cond + "]";
-                String type = randomizer.nextBoolean() ? "lengthBatch" : "length";
-                int batchCount = 5 + randomizer.nextInt(5000);
+                String type = randomizer.nextFloat() < 0.75 ? "lengthBatch" : "length";
+                int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
                 List<String> inps = new ArrayList<String>();
@@ -194,19 +135,4 @@ public class RandomQueryGenerator {
         Query query = new Query( queryString,inputDefList,outputDef,newQueryID(), Configuration.ENGINE_TYPE_SIDDHI);
         return query;
     }
-
-    public List<Query> generateQueries(int queryCount,List<StreamDefinition> inputs, List<StreamDefinition> outputs)
-    {
-        System.out.print("Generating " + queryCount + " queries ...");
-        List<Query> allQueries= new ArrayList<Query>(queryCount);
-
-        for(int qIndex = 0; qIndex < queryCount ; qIndex++)
-        {
-            Query query = generateQuery(inputs,outputs);
-            allQueries.add(query);
-        }
-        System.out.println(" Done!");
-        return allQueries;
-    }
-
 }
