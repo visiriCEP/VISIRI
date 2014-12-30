@@ -48,7 +48,7 @@ public class Node implements EnvironmentChangedCallback{
             Thread.sleep(2000);
         }
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_NODE_START);
-        agent.start();
+
     }
 
     public void stop() {
@@ -149,9 +149,7 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
-        if(!agent.isAlive()){
-            agent.start();
-        }
+        agent.start();
         System.out.println("Node started");
     }
     @Override

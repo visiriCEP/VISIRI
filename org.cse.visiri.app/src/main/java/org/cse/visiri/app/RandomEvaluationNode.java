@@ -41,8 +41,8 @@ public class RandomEvaluationNode {
             node.subscribeToStream(outputStream,sinkIp+":6666");
         }
 
-        System.out.println("Starting in 30 seconds");
-        Thread.sleep(40*1000);
+//        System.out.println("Starting in 30 seconds");
+//        Thread.sleep(40*1000);
 
         node.start();
 
