@@ -68,7 +68,7 @@ public class EngineHandler {
 
     }
 
-    public Map<Query,String> getTransferableEngines(){
+    public Map<String,List<Query>> getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
@@ -113,11 +113,16 @@ public class EngineHandler {
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
 
-        return transferbleEnginesMap;
+       // return transferbleEnginesMap;
 
+
+
+        //Ujitha ,Change this to return  Map<ip,List<Query>>
+        return null;
     }
 
     private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
+
         List<String> bufferingList=Environment.getInstance().getBufferingEventList();
         List<StreamDefinition> strmDefs=siddhiCEPEngine.getInputStreamDefinitionList();
 
@@ -125,6 +130,8 @@ public class EngineHandler {
             bufferingList.add(strdrf.getStreamId());
            // Environment.getInstance().getBufferingEventList().add(strdrf.getStreamId());
         }
+
+        System.out.println("----Added transferable queries to Buffering list");
     }
 
     public void stop(){
@@ -157,6 +164,7 @@ public class EngineHandler {
         eventServer.bufferingStart(bufferingEventList);
     }
     public void eventServerBufferStop(){
+        Environment.getInstance().getBufferingEventList().clear();
         eventServer.bufferingStop();
     }
 
@@ -178,7 +186,19 @@ public class EngineHandler {
         }
     }
 
+    public void addNewQueries(List<Query> queries){
+        for(Query query : queries){
+            try {
+                dynamicAddQuery(query);
+            } catch (Exception e) {
+                System.err.println("Dynamic : Failed to add new query" );
+                //e.printStackTrace();
+            }
+        }
 
+        Environment.getInstance().clearNewAddedQueries();
+        System.out.println("\n----Query adding completed and environment cleared");
+    }
 
     public void dynamicAddQuery(Query query) throws Exception {
 
@@ -222,6 +242,8 @@ public class EngineHandler {
                 outputEventReceiver.addDestinationIp(nodeIp,eventClient);
             }
         }
+
+        System.out.println("----"+query.getQuery()+" added");
 
     }
 

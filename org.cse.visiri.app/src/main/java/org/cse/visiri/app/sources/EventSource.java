@@ -20,18 +20,18 @@ public class EventSource {
     {
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
-//        StreamDefinition sd =new StreamDefinition("fire",null);
-//        sd.addAttribute("location", StreamDefinition.Type.STRING);
-//        sd.addAttribute("temperature", StreamDefinition.Type.DOUBLE);
-//        sd.addAttribute("casualties", StreamDefinition.Type.BOOLEAN);
-//        defs.add(sd);
-//
-//        sd =new StreamDefinition("fight",null);
-//        sd.addAttribute("location", StreamDefinition.Type.STRING);
-//        sd.addAttribute("fighters", StreamDefinition.Type.INTEGER);
-//        sd.addAttribute("deaths", StreamDefinition.Type.INTEGER);
-//        sd.addAttribute("duration", StreamDefinition.Type.DOUBLE);
-//        defs.add(sd);
+        StreamDefinition sd =new StreamDefinition("fire",null);
+        sd.addAttribute("location", StreamDefinition.Type.STRING);
+        sd.addAttribute("temperature", StreamDefinition.Type.DOUBLE);
+        sd.addAttribute("casualties", StreamDefinition.Type.BOOLEAN);
+        defs.add(sd);
+
+        sd =new StreamDefinition("fight",null);
+        sd.addAttribute("location", StreamDefinition.Type.STRING);
+        sd.addAttribute("fighters", StreamDefinition.Type.INTEGER);
+        sd.addAttribute("deaths", StreamDefinition.Type.INTEGER);
+        sd.addAttribute("duration", StreamDefinition.Type.DOUBLE);
+        defs.add(sd);
 
         StreamDefinition inputStreamDefinition1=new StreamDefinition();
         inputStreamDefinition1.setStreamId("car");

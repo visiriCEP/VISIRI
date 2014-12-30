@@ -1,5 +1,6 @@
 package org.cse.visiri.core;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.engine.EngineHandler;
@@ -30,6 +31,11 @@ public class Agent extends Thread {
     public void run(){
         while(true){
 
+
+            if(!Environment.getInstance().checkTransferInprogress()){
+
+            }
+
             //Double utilizationLevel=utilizationUpdater.getUtilizationLevel();
 //            Utilization utilization=utilizationUpdater.update();
 //            double utilizationLevel=utilization.getOverallUtilizationValue();
@@ -39,24 +45,21 @@ public class Agent extends Thread {
 ////                transferEngines();
 //            }
 //
-//            try {
-//                sleep(Configuration.AGENT_UPDATE_PERIOD);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                sleep(Configuration.AGENT_UPDATE_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void transferEngines(){
-            Map<Query,String> transferableEngines=engineHandler.getTransferableEngines();
+            System.out.println("----Started Transferring Engines");
+            Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
+            Environment.getInstance().createNewTransferable(transferableEngines);
 
-            //TODO should Add inter node communications
-            for(Query query : transferableEngines.keySet()){
-                environment.sendEngine(query,transferableEngines.get(query));
-            }
-
-        //Notification to dispatcher
-        throw new UnsupportedOperationException();
+            Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
+            System.out.println("----EVENT_TYPE_ENGINE_PASS Message sent");
     }
 
 }
