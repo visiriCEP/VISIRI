@@ -65,7 +65,6 @@ public class EngineHandler {
         },identifier);
         eventServer.start();
 
-
     }
 
     public Map<String,List<Query>> getTransferableEngines(){
@@ -89,7 +88,8 @@ public class EngineHandler {
 
         DynamicQueryDistributionAlgoImpliment dynamicQueryDistribution=new DynamicQueryDistributionAlgoImpliment();
 
-        Map<Query,String> transferbleEnginesMap=new HashMap<Query, String>();
+        Map<String,List<Query>> nodeTransferbleQueryMap=dynamicQueryDistribution.getQueryDistribution(transferbleQueryList);
+
 
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
@@ -101,8 +101,6 @@ public class EngineHandler {
             //TODO use revision key
             String revisionKey=(String)siddhiCEPEngine.saveState();
 
-            transferbleEnginesMap.put(query,dynamicQueryDistribution.getQueryDistribution(query));
-
             siddhiCEPEngine.stop();
             //removing query from all the lists and maps in EngineHandler
             queryList.remove(query);
@@ -113,12 +111,8 @@ public class EngineHandler {
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
 
-       // return transferbleEnginesMap;
+        return nodeTransferbleQueryMap;
 
-
-
-        //Ujitha ,Change this to return  Map<ip,List<Query>>
-        return null;
     }
 
     private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
