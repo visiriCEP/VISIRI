@@ -293,6 +293,7 @@ public class Environment implements MessageListener {
                 break;
             case Environment.EVENT_TYPE_NODE_STOP:
                 changedCallback.stopNode();
+                System.out.println("-------   Start node message received");
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
                 changedCallback.newEnginesRecieved();
