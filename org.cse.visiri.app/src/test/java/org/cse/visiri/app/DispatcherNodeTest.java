@@ -27,10 +27,10 @@ public class DispatcherNodeTest extends TestCase {
 
 
         t1.start();
-        Thread.sleep(1000);
+        Thread.sleep(10000);
 
         List<String> tmpQ=new LinkedList<String>();
-        tmpQ.add("car");
+//        tmpQ.add("car");
 //        server.bufferingStart(tmpQ);
         Environment.getInstance().getBufferingEventList().add("stream1");
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
