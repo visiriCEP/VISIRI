@@ -69,7 +69,7 @@ public class EngineHandler {
 
     }
 
-    public Map<Query,String> getTransferableEngines(){
+    public Map<String,List<Query>> getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
@@ -110,8 +110,12 @@ public class EngineHandler {
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
 
-        return transferbleEnginesMap;
+       // return transferbleEnginesMap;
 
+
+
+        //Ujitha ,Change this to return  Map<ip,List<Query>>
+        return null;
     }
 
     private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
