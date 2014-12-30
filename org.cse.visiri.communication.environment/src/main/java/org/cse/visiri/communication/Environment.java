@@ -24,11 +24,12 @@ public class Environment implements MessageListener {
 
     public static final int EVENT_TYPE_QUERIES_CHANGED = 1;
     public static final int EVENT_TYPE_NODES_CHANGED = 2;
-    public static final int EVENT_TYPE_BUFFERINGSTATE_CHANGED = 3;
+    public static final int EVENT_TYPE_BUFFERING_START= 3;
     public static final int EVENT_TYPE_EVENTSUBSCIBER_CHANGED = 4;
     public static final int EVENT_TYPE_NODE_START = 5;
     public static final int EVENT_TYPE_NODE_STOP = 6;
     public static final int EVENT_TYPE_ENGINE_PASS = 7;
+    public static final int EVENT_TYPE_BUFFERING_STOP = 8;
 
     private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
@@ -271,8 +272,11 @@ public class Environment implements MessageListener {
         int eventType=messageObject.getEventType();
 
         switch (eventType){
-            case Environment.EVENT_TYPE_BUFFERINGSTATE_CHANGED:
-                changedCallback.bufferingStateChanged();
+            case Environment.EVENT_TYPE_BUFFERING_START:
+                changedCallback.bufferingStart();
+                break;
+            case Environment.EVENT_TYPE_BUFFERING_STOP:
+                changedCallback.bufferingStop();
                 break;
             case Environment.EVENT_TYPE_QUERIES_CHANGED:
                 changedCallback.queriesChanged();
