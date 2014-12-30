@@ -29,7 +29,7 @@ public class EventServer {
     private EventRateStore eventRateStore;
 
     private HashMap<String,Queue> eventBufferQueueMap;
-    private HashMap<String,Boolean> eventBufferConditionMap;
+    //private HashMap<String,Boolean> eventBufferConditionMap;
 
     private String identifier;
 
@@ -45,12 +45,12 @@ public class EventServer {
 
         this.streamRuntimeInfoHashMap=new HashMap<String, StreamRuntimeInfo>();
         this.eventBufferQueueMap =new HashMap<String, Queue>();
-        this.eventBufferConditionMap=new HashMap<String, Boolean>();
+        //this.eventBufferConditionMap=new HashMap<String, Boolean>();
         for(int i=0;i<streamDefinitions.size();i++){
             // this.streamRuntimeInfos[i]=EventServerUtils.createStreamRuntimeInfo(streamDefinitions[i]);
             streamRuntimeInfoHashMap.put(streamDefinitions.get(i).getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinitions.get(i)));
             eventBufferQueueMap.put(streamDefinitions.get(i).getStreamId(),new LinkedList());
-            eventBufferConditionMap.put(streamDefinitions.get(i).getStreamId(),false);
+            //eventBufferConditionMap.put(streamDefinitions.get(i).getStreamId(),false);
         }
         pool = Executors.newFixedThreadPool(eventServerConfig.getNumberOfThreads());
 
@@ -119,13 +119,14 @@ public class EventServer {
 
                                 eventRateStore.increment(identifier);
                               //  System.out.println("event received "+streamId);
-                                if(!eventBufferConditionMap.get(streamId)) {
+                                if(eventBufferQueueMap.get(streamId)==null){
+                                //if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
                                    // System.out.println("event received "+streamId);
                                 }else{
-                                    Queue<Object> tmpQ= eventBufferQueueMap.get(streamId);
-                                    tmpQ.add(eventStream);
-                                    eventBufferQueueMap.put(streamId, tmpQ);
+                                    eventBufferQueueMap.get(streamId).add(eventStream);
+//                                    tmpQ.add(eventStream);
+//                                    eventBufferQueueMap.put(streamId, tmpQ);
                                 }
                             }
                         } catch (IOException e) {
@@ -157,24 +158,44 @@ public class EventServer {
         return eventRateStore.getInstantRate();
     }
 
-    public void bufferStateChanged(List<String> bufferingEventList){
-        Iterator it = eventBufferQueueMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
-            if(!bufferingEventList.contains(pairs.getKey())){
-                Queue<Event> tmpQ= eventBufferQueueMap.get(pairs.getKey());
-                eventBufferConditionMap.put(pairs.getKey().toString(),false);
-                System.out.println("releasing buffer:"+pairs.getKey());
-                for(Event e:tmpQ){
-                    streamCallback.receive(e);
-                }
-                eventBufferQueueMap.put(pairs.getKey().toString(),new LinkedList());
-            }
-            else{
-                eventBufferConditionMap.put(pairs.getKey().toString(),true);
-            }
+//    public void bufferStateChanged(List<String> bufferingEventList){
+//        Iterator it = eventBufferQueueMap.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry pairs = (Map.Entry)it.next();
+//            if(!bufferingEventList.contains(pairs.getKey())){
+//                Queue<Event> tmpQ= eventBufferQueueMap.get(pairs.getKey());
+//                eventBufferConditionMap.put(pairs.getKey().toString(),false);
+//                System.out.println("releasing buffer:"+pairs.getKey());
+//                for(Event e:tmpQ){
+//                    streamCallback.receive(e);
+//                }
+//                eventBufferQueueMap.put(pairs.getKey().toString(),new LinkedList());
+//            }
+//            else{
+//                eventBufferConditionMap.put(pairs.getKey().toString(),true);
+//            }
+//        }
+//    }
+
+    public void bufferingStart(List<String> bufferingEventList){
+        for(String buffEventId:bufferingEventList){
+            eventBufferQueueMap.put(buffEventId,new LinkedList());
         }
     }
+    public void bufferingStop(){
+        Iterator it = eventBufferQueueMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry) it.next();
+            Queue<Event> tmpQ = eventBufferQueueMap.get(pairs.getKey());
+            System.out.println("releasing buffer:" + pairs.getKey());
+            for (Event e : tmpQ) {
+                streamCallback.receive(e);
+            }
+        }
+        eventBufferQueueMap=new HashMap<String, Queue>();
+    }
+
+
 
     private int loadData(BufferedInputStream in) throws IOException {
 
