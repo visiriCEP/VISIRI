@@ -137,7 +137,11 @@ public class EventServer {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+          //  System.out.println("ES started");
         }
+
+       //ystem.out.println("ES started");
+
 
     }
 
