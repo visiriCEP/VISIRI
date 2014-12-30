@@ -1,0 +1,3 @@
+query_count=20
+input_def_count=10
+output_def_count=10

@@ -164,6 +164,7 @@ public class EngineHandler {
         eventServer.bufferingStart(bufferingEventList);
     }
     public void eventServerBufferStop(){
+        Environment.getInstance().getBufferingEventList().clear();
         eventServer.bufferingStop();
     }
 

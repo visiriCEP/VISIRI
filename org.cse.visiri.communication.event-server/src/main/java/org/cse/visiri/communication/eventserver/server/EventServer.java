@@ -118,15 +118,13 @@ public class EventServer {
                                 eventStream.setData(event);
 
                                 eventRateStore.increment(identifier);
-                              //  System.out.println("event received "+streamId);
+                                System.out.println("event received "+streamId);
                                 if(eventBufferQueueMap.get(streamId)==null){
                                 //if(!eventBufferConditionMap.get(streamId)) {
                                     streamCallback.receive(eventStream);
-                                   // System.out.println("event received "+streamId);
+                                    System.out.println("event received----------------------------- "+streamId);
                                 }else{
                                     eventBufferQueueMap.get(streamId).add(eventStream);
-//                                    tmpQ.add(eventStream);
-//                                    eventBufferQueueMap.put(streamId, tmpQ);
                                 }
                             }
                         } catch (IOException e) {
