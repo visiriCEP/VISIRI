@@ -1,9 +1,6 @@
 package org.cse.visiri.engine;
 
-import org.cse.visiri.algo.AlgoFactory;
 import org.cse.visiri.algo.DynamicQueryDistributionAlgoImpliment;
-import org.cse.visiri.algo.QueryDistributionAlgo;
-import org.cse.visiri.algo.QueryDistributionParam;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
@@ -183,18 +180,17 @@ public class EngineHandler {
     public void addNewQueries(List<Query> queries){
         for(Query query : queries){
             try {
-                dynamicAddQuery(query);
+                this.dynamicAddQuery(query);
             } catch (Exception e) {
                 System.err.println("Dynamic : Failed to add new query" );
                 //e.printStackTrace();
             }
         }
-
         Environment.getInstance().clearNewAddedQueries();
         System.out.println("\n----Query adding completed and environment cleared");
     }
 
-    public void dynamicAddQuery(Query query) throws Exception {
+    private void dynamicAddQuery(Query query) throws Exception {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
         cepEngine.restoreEngine();
