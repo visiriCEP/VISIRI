@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Created by Geeth on 2014-12-01.
  */
-public class DynamicQueryDistributionAlgo1 extends DynamicQueryDistributionAlgo{
+public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistributionAlgo{
 
     public final double costThreshold = 10;
     public final double utilizationThreshold = 10;
