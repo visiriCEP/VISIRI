@@ -64,6 +64,7 @@ public class Node implements EnvironmentChangedCallback{
         QueryDistribution dist = algo.getQueryDistribution(params);
         Environment.getInstance().addQueryDistribution(dist);
 
+        System.out.println("------Queries are distributed to Environment----");
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
     }
 
@@ -107,9 +108,10 @@ public class Node implements EnvironmentChangedCallback{
             }
         }
         queries.addAll(addedQueries);
+        System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
 //        send ready message
         Environment.getInstance().setReady();
-        System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
+
     }
 
     @Override
@@ -151,6 +153,7 @@ public class Node implements EnvironmentChangedCallback{
         agent.start();
         System.out.println("Node started");
     }
+
     @Override
     public void stopNode()
     {
