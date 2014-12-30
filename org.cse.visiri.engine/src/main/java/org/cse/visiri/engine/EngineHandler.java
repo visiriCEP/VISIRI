@@ -1,6 +1,7 @@
 package org.cse.visiri.engine;
 
 import org.cse.visiri.algo.AlgoFactory;
+import org.cse.visiri.algo.DynamicQueryDistributionAlgoImpliment;
 import org.cse.visiri.algo.QueryDistributionAlgo;
 import org.cse.visiri.algo.QueryDistributionParam;
 import org.cse.visiri.communication.Environment;
@@ -86,12 +87,9 @@ public class EngineHandler {
         }
 
         List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
-        QueryDistributionAlgo queryDistributionAlgo= AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_ALGO);
-        QueryDistributionParam param = QueryDistributionParam.fromEnvironment();
-        param.setQueries(transferbleQueryList);
-        QueryDistribution queryDistribution=queryDistributionAlgo.getQueryDistribution(param);
 
-        Map<Query,String> queryAllocation=queryDistribution.getQueryAllocation();
+        DynamicQueryDistributionAlgoImpliment dynamicQueryDistribution=new DynamicQueryDistributionAlgoImpliment();
+
         Map<Query,String> transferbleEnginesMap=new HashMap<Query, String>();
 
         for(Query query:transferbleQueryList){
@@ -104,7 +102,7 @@ public class EngineHandler {
             //TODO use revision key
             String revisionKey=(String)siddhiCEPEngine.saveState();
 
-            transferbleEnginesMap.put(query,queryAllocation.get(query));
+            transferbleEnginesMap.put(query,dynamicQueryDistribution.getQueryDistribution(query));
 
             siddhiCEPEngine.stop();
 

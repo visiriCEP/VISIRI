@@ -66,8 +66,13 @@ public class TransferbleQuery {
 
         Arrays.sort(costRateValueArray);
 
-        int middleIndex=costRateValueArray.length/2;        //get the query w.r.t the moddle values in the costRate array
-        queryList.add(costRateQueryMap.get(costRateValueArray[middleIndex]));
+        int minIndex=(int)(size*(9.0/20));
+        int maxIndex=(int)(size*(11.0/20));                          //get the middle 10% of the queries
+
+        for(int j=minIndex;j<maxIndex;j++){
+            queryList.add(costRateQueryMap.get(costRateValueArray[j]));
+        }
+
         return queryList;
     }
 

@@ -59,7 +59,7 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.RANDOM_DISTRIBUTOR_ALGO);
         QueryDistributionParam params = QueryDistributionParam.fromEnvironment();
         params.setQueries(queries);
         QueryDistribution dist = algo.getQueryDistribution(params);
@@ -119,9 +119,15 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void bufferingStateChanged() {
-        recievedEvent=3;
+    public void bufferingStart() {
+
     }
+
+    @Override
+    public void bufferingStop() {
+
+    }
+
 
     @Override
     public void eventSubscriberChanged() {

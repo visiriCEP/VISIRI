@@ -12,5 +12,6 @@ public abstract class QueryDistributionAlgo {
     public final static int ROUNDROBIN_ALGO=2;
     public final static int RANDOM_DISTRIBUTOR_ALGO=3;
 
+
     public abstract QueryDistribution getQueryDistribution(QueryDistributionParam param);
 }
