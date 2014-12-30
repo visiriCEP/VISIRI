@@ -142,7 +142,9 @@ public class Node implements EnvironmentChangedCallback{
         if(!started)
         {
             try {
+                System.out.println("EH");
                 engineHandler.start();
+                System.out.println("EH2");
                 started = true;
             }
             catch(Exception e)
@@ -150,6 +152,7 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
+        System.out.println("Before agent started");
         agent.start();
         System.out.println("Node started");
     }
