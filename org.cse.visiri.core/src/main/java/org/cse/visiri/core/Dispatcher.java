@@ -123,7 +123,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void newEngineRecieved(Query query) {
+    public void newEnginesRecieved() {
 
     }
 

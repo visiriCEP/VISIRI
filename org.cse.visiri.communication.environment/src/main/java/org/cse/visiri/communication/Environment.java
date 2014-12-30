@@ -31,6 +31,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_ENGINE_PASS = 7;
     public static final int EVENT_TYPE_BUFFERING_STOP = 8;
 
+    private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
     private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
@@ -294,8 +295,8 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                if(messageObject.getDestination().equals(getNodeId()))
-                    changedCallback.newEngineRecieved(messageObject.getPersistedEngine());
+                //if(messageObject.getDestination().equals(getNodeId()))
+                changedCallback.newEnginesRecieved();
                 break;
         }
 
@@ -305,8 +306,18 @@ public class Environment implements MessageListener {
        topic.publish(new MessageObject(eventType));
     }
 
-    public void sendEngine(Query query,String destination){
-        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,query,destination));
+//    public void sendEngine(Query query,String destination){
+//        topic.publish(new MessageObject(Environment.EVENT_TYPE_ENGINE_PASS,query,destination));
+//    }
+
+    public void createNewTransferable(Map<String,List<Query>> transferableEngines){
+
+//        hzInstance.getMap(NEW_DISTRIBUTION).clear();
+
+        for(String ip : transferableEngines.keySet()) {
+            hzInstance.getMap(NEW_DISTRIBUTION).put(ip, transferableEngines.get(ip));
+        }
+        //hzInstance.getMap(NEW_DISTRIBUTION).
     }
 
 
