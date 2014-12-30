@@ -88,7 +88,7 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void queriesChanged() {
-        System.out.println( "1111");
+
         String nodeID = Environment.getInstance().getNodeId();
         List<Query> newQuerySet = Environment.getInstance().getNodeQueryMap().get(nodeID);
         if(newQuerySet == null)
@@ -97,19 +97,16 @@ public class Node implements EnvironmentChangedCallback{
         }
         List<Query> addedQueries = new ArrayList<Query>(newQuerySet);
         addedQueries.removeAll(queries);
-        System.out.println( "222222");
+
         int count =0;
         for(Query q : addedQueries)
         {
             engineHandler.addQuery(q);
-//            if(++count % 20 == 0)
-//            {
-//                System.out.print(count+" ");
-//            }
-            System.out.println(count+" ");
-            count++;
+            if(++count % 20 > 0)
+            {
+                System.out.print(count+" ");
+            }
         }
-        System.out.println( "33333");
         queries.addAll(addedQueries);
         System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
 //        send ready message
@@ -141,11 +138,13 @@ public class Node implements EnvironmentChangedCallback{
 
     @Override
     public void startNode() {
-        System.out.println("---startNode callback is called");
+        System.out.println("Node trying to start. . . . .");
         if(!started)
         {
             try {
+                System.out.println("EH");
                 engineHandler.start();
+                System.out.println("EH2");
                 started = true;
             }
             catch(Exception e)
@@ -153,7 +152,7 @@ public class Node implements EnvironmentChangedCallback{
                 e.printStackTrace();
             }
         }
-        System.out.println("agent is about to start");
+        System.out.println("Before agent started");
         agent.start();
         System.out.println("Node started");
     }
