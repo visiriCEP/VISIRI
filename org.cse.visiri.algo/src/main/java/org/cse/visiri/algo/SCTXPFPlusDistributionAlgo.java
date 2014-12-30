@@ -19,7 +19,7 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
-    public final double costThreshold = 150;
+    public final double costThreshold = 180;
     public final double queryCountThreshold = 80;
     public final double utilizationThreshold = 10;
 

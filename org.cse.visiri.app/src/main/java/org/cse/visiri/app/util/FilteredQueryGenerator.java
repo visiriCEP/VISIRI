@@ -14,12 +14,12 @@ import java.util.List;
  */
 public class FilteredQueryGenerator extends RandomQueryGenerator{
 
-    private int complexity = 2;
+    private double complexity = 2;
     public  FilteredQueryGenerator(int seed)
     {
         super(seed);
     }
-    public  FilteredQueryGenerator(int seed,int complexity)
+    public  FilteredQueryGenerator(int seed,double complexity)
     {
         super(seed);
         this.complexity = complexity;
@@ -60,7 +60,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
         {
             case 0: //filter 1
             {
-                String conds = generateMultipleConditions(inAttrs,2*complexity);
+                String conds = generateMultipleConditions(inAttrs,(int)(2*complexity));
                 varCondition = "[" + conds + "]";
 
                 List<String> inps = new ArrayList<String>();
@@ -75,7 +75,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             }
             case 1: //filter 2
             {
-                String cond = generateMultipleConditions(inAttrs,4*complexity);
+                String cond = generateMultipleConditions(inAttrs,(int)(4*complexity));
 
                 varCondition = "[" + cond + "]";
 
@@ -91,7 +91,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             case 2: //window
             {
                 String type = randomizer.nextFloat() < 0.80 ? "lengthBatch" : "length";
-                int batchCount = 5 + randomizer.nextInt(200*complexity);
+                int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
                 List<String> inps = new ArrayList<String>();
@@ -112,7 +112,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
                 String cond = generateMultipleConditions(inAttrs,4);
                 varCondition = "[" + cond + "]";
                 String type = randomizer.nextFloat() < 0.75 ? "lengthBatch" : "length";
-                int batchCount = 5 + randomizer.nextInt(200*complexity);
+                int batchCount = 5 + randomizer.nextInt((int)(200*complexity));
                 varWindow="#window."+type+"("+batchCount+") ";
 
                 List<String> inps = new ArrayList<String>();
