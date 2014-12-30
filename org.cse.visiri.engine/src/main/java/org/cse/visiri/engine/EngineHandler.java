@@ -106,8 +106,8 @@ public class EngineHandler {
             siddhiCEPEngine.stop();
             //removing query from all the lists and maps in EngineHandler
             queryList.remove(query);
-            queryEngineMap.remove(query.getQueryId());
-            myQueryList.remove(query);
+            nodeQueryMap.put(myNode,queryList);
+            this.removeQueries(query,siddhiCEPEngine);
 
         }
         //Sending buffering message to dispatcher
@@ -231,6 +231,20 @@ public class EngineHandler {
         this.queryEngineMap.remove(query.getQueryId());
 
         //TODO have to implement persistent siddhi instance
+    }
+
+    private void removeQueries(Query query,CEPEngine cEPEngine){
+        queryEngineMap.remove(query.getQueryId());
+        myQueryList.remove(query);
+
+        List<StreamDefinition> inputStreams=query.getInputStreamDefinitionsList();
+
+        for(StreamDefinition streamDefinition:inputStreams){
+            List<CEPEngine> cepEngineList=eventEngineMap.get(streamDefinition.getStreamId());
+            cepEngineList.remove(cEPEngine);
+            eventEngineMap.put(streamDefinition.getStreamId(),cepEngineList);
+        }
+
     }
 
     public Map<String, CEPEngine> getQueryEngineMap() {
