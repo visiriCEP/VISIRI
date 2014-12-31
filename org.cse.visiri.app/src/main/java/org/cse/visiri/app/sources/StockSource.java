@@ -24,7 +24,7 @@ public class StockSource {
 
     private List<StreamDefinition> getDefinitions()
     {
-        eventRateStore=EventRateStore.getInstance();
+        eventRateStore=new EventRateStore();
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
         StreamDefinition inputStreamDefinition1=new StreamDefinition();

@@ -13,7 +13,7 @@ public class EventRateStore {
     private int instantMapSize,avgMapSize;
     private static EventRateStore instance;
 
-    private EventRateStore(){
+    public EventRateStore(){
 
         instantMapSize=Configuration.INSTANT_EVENT_COUNT;
         avgMapSize=Configuration.AVERAGE_EVENT_COUNT;
@@ -30,17 +30,9 @@ public class EventRateStore {
         for(int i=0;i<avgMapSize;i++){
             avgMap[i]=startTime;
         }
-
+        increment("");
     }
 
-
-    public static EventRateStore getInstance(){
-        if(instance==null){
-            instance=new EventRateStore();
-        }
-
-        return instance;
-    }
     public void increment(String message){
         Long mil=System.currentTimeMillis();
 
@@ -93,8 +85,9 @@ public class EventRateStore {
     public static void main(String[] args){
 
         EventRateStore eventRateStore=new EventRateStore();
-        eventRateStore.getAverageRate();
 
+        eventRateStore.getAverageRate();
+/*
         for(int i=0;i<5000000;i++){
             eventRateStore.increment(i+" dd");
             try {
@@ -112,7 +105,7 @@ public class EventRateStore {
             //System.out.println("\t\t"+i+"\t"+eventRateStore.getInstantRate()*1000);
 
         }
-
+*/
         for(int i=0;i<25;i++){
             eventRateStore.getAverageRate();
         }

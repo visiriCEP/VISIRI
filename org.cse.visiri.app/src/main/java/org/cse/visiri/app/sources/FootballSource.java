@@ -24,7 +24,7 @@ public class FootballSource {
 
     private List<StreamDefinition> getDefinitions()
     {
-        eventRateStore=EventRateStore.getInstance();
+        eventRateStore=new EventRateStore();
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
         StreamDefinition inputStreamDef=new StreamDefinition();

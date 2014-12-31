@@ -39,7 +39,7 @@ public class TransferbleQuery {
 //        List<Query> queryList=nodeQueryMap.get(myNode);
           List<Query> queryList=qList;
         queryArray=new Query[queryList.size()];
-        queryArray= (Query[]) queryList.toArray();
+        queryArray= (Query[]) queryList.toArray(new Query[0]);
     }
 
     public List<Query> detectTransferbleQuery(double[] eventRates,List<Query> qList){
