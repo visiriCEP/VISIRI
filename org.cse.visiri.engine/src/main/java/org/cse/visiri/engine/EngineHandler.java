@@ -61,7 +61,19 @@ public class EngineHandler {
             }
         },identifier);
         System.out.println("ES trying to start. . .");
-        eventServer.start();
+
+        Thread t = new Thread(new Runnable() {
+            public void run()
+            {
+                try {
+                    eventServer.start();
+                } catch (Exception e) {
+                    System.err.println("Error : Unable to start EventServer");
+                }
+                // Insert some method call here.
+            }
+        });
+        t.start();
 
     }
 
