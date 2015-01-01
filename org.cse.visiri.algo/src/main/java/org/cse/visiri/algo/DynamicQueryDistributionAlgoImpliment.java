@@ -105,20 +105,23 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
         //minimum utilization
         Map<String, Utilization> utilizations = env.getNodeUtilizations();
-        double maxUtil = Collections.max(utilizations.values(), new
-                Comparator<Utilization>() {
-                    @Override
-                    public int compare(Utilization o1, Utilization o2) {
-                        return (int) ( o1.getFreeMemoryPercentage() - o2.getFreeMemoryPercentage());
-                    }
-                }).getFreeMemoryPercentage();
+        double minUtil = Double.MAX_VALUE;
+        for(String node : candidateNodes)
+        {
+            double util = utilizations.get(node).getFreeMemoryPercentage();
+            util = 100 - util;
+            if(util < minUtil)
+            {
+                minUtil = util;
+            }
+        }
 
         //filter ones above threshold
         for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
         {
             String nodeId = iter.next();
-            if(utilizations.get(nodeId).getFreeMemoryPercentage()
-                        > maxUtil - utilizationThreshold)
+            double util = 100 - utilizations.get(nodeId).getFreeMemoryPercentage();
+            if(util  > minUtil + utilizationThreshold)
             {
                 iter.remove();
             }
