@@ -15,6 +15,7 @@ public class Query implements Serializable{
     private StreamDefinition outputStreamDefinition;
     private String queryId;
     private int engineId;
+    private double cost;
 
     public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
@@ -108,5 +109,13 @@ public class Query implements Serializable{
         else {
             return false;
         }
+    }
+
+    public double getCost() {
+         return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 }
