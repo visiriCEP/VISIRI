@@ -57,7 +57,8 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
            for(Query q: nodeQueryTable.get(str))
            {
-                cost += costCal.calculateCost(q);
+
+                cost += q.getCost();
            }
             costs.put(str,cost);
 
@@ -196,6 +197,10 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
 
             // *********** Add to distribution *************
+
+            double thisCost = costCal.calculateCost(q);
+            q.setCost(thisCost);
+
             List<Query> derivedQueries = new ArrayList<Query>();
             Query nodeQuery = new Query(q,true);
 
@@ -204,7 +209,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             derivedQueries.add(nodeQuery);
 
             //add to dispatchers
-            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT);
+            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT,1.0);
 
             for(String disp : dispatcherList)
             {
@@ -232,7 +237,8 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
 
             System.out.println(qIndex);
-            costs.put(targetNode, costs.get(targetNode) + costCal.calculateCost(q));
+
+            costs.put(targetNode, costs.get(targetNode) +thisCost);
         }
 
         return dist;

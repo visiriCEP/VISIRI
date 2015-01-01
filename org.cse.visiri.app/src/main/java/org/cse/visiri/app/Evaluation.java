@@ -49,7 +49,7 @@ public class Evaluation {
         String q1="from players[v<=1] " +
                 "select sid,x,y,z,v,a " +
                 "insert into stopplayer";
-        Query query1=new Query(q1,inputStreamDefinitionList,outputStreamdef1,"1", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query1=new Query(q1,inputStreamDefinitionList,outputStreamdef1,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query1);
 
         StreamDefinition outputStreamdef2=new StreamDefinition();
@@ -65,7 +65,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a " +
                 "insert into trotplayer";
 
-        Query query2=new Query(q2,inputStreamDefinitionList,outputStreamdef2,"2", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query2=new Query(q2,inputStreamDefinitionList,outputStreamdef2,"2", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query2);
 
         StreamDefinition outputStreamdef3=new StreamDefinition();
@@ -81,7 +81,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a " +
                 "insert into lowplayer";
 
-        Query query3=new Query(q3,inputStreamDefinitionList,outputStreamdef3,"3", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query3=new Query(q3,inputStreamDefinitionList,outputStreamdef3,"3", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query3);
 
         StreamDefinition outputStreamdef4=new StreamDefinition();
@@ -97,7 +97,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a " +
                 "insert into mediumplayer";
 
-        Query query4=new Query(q4,inputStreamDefinitionList,outputStreamdef4,"4", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query4=new Query(q4,inputStreamDefinitionList,outputStreamdef4,"4", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query4);
 
 
@@ -114,7 +114,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a " +
                 "insert into highplayer";
 
-        Query query5=new Query(q5,inputStreamDefinitionList,outputStreamdef5,"5", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query5=new Query(q5,inputStreamDefinitionList,outputStreamdef5,"5", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query5);
 
         StreamDefinition outputStreamdef6=new StreamDefinition();
@@ -130,7 +130,7 @@ public class Evaluation {
                 "select sid,x,y,z,v,a " +
                 "insert into sprintplayer";
 
-        Query query6=new Query(q6,inputStreamDefinitionList,outputStreamdef6,"6", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query6=new Query(q6,inputStreamDefinitionList,outputStreamdef6,"6", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query6);
 
         StreamDefinition outputStreamdefAvgSpeedPlayer=new StreamDefinition();
@@ -142,14 +142,14 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers; ";
-        Query query15=new Query(q15,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"15", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query15=new Query(q15,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"15", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query15);
 
         String q7="from players#window.length(100) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers; ";
-        Query query7=new Query(q7,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"7", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query7=new Query(q7,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"7", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query7);
 
 
@@ -157,7 +157,7 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
-        Query query8=new Query(q8,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"8", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query8=new Query(q8,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"8", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query8);
 
         StreamDefinition outputStreamdefHighSpeedPlayer=new StreamDefinition();
@@ -169,7 +169,7 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
-        Query query9=new Query(q9,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"9", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query9=new Query(q9,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"9", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query9);
 
 
@@ -177,7 +177,7 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
-        Query query10=new Query(q10,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"10", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query10=new Query(q10,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"10", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query10);
 
 
@@ -185,7 +185,7 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>17 " +
                 "insert into highspeedplayers;";
-        Query query11=new Query(q11,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"11", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query11=new Query(q11,inputStreamDefinitionList,outputStreamdefHighSpeedPlayer,"11", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query11);
 
         //////////////////////////////////////////////////////////// 11 end
@@ -194,21 +194,21 @@ public class Evaluation {
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
-        Query query12=new Query(q12,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"12", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query12=new Query(q12,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"12", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query12);
 
         String q13="from players#window.time(5sec) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
-        Query query13=new Query(q13,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"13", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query13=new Query(q13,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"13", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query13);
 
         String q14="from players#window.time(10sec) " +
                 "select sid,avg(v) as avgV " +
                 "group by sid having avgV>12 " +
                 "insert into avgspeedplayers;";
-        Query query14=new Query(q14,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"14", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query14=new Query(q14,inputStreamDefinitionList,outputStreamdefAvgSpeedPlayer,"14", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queryList.add(query14);
 
         return queryList;
@@ -254,7 +254,7 @@ public class Evaluation {
                 "select Date,Volume " +
                 "insert into stocks";
         Query query=new Query(queryStr,inputDefs,
-                outStocks,"gt1", Configuration.ENGINE_TYPE_SIDDHI);
+                outStocks,"gt1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
 
@@ -263,21 +263,21 @@ public class Evaluation {
                 "insert into stocks";
 
         query=new Query(queryStr,inputDefs,
-                outStocks,"gt2", Configuration.ENGINE_TYPE_SIDDHI);
+                outStocks,"gt2", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Close < Open] " +
                 "select Date,Volume " +
                 "insert into stocks";
         query=new Query(queryStr,inputDefs,
-                outStocks,"gt3", Configuration.ENGINE_TYPE_SIDDHI);
+                outStocks,"gt3", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[High != Close] " +
                 "select Date,Volume " +
                 "insert into stocks";
         query=new Query(queryStr,inputDefs,
-                outStocks,"gt4", Configuration.ENGINE_TYPE_SIDDHI);
+                outStocks,"gt4", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         //--
@@ -285,28 +285,28 @@ public class Evaluation {
                 "select Date,Volume " +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
-                outVolumes,"gt5", Configuration.ENGINE_TYPE_SIDDHI);
+                outVolumes,"gt5", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Volume >= 500000 and Volume < 5000000] " +
                 "select Date,Volume " +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
-                outVolumes,"gt6", Configuration.ENGINE_TYPE_SIDDHI);
+                outVolumes,"gt6", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Volume >= 5000000 and Volume < 10000000] " +
                 "select Date,Volume " +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
-                outVolumes,"gt7", Configuration.ENGINE_TYPE_SIDDHI);
+                outVolumes,"gt7", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Volume >= 10000000] " +
                 "select Date,Volume " +
                 "insert into volumes";
         query=new Query(queryStr,inputDefs,
-                outVolumes,"gt8", Configuration.ENGINE_TYPE_SIDDHI);
+                outVolumes,"gt8", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         //----
@@ -314,21 +314,21 @@ public class Evaluation {
                 "select Date,Volume,Close " +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
-                outStockValue,"gt9", Configuration.ENGINE_TYPE_SIDDHI);
+                outStockValue,"gt9", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Close >= 20 and Close < 50] " +
                 "select Date,Volume,Close " +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
-                outStockValue,"gs1", Configuration.ENGINE_TYPE_SIDDHI);
+                outStockValue,"gs1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock[Close >= 50] " +
                 "select Date,Volume,Close " +
                 "insert into stockValue";
         query=new Query(queryStr,inputDefs,
-                outStockValue,"gs2", Configuration.ENGINE_TYPE_SIDDHI);
+                outStockValue,"gs2", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         //---------
@@ -336,42 +336,42 @@ public class Evaluation {
                 "select max(Close) as avgs " +
                 "insert into averages;";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs3", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs3", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock#window.lengthBatch(10) " +
                 "select min(Close) as avgs " +
                 "insert into averages ";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs4", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs4", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock#window.lengthBatch(50) " +
                 "select max(Close) as avgs " +
                 "insert into averages   ";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs5", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs5", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock#window.lengthBatch(20) " +
                 "select max(Open) as avgs " +
                 "insert into averages ";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs6", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs6", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock#window.lengthBatch(10)  " +
                 "select max(Open) as avgs " +
                 "insert into averages  ";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs7", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs7", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         queryStr = "from stock#window.lengthBatch(50) " +
                 "select min(Open) as avgs " +
                 "insert into averages  ";
         query=new Query(queryStr,inputDefs,
-                outAverages,"gs8", Configuration.ENGINE_TYPE_SIDDHI);
+                outAverages,"gs8", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(query);
 
         /////////////////////////////////////
@@ -410,43 +410,43 @@ public class Evaluation {
                 "select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
 
-        Query querya1=new Query(qa1,defs,outputStreamDefinitionOutStock,"a1", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya1=new Query(qa1,defs,outputStreamDefinitionOutStock,"a1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya1);
 
         String qa2="from stock " +
                 "[ Open <= 50 ] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
-        Query querya2=new Query(qa2,defs,outputStreamDefinitionOutStock,"a2", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya2=new Query(qa2,defs,outputStreamDefinitionOutStock,"a2", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya2);
 
         String qa3="from stock " +
                 "[ Open <= 50 and Open>25] select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
-        Query querya3=new Query(qa3,defs,outputStreamDefinitionOutStock,"a3", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya3=new Query(qa3,defs,outputStreamDefinitionOutStock,"a3", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya3);
 
         String qa4="from stock[Open > 25]#window.timeBatch( 10 seconds ) "+
                 "select max(Open) as Open, max(Close) as High "+
                 "insert into outStock2;";
-        Query querya4=new Query(qa4,defs,outputStreamDefinitionOutStock2,"a4", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya4=new Query(qa4,defs,outputStreamDefinitionOutStock2,"a4", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya4);
 
         String qa5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
                 "select max(Open) as Open, max(Open) as High "+
                 " insert into outStock2;";
-        Query querya5=new Query(qa5,defs,outputStreamDefinitionOutStock2,"a5", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya5=new Query(qa5,defs,outputStreamDefinitionOutStock2,"a5", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya5);
 
         String qa6="from stock[Open > 250]#window.length(1000) "+
                 "select max(Open) as Open, max(High) as High "+
                 "insert into outStock2;";
-        Query querya6=new Query(qa6,defs,outputStreamDefinitionOutStock2,"a6", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya6=new Query(qa6,defs,outputStreamDefinitionOutStock2,"a6", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya6);
 
         String qa7=" from a1 = stock[Open >25] -> a2 = stock[High<50] " +
                 "select a1.Open as Open, a2.High as High " +
                 "insert into outStock2";
-        Query querya7=new Query(qa7,defs,outputStreamDefinitionOutStock2,"a7", Configuration.ENGINE_TYPE_SIDDHI);
+        Query querya7=new Query(qa7,defs,outputStreamDefinitionOutStock2,"a7", Configuration.ENGINE_TYPE_SIDDHI,1.0);
         queries.add(querya7);
         ///////////////////////////////////////////
 

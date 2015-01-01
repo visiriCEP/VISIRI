@@ -29,7 +29,7 @@ public class RoundRobinDistributionAlgoTest extends TestCase {
         outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
         outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
 
-        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query2=new Query(queryString2,inputStreamDefinitionList2,outputDef,"2", Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         queryList.add(query2);
 

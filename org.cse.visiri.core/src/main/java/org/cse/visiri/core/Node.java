@@ -8,6 +8,7 @@ import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
+import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,14 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
+        CostModelCalculator costCal = new CostModelCalculator();
+        System.out.print("Calculating costs...");
+        for(Query q: queries)
+        {
+            double cost = costCal.calculateCost(q);
+            q.setCost(cost);
+        }
+        System.out.println("... Done!");
         QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
         QueryDistributionParam params = QueryDistributionParam.fromEnvironment();
         params.setQueries(queries);

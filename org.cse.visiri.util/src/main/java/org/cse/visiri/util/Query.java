@@ -15,7 +15,20 @@ public class Query implements Serializable{
     private StreamDefinition outputStreamDefinition;
     private String queryId;
     private int engineId;
-    private double cost;
+    private double cost = 1.0;
+
+    public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId,double cost){
+        this.setQuery(query);
+        if(inputStreamDefinitionList == null)
+        {
+            inputStreamDefinitionList = new ArrayList<StreamDefinition>();
+        }
+        this.setInputStreamDefinitionsList(inputStreamDefinitionList);
+        this.setOutputStreamDefinition(outputStreamDefinition);
+        this.setQueryId(queryId);
+        this.setEngineId(engineId);
+        this.setCost(cost);
+    }
 
     public Query(String query,List<StreamDefinition> inputStreamDefinitionList,StreamDefinition outputStreamDefinition,String queryId,int engineId){
         this.setQuery(query);
@@ -27,12 +40,13 @@ public class Query implements Serializable{
         this.setOutputStreamDefinition(outputStreamDefinition);
         this.setQueryId(queryId);
         this.setEngineId(engineId);
+
     }
 
     /** Create a copy of a query **/
     public Query(Query q, boolean newID)
     {
-        this.setQuery(q.query);
+        this.setQuery(q.getQuery());
         this.setInputStreamDefinitionsList(new ArrayList<StreamDefinition>());
         for(StreamDefinition sd : q.getInputStreamDefinitionsList())
         {
@@ -41,8 +55,9 @@ public class Query implements Serializable{
         if(q.getOutputStreamDefinition() != null) {
             this.setOutputStreamDefinition(new StreamDefinition(q.getOutputStreamDefinition()));
         }
-        this.setQueryId(queryId);
-        this.setEngineId(engineId);
+        this.setQueryId(q.getQueryId());
+        this.setEngineId(q.getEngineId());
+        this.setCost(q.getCost());
 
         if(newID)
         {

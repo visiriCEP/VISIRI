@@ -41,7 +41,7 @@ public class CostModelCalculatorTest extends TestCase {
         outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
         outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
 
-        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         double b=new CostModelCalculator().calculateCost(query1);
         System.out.println(b);
@@ -79,7 +79,7 @@ public class CostModelCalculatorTest extends TestCase {
         outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
         outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
 
-        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         double b=new CostModelCalculator().calculateCost(query1);
         System.out.println(b);
@@ -117,7 +117,7 @@ public class CostModelCalculatorTest extends TestCase {
         outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
         outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
 
-        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI);
+        Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         double b=new CostModelCalculator().calculateCost(query1);
         System.out.println(b);

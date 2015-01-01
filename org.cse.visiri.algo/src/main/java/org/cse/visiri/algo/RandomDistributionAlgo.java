@@ -86,7 +86,7 @@ public class RandomDistributionAlgo extends QueryDistributionAlgo {
             queryToQueryList.add(nodeQuery);
 
             //add to dispatchers
-            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT);
+            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT,1.0);
 
 
             for(String disp : dispatcherList)

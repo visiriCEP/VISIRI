@@ -17,6 +17,8 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
     private double complexity = 2;
     private final int maximumLengthWindow = 1000;
 
+
+
     public  FilteredQueryGenerator(int seed)
     {
         super(seed);
@@ -137,7 +139,10 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
         String queryString = String.format(template,varInput, varCondition,varWindow, varInAttr, varOutput);
         List<StreamDefinition> inputDefList = Arrays.asList(inputDef);
 
-        Query query = new Query( queryString,inputDefList,outputDef,newQueryID(), Configuration.ENGINE_TYPE_SIDDHI);
+
+        Query query = new Query( queryString,inputDefList,outputDef,newQueryID(), Configuration.ENGINE_TYPE_SIDDHI,1.0);
+
+
         return query;
     }
 }

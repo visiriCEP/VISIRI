@@ -1,7 +1,7 @@
 package org.cse.visiri.algo;
 
 import org.cse.visiri.util.Configuration;
-import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
+//import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
@@ -30,7 +30,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
         Random randomizer = new Random();
 
-        CostModelCalculator costCal = new CostModelCalculator();
+      //CostModelCalculator costCal = new CostModelCalculator();
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(param.getNodeQueryTable());
         List<String> nodeList = new ArrayList<String>(param.getNodeList());
@@ -54,7 +54,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
            for(Query q: nodeQueryTable.get(str))
            {
-                cost += costCal.calculateCost(q);
+                cost += q.getCost();
            }
             costs.put(str,cost);
 
@@ -170,7 +170,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             derivedQueries.add(nodeQuery);
 
             //add to dispatchers
-            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT);
+            Query dispQuery = new Query( "", null,null,"tempquery", Configuration.ENGINE_TYPE_DIRECT,1.0);
 
             for(String disp : dispatcherList)
             {
@@ -196,7 +196,7 @@ public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
             // update calculated tables for allocation of next queries
             nodeQueryTable.get(targetNode).add(q);
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
-            costs.put(targetNode, costs.get(targetNode) + costCal.calculateCost(q));
+            costs.put(targetNode, costs.get(targetNode) + q.getCost());
         }
 
         return dist;
