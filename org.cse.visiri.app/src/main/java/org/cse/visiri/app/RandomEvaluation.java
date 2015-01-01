@@ -20,7 +20,7 @@ public class RandomEvaluation {
     public RandomEvaluation()
     {
         final int seed = 12;
-        final double filteringLevel = 5.0;
+        final double filteringLevel = 4.1;
 
         int inDefCount = Reader.readConfig().get("input_def_count"), outDefCount = Reader.readConfig().get("output_def_count"),queryCount=Reader.readConfig().get("query_count");
 
@@ -28,7 +28,7 @@ public class RandomEvaluation {
         qg = new FilteredQueryGenerator(seed,filteringLevel);
         //final int inDefCount = 500, outDefCount = 50,queryCount=4000;
 
-        final int inAttrCntMin = 3, inAttrCntMax= 10;
+        final int inAttrCntMin = 3, inAttrCntMax= 5;
         final int outAttrCntMin = 1, outAttrCntMax= 3;
 
         in= qg.generateDefinitions(inDefCount,inAttrCntMin,inAttrCntMax);
