@@ -130,7 +130,15 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
 
         //minimum total cost
-        double minCost = Collections.min(costs.values());
+        double minCost = Double.MAX_VALUE;
+        for(String node : candidateNodes)
+        {
+            double cost = costs.get(node);
+            if(cost < minCost)
+            {
+                minCost = cost;
+            }
+        }
 
         //filter ones above threshold
         for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)

@@ -113,7 +113,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             case 3:
             case 4: //window +  filter
             {
-                String cond = generateMultipleConditions(inAttrs,4);
+                String cond = generateMultipleConditions(inAttrs,(int)(2*complexity));
                 varCondition = "[" + cond + "]";
                 String type = randomizer.nextFloat() < 0.88 ? "lengthBatch" : "length";
                 int window = Math.min((int)(200*complexity),maximumLengthWindow);
