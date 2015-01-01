@@ -5,7 +5,7 @@ import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
-import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
+
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
         Random randomizer = new Random(randSeed);
 
-        CostModelCalculator costCal = new CostModelCalculator();
+
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(param.getNodeQueryTable());
         List<String> nodeList = new ArrayList<String>(param.getNodeList());
@@ -198,9 +198,6 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
             // *********** Add to distribution *************
 
-            double thisCost = costCal.calculateCost(q);
-            q.setCost(thisCost);
-
             List<Query> derivedQueries = new ArrayList<Query>();
             Query nodeQuery = new Query(q,true);
 
@@ -236,9 +233,9 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
             nodeQueryTable.get(targetNode).add(q);
             nodeEventTypes.get(targetNode).addAll(usedEventTypes);
 
-            System.out.println(qIndex);
+            //System.out.println(qIndex);
 
-            costs.put(targetNode, costs.get(targetNode) +thisCost);
+            costs.put(targetNode, costs.get(targetNode) +q.getCost());
         }
 
         return dist;

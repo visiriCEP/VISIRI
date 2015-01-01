@@ -16,6 +16,8 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
     public final double costThreshold = 10;
     public final double utilizationThreshold = 10;
 
+    private final int seed= 1;
+    private Random randomizer = new Random(seed);
 
     @Override
     public Map<String,List<Query> > getQueryDistribution(List<Query> queries) {
@@ -41,17 +43,12 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         DynamicQueryDistribution dist = new DynamicQueryDistribution();
         Environment env = Environment.getInstance();
 
-        Random randomizer = new Random();
-
-
-
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
         // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
-
 
         for(String str: nodeList)
         {
