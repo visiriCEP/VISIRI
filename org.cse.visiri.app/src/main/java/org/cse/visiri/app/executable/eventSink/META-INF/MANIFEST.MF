@@ -1,3 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: org.cse.visiri.app.sinks.RandomSink
-
+Main-Class: org.cse.visiri.app.sinks.EventSink
