@@ -13,10 +13,9 @@ import java.util.*;
 public class TransferbleQuery {
 
     private Query[] queryArray;
-    private CostModelCalculator costModelCalculator;
 
     public TransferbleQuery(List<Query> queryList){
-        this.costModelCalculator=new CostModelCalculator();
+
 //        String myNode= Environment.getInstance().getNodeId();
 //        Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
 //        List<Query> queryList=nodeQueryMap.get(myNode);
@@ -25,12 +24,12 @@ public class TransferbleQuery {
     }
 
     public TransferbleQuery(Query[] queriesArray){
-        this.costModelCalculator=new CostModelCalculator();
+
         this.queryArray=queriesArray;
     }
 
     public TransferbleQuery(){
-        this.costModelCalculator=new CostModelCalculator();
+
     }
 
     private void updateQueryArray(List<Query> qList){
@@ -58,7 +57,8 @@ public class TransferbleQuery {
 
         int i=0;
         for(Query query:queryArray){
-            costArray[i]=costModelCalculator.calculateCost(query);
+//            costArray[i]=costModelCalculator.calculateCost(query);
+            costArray[i]=query.getCost();
             costRateValueArray[i]=eventRates[i]*costArray[i];  // cost * eventRate
             costRateQueryMap.put(costRateValueArray[i],query);
             i++;
