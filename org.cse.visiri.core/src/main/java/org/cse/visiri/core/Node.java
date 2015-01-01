@@ -58,7 +58,7 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.RANDOM_DISTRIBUTOR_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
         QueryDistributionParam params = QueryDistributionParam.fromEnvironment();
         params.setQueries(queries);
         QueryDistribution dist = algo.getQueryDistribution(params);
