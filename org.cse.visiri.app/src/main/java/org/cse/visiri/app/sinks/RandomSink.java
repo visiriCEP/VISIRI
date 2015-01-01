@@ -40,7 +40,7 @@ public class RandomSink {
 
     public void start() throws Exception {
         EventServerConfig conf = new EventServerConfig(port);
-        conf.setEventRateStoreFrequency(100*1000);
+        conf.setEventRateStoreFrequency(20*1000);
         server = new EventServer(conf,getDefinitions(), new StreamCallback() {
             @Override
             public void receive(Event event) {
