@@ -44,7 +44,7 @@ public class Agent extends Thread {
                        transferEngines();
                        break;
                 }else{
-                    System.out.println("check . . .");
+                   // System.out.println("check . . .");
                 }
                 /*
                     Utilization utilization=utilizationUpdater.update();
@@ -67,12 +67,13 @@ public class Agent extends Thread {
     }
 
     private void transferEngines(){
-            System.out.println("----Started Transferring Engines");
+            System.out.println("\n----Started Transferring Engines");
             Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
+        System.out.println("\n----"+transferableEngines.size()+" engines trying to transfer");
             Environment.getInstance().createNewTransferable(transferableEngines);
 
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
-            System.out.println("----EVENT_TYPE_ENGINE_PASS Message sent");
+            System.out.println("\n----EVENT_TYPE_ENGINE_PASS Message sent");
     }
 
 }
