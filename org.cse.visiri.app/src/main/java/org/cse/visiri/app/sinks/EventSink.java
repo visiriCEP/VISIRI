@@ -1,4 +1,4 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.sinks;
 
 import org.cse.visiri.app.Evaluation;
 import org.cse.visiri.app.util.Writer;
