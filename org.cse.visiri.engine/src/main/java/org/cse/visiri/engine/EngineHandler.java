@@ -71,22 +71,22 @@ public class EngineHandler {
         //3. call "removeEngine" method for all transferable engines
         //4. return new dynamic query distribution
 
-        System.out.println("=================1");
+       // System.out.println("=================1");
         String myNode= Environment.getInstance().getNodeId();
-        System.out.println("=================2");
+       // System.out.println("=================2");
         Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
-        System.out.println("=================3");
+       // System.out.println("=================3");
         List<Query> queryList=nodeQueryMap.get(myNode);
         double[] eventRates=new double[queryList.size()];
         int i=0;
-        System.out.println("=================4");
+       // System.out.println("=================4");
         for(Query query:queryList){
             SiddhiCEPEngine cepEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
             eventRates[i]=cepEngine.getAvgEventRate();
             i++;
         }
 
-        System.out.println("=================5");
+        //System.out.println("=================5");
         List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
 
         DynamicQueryDistributionAlgoImpliment dynamicQueryDistribution=new DynamicQueryDistributionAlgoImpliment();
