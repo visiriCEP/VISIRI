@@ -16,6 +16,8 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
     public final double costThreshold = 10;
     public final double utilizationThreshold = 10;
 
+    private final int seed= 1;
+    private Random randomizer = new Random(seed);
 
     @Override
     public Map<String,List<Query> > getQueryDistribution(List<Query> queries) {
@@ -41,17 +43,12 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         DynamicQueryDistribution dist = new DynamicQueryDistribution();
         Environment env = Environment.getInstance();
 
-        Random randomizer = new Random();
-
-
-
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
         // Map<String,Utilization> utilizations = new HashMap<String, Utilization>(env.getNodeUtilizations());
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
-
 
         for(String str: nodeList)
         {
@@ -108,20 +105,23 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
         //minimum utilization
         Map<String, Utilization> utilizations = env.getNodeUtilizations();
-        double maxUtil = Collections.max(utilizations.values(), new
-                Comparator<Utilization>() {
-                    @Override
-                    public int compare(Utilization o1, Utilization o2) {
-                        return (int) ( o1.getFreeMemoryPercentage() - o2.getFreeMemoryPercentage());
-                    }
-                }).getFreeMemoryPercentage();
+        double minUtil = Double.MAX_VALUE;
+        for(String node : candidateNodes)
+        {
+            double util = utilizations.get(node).getFreeMemoryPercentage();
+            util = 100 - util;
+            if(util < minUtil)
+            {
+                minUtil = util;
+            }
+        }
 
         //filter ones above threshold
         for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
         {
             String nodeId = iter.next();
-            if(utilizations.get(nodeId).getFreeMemoryPercentage()
-                        > maxUtil - utilizationThreshold)
+            double util = 100 - utilizations.get(nodeId).getFreeMemoryPercentage();
+            if(util  > minUtil + utilizationThreshold)
             {
                 iter.remove();
             }
