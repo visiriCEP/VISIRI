@@ -5,7 +5,6 @@ import org.cse.visiri.util.DynamicQueryDistribution;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
-import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 
 import java.util.*;
 
@@ -44,7 +43,7 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
         Random randomizer = new Random();
 
-        CostModelCalculator costCal = new CostModelCalculator();
+
 
         Map<String,List<Query>> nodeQueryTable = new HashMap<String, List<Query>>(env.getNodeQueryMap());
         List<String> nodeList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_PROCESSINGNODE));
@@ -66,7 +65,7 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
             for(Query q: nodeQueryTable.get(str))
             {
-                cost += costCal.calculateCost(q);
+                cost += q.getCost();
             }
             costs.put(str,cost);
 
