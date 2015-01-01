@@ -69,7 +69,13 @@ public class Agent extends Thread {
     private void transferEngines(){
             System.out.println("\n----Started Transferring Engines");
             Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
-        System.out.println("\n----"+transferableEngines.size()+" engines trying to transfer");
+            System.out.println("\n----"+transferableEngines.size()+" engines trying to transfer");
+
+            for(String ip : transferableEngines.keySet()){
+                List<Query> queries=transferableEngines.get(ip);
+                System.out.println("=====   IP "+ip+" : "+ queries.size());
+            }
+
             Environment.getInstance().createNewTransferable(transferableEngines);
 
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
