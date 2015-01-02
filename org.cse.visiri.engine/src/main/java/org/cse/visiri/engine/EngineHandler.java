@@ -105,7 +105,7 @@ public class EngineHandler {
 
         Map<String,List<Query>> nodeTransferbleQueryMap=dynamicQueryDistribution.getQueryDistribution(transferbleQueryList);
 
-        System.out.println("=================6");
+       // System.out.println("=================6");
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
 
@@ -123,10 +123,10 @@ public class EngineHandler {
             this.removeQueries(query,siddhiCEPEngine);
 
         }
-        System.out.println("=================7");
+     //  System.out.println("=================7");
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
-        System.out.println("=================8");
+     //   System.out.println("=================8");
         return nodeTransferbleQueryMap;
 
     }
