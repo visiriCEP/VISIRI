@@ -39,8 +39,9 @@ public class Agent extends Thread {
 
             if(!Environment.getInstance().checkTransferInprogress()){
 
-                System.out.println("Dynamic Started. . . . ");
+
                 if(Environment.getInstance().checkDynamic()){
+                    System.out.println("Dynamic Started. . . . ");
                        transferEngines();
                         Environment.getInstance().disableDynamic();
                       // break;
