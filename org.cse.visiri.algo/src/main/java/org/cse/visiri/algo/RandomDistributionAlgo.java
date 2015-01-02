@@ -73,14 +73,16 @@ public class RandomDistributionAlgo extends QueryDistributionAlgo {
         List<Query> queries = param.getQueries();
 
         for(Query q:queries){
+            queryToQueryList = new ArrayList<Query>();
+
             int randomNum=randomizer.nextInt(nodeList.size());
             //queryToQueryList.add(q);
 
             String targetNode = nodeList.get(randomNum);
-            dist.getQueryAllocation().put(q,targetNode );
+            //dist.getQueryAllocation().put(q,targetNode );
 
             Query nodeQuery = new Query(q,true);
-
+            dist.getQueryAllocation().put(nodeQuery,targetNode);
             nodeQuery.setEngineId(Configuration.ENGINE_TYPE_SIDDHI);
           //  dist.getQueryAllocation().put(nodeQuery,targetNode);
             queryToQueryList.add(nodeQuery);
