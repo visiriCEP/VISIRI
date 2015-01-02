@@ -11,7 +11,10 @@ import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.query.api.definition.Attribute;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -100,7 +103,7 @@ public class SiddhiCEPEngine extends CEPEngine {
                     event.setData(events[i].getData());
                     try {
                         try {
-                            System.out.println("Engine is Query ID : "+query.getQueryId());
+
                             outputEventReceiver.sendEvents(event);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -134,6 +137,18 @@ public class SiddhiCEPEngine extends CEPEngine {
         //eventRateStore.increment();
         InputHandler inputHandler=siddhiManager.getInputHandler(event.getStreamId());
         //System.out.println(event.getStreamId());
+//        System.out.println("Engine is Query ID : "+query.getQueryId());
+        try {
+
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_check.txt", true)));
+            out.print(query.getQueryId());
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         try {
             inputHandler.send(event.getData());
         }catch (InterruptedException e){
