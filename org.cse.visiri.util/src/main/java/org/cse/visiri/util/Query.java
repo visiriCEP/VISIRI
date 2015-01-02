@@ -4,7 +4,6 @@ package org.cse.visiri.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by visiri on 10/30/14.
@@ -65,9 +64,11 @@ public class Query implements Serializable{
         }
     }
 
+    private static int __last = 1;
     private static String getNewQueryId()
     {
-        return UUID.randomUUID().toString();
+        return "gen" + __last++;
+       // return UUID.randomUUID().toString();
     }
 
     public String getQuery() {
