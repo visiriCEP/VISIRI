@@ -76,6 +76,11 @@ public class Agent extends Thread {
             for(String ip : transferableEngines.keySet()){
                 List<Query> queries=transferableEngines.get(ip);
                 System.out.println("ip - "+ip+" : "+ queries.size());
+
+                for(Query query : queries){
+                    System.out.println(query.getQueryId());
+                }
+
             }
 
             Environment.getInstance().createNewTransferable(transferableEngines);
