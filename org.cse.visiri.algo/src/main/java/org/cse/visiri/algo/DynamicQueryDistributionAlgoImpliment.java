@@ -102,6 +102,8 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
 
         Set<String> candidateNodes = new HashSet<String>(nodeList);
 
+        String thisNode = env.getNodeId();
+        candidateNodes.remove(thisNode);
 
         //minimum utilization
         Map<String, Utilization> utilizations = env.getNodeUtilizations();
