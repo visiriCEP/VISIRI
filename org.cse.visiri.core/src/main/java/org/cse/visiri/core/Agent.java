@@ -33,7 +33,7 @@ public class Agent extends Thread {
     }
 
     public void run(){
-        System.out.println("Agent started");
+        System.out.println("Agent started . . .");
         while(true){
 
 
@@ -41,8 +41,8 @@ public class Agent extends Thread {
 
 
                 if(Environment.getInstance().checkDynamic()){
-                    System.out.println("Dynamic Started. . . . ");
-                       transferEngines();
+                        System.out.println("Dynamic adjustments started . . . ");
+                        transferEngines();
                         Environment.getInstance().disableDynamic();
                       // break;
                 }else{
@@ -69,19 +69,19 @@ public class Agent extends Thread {
     }
 
     private void transferEngines(){
-            System.out.println("\n----Started Transferring Engines");
+
             Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
-            System.out.println("\n----"+transferableEngines.size()+" engines trying to transfer");
+            System.out.println("\nSelected nodes : "+transferableEngines.size());
 
             for(String ip : transferableEngines.keySet()){
                 List<Query> queries=transferableEngines.get(ip);
-                System.out.println("=====   IP "+ip+" : "+ queries.size());
+                System.out.println("ip - "+ip+" : "+ queries.size());
             }
 
             Environment.getInstance().createNewTransferable(transferableEngines);
 
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
-            System.out.println("\n----EVENT_TYPE_ENGINE_PASS Message sent");
+            System.out.println("\nENGINE_PASS Message sent");
     }
 
 }

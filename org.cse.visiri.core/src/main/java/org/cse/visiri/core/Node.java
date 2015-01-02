@@ -177,9 +177,9 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void newEnginesRecieved() {
         List<Query> queries=Environment.getInstance().getAdditionalQueries();
-        System.out.println("\n-------newEnginesReceived method : "+queries);
+        //System.out.println("\n-------newEnginesReceived method : "+queries);
         if(queries!=null){
-            System.out.println("\n----New engines received to Node : "+queries.size());
+            System.out.println("\n"+queries.size()+" engines received");
             engineHandler.addNewQueries(queries);
         }
     }

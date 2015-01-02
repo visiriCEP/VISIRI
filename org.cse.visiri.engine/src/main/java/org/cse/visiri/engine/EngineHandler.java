@@ -83,29 +83,24 @@ public class EngineHandler {
         //3. call "removeEngine" method for all transferable engines
         //4. return new dynamic query distribution
 
-       // System.out.println("=================1");
         String myNode= Environment.getInstance().getNodeId();
-       // System.out.println("=================2");
         Map<String,List<Query>> nodeQueryMap=Environment.getInstance().getNodeQueryMap();
-       // System.out.println("=================3");
+
         List<Query> queryList=nodeQueryMap.get(myNode);
         double[] eventRates=new double[queryList.size()];
         int i=0;
-       // System.out.println("=================4");
         for(Query query:queryList){
             SiddhiCEPEngine cepEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
             eventRates[i]=cepEngine.getAvgEventRate();
             i++;
         }
 
-        //System.out.println("=================5");
         List<Query> transferbleQueryList=transferbleQuery.detectTransferbleQuery(eventRates,queryList);
 
         DynamicQueryDistributionAlgoImpliment dynamicQueryDistribution=new DynamicQueryDistributionAlgoImpliment();
 
         Map<String,List<Query>> nodeTransferbleQueryMap=dynamicQueryDistribution.getQueryDistribution(transferbleQueryList);
 
-       // System.out.println("=================6");
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
 
@@ -123,10 +118,9 @@ public class EngineHandler {
             this.removeQueries(query,siddhiCEPEngine);
 
         }
-     //  System.out.println("=================7");
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
-     //   System.out.println("=================8");
+
         return nodeTransferbleQueryMap;
 
     }
@@ -141,7 +135,7 @@ public class EngineHandler {
            // Environment.getInstance().getBufferingEventList().add(strdrf.getStreamId());
         }
 
-        System.out.println("----Added transferable queries to Buffering list");
+        System.out.println("Transferable queries to Buffering list");
     }
 
     public void stop(){
@@ -199,19 +193,20 @@ public class EngineHandler {
     }
 
     public void addNewQueries(List<Query> queries){
+        int n=0;
         for(Query query : queries){
             try {
-                this.dynamicAddQuery(query);
+                this.dynamicAddQuery(query,++n);
             } catch (Exception e) {
                 System.err.println("Dynamic : Failed to add new query" );
                 //e.printStackTrace();
             }
         }
         Environment.getInstance().clearNewAddedQueries();
-        System.out.println("\n----Query adding completed and environment cleared");
+        System.out.println("\nQuery adding completed");
     }
 
-    private void dynamicAddQuery(Query query) throws Exception {
+    private void dynamicAddQuery(Query query,int n) throws Exception {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
         cepEngine.restoreEngine();
@@ -254,7 +249,7 @@ public class EngineHandler {
             }
         }
 
-        System.out.println("----"+query.getQuery()+" added");
+        System.out.print(n+" ");
 
     }
 
