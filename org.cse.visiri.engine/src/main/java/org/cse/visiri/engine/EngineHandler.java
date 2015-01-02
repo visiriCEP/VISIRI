@@ -109,10 +109,10 @@ public class EngineHandler {
 
             //persist the siddhi engine
             //TODO use revision key
-            siddhiCEPEngine.stop();
+
             String revisionKey=(String)siddhiCEPEngine.saveState();
 
-//            siddhiCEPEngine.stop();
+            siddhiCEPEngine.stop();
             //removing query from all the lists and maps in EngineHandler
             queryList.remove(query);
             nodeQueryMap.put(myNode,queryList);
