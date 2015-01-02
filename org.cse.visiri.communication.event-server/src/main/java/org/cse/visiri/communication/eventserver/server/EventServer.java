@@ -127,7 +127,7 @@ public class EventServer {
                                     eventBufferQueueMap.get(streamId).add(eventStream);
                                 }
                             }
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
