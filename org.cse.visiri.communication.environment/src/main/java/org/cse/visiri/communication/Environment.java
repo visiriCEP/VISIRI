@@ -297,7 +297,7 @@ public class Environment implements MessageListener {
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
                 changedCallback.newEnginesRecieved();
-                System.out.println("\n-------ENGINE_PASS message received 2");
+
                 break;
         }
 
