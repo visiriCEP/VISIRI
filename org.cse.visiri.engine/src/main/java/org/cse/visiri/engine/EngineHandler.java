@@ -209,6 +209,7 @@ public class EngineHandler {
     private void dynamicAddQuery(Query query,int n) throws Exception {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
+        System.out.println("query "+n+"is about to resore");
         cepEngine.restoreEngine();
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
@@ -249,7 +250,7 @@ public class EngineHandler {
             }
         }
 
-        System.out.print(n+" ");
+        System.out.print(n + " ");
 
     }
 
