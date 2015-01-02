@@ -100,6 +100,7 @@ public class SiddhiCEPEngine extends CEPEngine {
                     event.setData(events[i].getData());
                     try {
                         try {
+                            System.out.println("Engine is Query ID : "+query.getQueryId());
                             outputEventReceiver.sendEvents(event);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
