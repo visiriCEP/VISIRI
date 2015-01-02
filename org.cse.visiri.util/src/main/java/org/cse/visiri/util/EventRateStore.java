@@ -30,7 +30,18 @@ public class EventRateStore {
         for(int i=0;i<avgMapSize;i++){
             avgMap[i]=startTime;
         }
-        increment("");
+        initialIncrement();
+    }
+
+    public void initialIncrement(){
+        Long mil=System.currentTimeMillis();
+
+        instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
+        instantMap[instantPos]=mil;
+
+        avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
+        avgMap[avgPos]=mil;
+
     }
 
     public void increment(String message){
