@@ -31,6 +31,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_ENGINE_PASS = 7;
     public static final int EVENT_TYPE_BUFFERING_STOP = 8;
 
+    private final String ENABLE_DYNAMIC = "ENABLE_DYNAMIC";
     private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
     private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
@@ -267,7 +268,7 @@ public class Environment implements MessageListener {
 
     @Override
     public void onMessage(Message event) {
-        System.out.println("Message Recieved "+event.getMessageObject());
+       // System.out.println("Message Recieved "+event.getMessageObject());
 
         MessageObject messageObject=(MessageObject)event.getMessageObject();
         int eventType=messageObject.getEventType();
@@ -293,12 +294,10 @@ public class Environment implements MessageListener {
                 break;
             case Environment.EVENT_TYPE_NODE_STOP:
                 changedCallback.stopNode();
-                System.out.println("-------   Start node message received");
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                System.out.println("\n-------ENGINE_PASS message received");
                 changedCallback.newEnginesRecieved();
-                System.out.println("\n-------ENGINE_PASS message received 2");
+
                 break;
         }
 
@@ -321,7 +320,7 @@ public class Environment implements MessageListener {
     }
 
     public Boolean checkDynamic(){
-       String temp= (String) hzInstance.getMap("DD").get("dd");
+       String temp= (String) hzInstance.getMap(ENABLE_DYNAMIC).get(ENABLE_DYNAMIC);
 
         if(temp!=null && temp.equals(getNodeId()))
             return true;
@@ -330,10 +329,10 @@ public class Environment implements MessageListener {
     }
 
     public void enableDynamic(){
-        hzInstance.getMap("DD").put("dd",getNodeId());
+        hzInstance.getMap(ENABLE_DYNAMIC).put(ENABLE_DYNAMIC,getNodeId());
     }
     public void disableDynamic(){
-        hzInstance.getMap("DD").put("dd"," ");
+        hzInstance.getMap(ENABLE_DYNAMIC).put(ENABLE_DYNAMIC,"FALSE");
     }
 
 
