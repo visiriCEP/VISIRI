@@ -141,7 +141,7 @@ public class SiddhiCEPEngine extends CEPEngine {
         try {
 
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_check.txt", true)));
-            out.print(query.getQueryId());
+            out.println(query.getQueryId());
             out.close();
 
         } catch (IOException e) {
