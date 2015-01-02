@@ -328,8 +328,11 @@ public class Environment implements MessageListener {
             return false;
     }
 
-    public void addDynamic(){
+    public void enableDynamic(){
         hzInstance.getMap("DD").put("dd",getNodeId());
+    }
+    public void disableDynamic(){
+        hzInstance.getMap("DD").put("dd"," ");
     }
 
 

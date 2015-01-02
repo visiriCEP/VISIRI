@@ -9,7 +9,8 @@ import com.hazelcast.core.HazelcastInstance;
 public class tempEnableDynamic {
     public static  void main(String[] args){
       // HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-Environment.getInstance().addDynamic();
+        Environment.getInstance();
+        Environment.getInstance().enableDynamic();
         System.out.println("Done.");
     }
 }
