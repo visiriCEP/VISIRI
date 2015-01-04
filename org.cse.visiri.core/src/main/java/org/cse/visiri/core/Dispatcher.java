@@ -127,4 +127,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     }
 
+    @Override
+    public void dynamicCompleted() {
+        //This wil executed after Dynamic adjustments are done
+    }
+
 }

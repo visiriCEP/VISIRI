@@ -204,6 +204,10 @@ public class EngineHandler {
             }
         }
         Environment.getInstance().clearNewAddedQueries();
+
+        if(!Environment.getInstance().checkTransferInprogress()){
+            Environment.getInstance().sendEvent(Environment.EVENT_TYPE_DISPATCHER_NOTIFICATION);
+        }
         System.out.println("\nQuery adding completed");
     }
 
