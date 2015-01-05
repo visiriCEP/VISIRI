@@ -54,14 +54,19 @@ public class OutputEventReceiver {
         this.destinationToClientMap = destinationToClientMap;
     }
 
-    public void addStreamDefinition(String nodeId,StreamDefinition streamDefinition){
-        EventClient eventClient=destinationToClientMap.get(nodeId);
-        eventClient.addStreamDefinition(streamDefinition);
+    public void addDynamicStreamDefinition(String nodeId,List<StreamDefinition> streamDefinitionList){
 
-        List<EventClient> eventClientList=eventToClientsMap.get(streamDefinition.getStreamId());
-        if(!eventClientList.contains(eventClient)){
-            eventClientList.add(eventClient);
-            eventToClientsMap.put(streamDefinition.getStreamId(),eventClientList);
+       //TODO have to remove the streamDefinition from previous EventClient if that event will not be sent to that node
+
+        for(StreamDefinition streamDefinition:streamDefinitionList) {
+            EventClient eventClient = destinationToClientMap.get(nodeId);
+            eventClient.addStreamDefinition(streamDefinition);
+
+            List<EventClient> eventClientList = eventToClientsMap.get(streamDefinition.getStreamId());
+            if (!eventClientList.contains(eventClient)) {
+                eventClientList.add(eventClient);
+                eventToClientsMap.put(streamDefinition.getStreamId(), eventClientList);
+            }
         }
     }
 

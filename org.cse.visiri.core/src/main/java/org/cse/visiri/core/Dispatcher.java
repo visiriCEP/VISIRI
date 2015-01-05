@@ -10,6 +10,7 @@ import org.cse.visiri.util.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Malinda Kumarasinghe on 11/5/2014.
@@ -133,11 +134,14 @@ public class Dispatcher implements EnvironmentChangedCallback {
         if(changedQueries!=null) {
             //This should executed after Dynamic adjustments are done
 
+            Set<String> nodeSet=changedQueries.keySet();
 
-
-
-
-
+            for(String nodeId:nodeSet){
+                List<Query> queryList=changedQueries.get(nodeId);
+                for(Query query:queryList){
+                    engineHandler.dynamicUpdateOutputEventReceiver(nodeId,query);
+                }
+            }
 
         }else{
             System.err.println("Changed queries are null");
