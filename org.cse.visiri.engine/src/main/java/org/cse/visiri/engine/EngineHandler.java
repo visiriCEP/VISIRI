@@ -149,7 +149,6 @@ public class EngineHandler {
 
     public void addQuery(Query query){
 
-
        CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
        queryEngineMap.put(query.getQueryId(),cepEngine);
 
@@ -304,6 +303,10 @@ public class EngineHandler {
             cepEngineList.add(cepEngine);
             eventEngineMap.put(streamId,cepEngineList);
         }
+    }
+
+    public void dynamicUpdateOutputEventReceiver(String nodeId,Query query){
+            this.outputEventReceiver.addDynamicStreamDefinition(nodeId,query.getInputStreamDefinitionsList());
     }
 
     private void configureOutputEventReceiver() throws Exception {
