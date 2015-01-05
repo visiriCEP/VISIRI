@@ -41,7 +41,6 @@ public class OutputEventReceiver {
                 List<EventClient> eventClientList=new ArrayList<EventClient>();
                 eventClientList.add(eventClient);
                 eventToClientsMap.put(streamId, eventClientList);
-
             }
         }
 
@@ -53,6 +52,17 @@ public class OutputEventReceiver {
 
     public void setDestinationToClientMap(Map<String, EventClient> destinationToClientMap) {
         this.destinationToClientMap = destinationToClientMap;
+    }
+
+    public void addStreamDefinition(String nodeId,StreamDefinition streamDefinition){
+        EventClient eventClient=destinationToClientMap.get(nodeId);
+        eventClient.addStreamDefinition(streamDefinition);
+
+        List<EventClient> eventClientList=eventToClientsMap.get(streamDefinition.getStreamId());
+        if(!eventClientList.contains(eventClient)){
+            eventClientList.add(eventClient);
+            eventToClientsMap.put(streamDefinition.getStreamId(),eventClientList);
+        }
     }
 
     public void sendEvents(Event event) throws IOException, InterruptedException {
