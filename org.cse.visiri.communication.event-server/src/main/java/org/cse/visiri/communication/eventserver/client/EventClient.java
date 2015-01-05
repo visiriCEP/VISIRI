@@ -156,8 +156,11 @@ public class EventClient {
     }
 
     public void addStreamDefinition(StreamDefinition streamDefinition){
-        this.streamDefinitionsList.add(streamDefinition);
-        streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinition));
+        if(!this.streamDefinitionsList.contains(streamDefinition)){
+            this.streamDefinitionsList.add(streamDefinition);
+            streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinition));
+        }
+
 
     }
 
