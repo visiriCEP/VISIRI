@@ -19,6 +19,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private EngineHandler engineHandler;
     private UtilizationUpdater utilizationUpdater;
     boolean started;
+    private Map<String,List<Query>> changedQueries;
 
     public void initialize()
     {
@@ -124,12 +125,25 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     @Override
     public void newEnginesRecieved() {
-
+        changedQueries=Environment.getInstance().getChangedQueries();
     }
 
     @Override
     public void dynamicCompleted() {
-        //This wil executed after Dynamic adjustments are done
+        if(changedQueries!=null) {
+            //This should executed after Dynamic adjustments are done
+
+
+
+
+
+
+
+        }else{
+            System.err.println("Changed queries are null");
+        }
+        //finally clear the environment
+        Environment.getInstance().clearChangedQueries();
     }
 
 }

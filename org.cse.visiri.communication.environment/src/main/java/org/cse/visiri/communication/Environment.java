@@ -34,6 +34,7 @@ public class Environment implements MessageListener {
 
     private final String ENABLE_DYNAMIC = "ENABLE_DYNAMIC";
     private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
+    private final String NEW_DISTRIBUTION_TO_DISPATCHER = "NEW_DISTRIBUTION_TO_DISPATCHER";
     private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
@@ -317,8 +318,17 @@ public class Environment implements MessageListener {
 
         for(String ip : transferableEngines.keySet()) {
             hzInstance.getMap(NEW_DISTRIBUTION).put(ip, transferableEngines.get(ip));
+            hzInstance.getMap(NEW_DISTRIBUTION_TO_DISPATCHER).put(ip, transferableEngines.get(ip));
         }
 
+    }
+
+    public Map<String,List<Query>> getChangedQueries(){
+        return hzInstance.getMap(NEW_DISTRIBUTION_TO_DISPATCHER);
+    }
+
+    public void clearChangedQueries(){
+        hzInstance.getMap(NEW_DISTRIBUTION_TO_DISPATCHER).clear();
     }
 
     public Boolean checkDynamic(){
