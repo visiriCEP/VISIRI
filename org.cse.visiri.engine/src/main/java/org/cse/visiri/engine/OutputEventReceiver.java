@@ -5,10 +5,7 @@ import org.cse.visiri.util.Event;
 import org.cse.visiri.util.StreamDefinition;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
@@ -52,6 +49,12 @@ public class OutputEventReceiver {
 
     public void setDestinationToClientMap(Map<String, EventClient> destinationToClientMap) {
         this.destinationToClientMap = destinationToClientMap;
+    }
+
+    public void removeEventsFromClient(String nodeId,Set<StreamDefinition> streamDefinitionSet){
+        EventClient eventClient=destinationToClientMap.get(nodeId);
+        eventClient.removeStreamDefinition(streamDefinitionSet);
+
     }
 
     public void addDynamicStreamDefinition(String nodeId,List<StreamDefinition> streamDefinitionList){
