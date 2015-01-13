@@ -53,6 +53,11 @@ public class OutputEventReceiver {
 
     public void removeEventsFromClient(String nodeId,Set<StreamDefinition> streamDefinitionSet){
         EventClient eventClient=destinationToClientMap.get(nodeId);
+        for(StreamDefinition streamDefinition:streamDefinitionSet){
+            List<EventClient> eventClientList=eventToClientsMap.get(streamDefinition.getStreamId());
+            eventClientList.remove(eventClient);
+            eventToClientsMap.put(streamDefinition.getStreamId(),eventClientList);
+        }
         eventClient.removeStreamDefinition(streamDefinitionSet);
 
     }
