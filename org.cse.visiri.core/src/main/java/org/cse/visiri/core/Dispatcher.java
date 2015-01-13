@@ -6,6 +6,7 @@ import org.cse.visiri.communication.EnvironmentChangedCallback;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
+import org.cse.visiri.util.StreamDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,10 +79,10 @@ public class Dispatcher implements EnvironmentChangedCallback {
         engineHandler.eventServerBufferStart(bufList);
     }
 
-    @Override
-    public void bufferingStop() {
-        engineHandler.eventServerBufferStop();
-    }
+//    @Override
+//    public void bufferingStop() {
+//        engineHandler.eventServerBufferStop();
+//    }
 
 //    @Override
 //    public void bufferingStateChanged() {
@@ -118,6 +119,11 @@ public class Dispatcher implements EnvironmentChangedCallback {
         System.out.println("Disp started");
     }
 
+    private void removeStreamDefinitions(){
+            Environment.getInstance().getRemovablesToDispatcher();
+    }
+
+
     @Override
     public void stopNode() {
         engineHandler.stop();
@@ -142,6 +148,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
                     engineHandler.dynamicUpdateOutputEventReceiver(nodeId,query);
                 }
             }
+
+            removeStreamDefinitions();
 
         }else{
             System.err.println("Changed queries are null");

@@ -70,7 +70,11 @@ public class Agent extends Thread {
 
     private void transferEngines(){
 
-            Map<String,List<Query>> transferableEngines=engineHandler.getTransferableEngines();
+            TransferbleEngine TREngines=engineHandler.getTransferableEngines();
+            Map<String,List<Query>> transferableEngines=TREngines.getNodeTransferbleQueryMap();
+            Set<StreamDefinition> removableEngines=TREngines.getCompletlyRemovedEvents();
+            Environment.getInstance().addRemovablesToDispatcher(removableEngines);
+
             System.out.println("\nSelected nodes : "+transferableEngines.size());
 
             for(String ip : transferableEngines.keySet()){
@@ -80,10 +84,10 @@ public class Agent extends Thread {
                 for(Query query : queries){
                     System.out.println(query.getQueryId());
 
-                    for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()){
-                        environment.getInstance().getBufferingEventList().add(streamDefinition.getStreamId());
-                        System.out.println("Buffering list "+streamDefinition.getStreamId());
-                    }
+//                    for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()){
+//                        environment.getInstance().getBufferingEventList().add(streamDefinition.getStreamId());
+//                        System.out.println("Buffering list "+streamDefinition.getStreamId());
+//                    }
 
                 }
 

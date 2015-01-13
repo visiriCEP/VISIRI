@@ -32,6 +32,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_BUFFERING_STOP = 8;
     public static final int EVENT_TYPE_DISPATCHER_NOTIFICATION = 9;
 
+    private final String REMOVING_EVENT_LIST = "REMOVING_EVENT_LIST";
     private final String BUFFERING_EVENT_LIST = "BUFFERING_EVENT_LIST";
     private final String ENABLE_DYNAMIC = "ENABLE_DYNAMIC";
     private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
@@ -223,7 +224,7 @@ public class Environment implements MessageListener {
     }
 
     public List<String> getBufferingEventList() {
-        return (List<String>)hzInstance.getMap(BUFFERING_EVENT_LIST);
+        return hzInstance.getList(BUFFERING_EVENT_LIST);
     }
 
     public Map<String, List<String>> getSubscriberMapping() {
@@ -280,9 +281,9 @@ public class Environment implements MessageListener {
             case Environment.EVENT_TYPE_BUFFERING_START:
                 changedCallback.bufferingStart();
                 break;
-            case Environment.EVENT_TYPE_BUFFERING_STOP:
-                changedCallback.bufferingStop();
-                break;
+//            case Environment.EVENT_TYPE_BUFFERING_STOP:
+//                changedCallback.bufferingStop();
+//                break;
             case Environment.EVENT_TYPE_QUERIES_CHANGED:
                 changedCallback.queriesChanged();
                 break;
@@ -330,6 +331,7 @@ public class Environment implements MessageListener {
 
     public void clearChangedQueries(){
         hzInstance.getMap(NEW_DISTRIBUTION_TO_DISPATCHER).clear();
+        hzInstance.getSet(REMOVING_EVENT_LIST).clear();
     }
 
     public Boolean checkDynamic(){
@@ -365,6 +367,16 @@ public class Environment implements MessageListener {
 
     public List<Query> getAdditionalQueries(){
         return (List<Query>) hzInstance.getMap(NEW_DISTRIBUTION).get(getNodeId());
+    }
+
+    public Set<String> getRemovablesToDispatcher(){
+        return hzInstance.getSet(REMOVING_EVENT_LIST);
+    }
+
+    public void addRemovablesToDispatcher(Set<StreamDefinition> set){
+        for(StreamDefinition s : set) {
+            hzInstance.getSet(REMOVING_EVENT_LIST).add(s);
+        }
     }
 
 
