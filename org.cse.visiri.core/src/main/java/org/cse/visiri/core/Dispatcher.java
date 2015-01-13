@@ -147,6 +147,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
             System.err.println("Changed queries are null");
         }
         //finally clear the environment
+        engineHandler.eventServerBufferStop();
         Environment.getInstance().clearChangedQueries();
     }
 
