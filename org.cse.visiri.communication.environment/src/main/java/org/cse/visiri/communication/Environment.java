@@ -32,6 +32,7 @@ public class Environment implements MessageListener {
     public static final int EVENT_TYPE_BUFFERING_STOP = 8;
     public static final int EVENT_TYPE_DISPATCHER_NOTIFICATION = 9;
 
+    private final String BUFFERING_EVENT_LIST = "BUFFERING_EVENT_LIST";
     private final String ENABLE_DYNAMIC = "ENABLE_DYNAMIC";
     private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
     private final String NEW_DISTRIBUTION_TO_DISPATCHER = "NEW_DISTRIBUTION_TO_DISPATCHER";
@@ -222,7 +223,7 @@ public class Environment implements MessageListener {
     }
 
     public List<String> getBufferingEventList() {
-        return bufferingEventList;
+        return (List<String>)hzInstance.getMap(BUFFERING_EVENT_LIST);
     }
 
     public Map<String, List<String>> getSubscriberMapping() {

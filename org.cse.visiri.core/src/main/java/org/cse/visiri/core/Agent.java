@@ -79,12 +79,17 @@ public class Agent extends Thread {
 
                 for(Query query : queries){
                     System.out.println(query.getQueryId());
+
+                    for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()){
+                        environment.getInstance().getBufferingEventList().add(streamDefinition.getStreamId());
+                        System.out.println("Buffering list "+streamDefinition.getStreamId());
+                    }
+
                 }
 
             }
 
             Environment.getInstance().createNewTransferable(transferableEngines);
-
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
             System.out.println("\nENGINE_PASS Message sent");
     }
