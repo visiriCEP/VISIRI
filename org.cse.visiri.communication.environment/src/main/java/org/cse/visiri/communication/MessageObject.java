@@ -11,20 +11,26 @@ public class MessageObject implements Serializable {
     private int eventType;
     private Query query;
     private String destination;
+    private String from;
 
-    public MessageObject(int eventType,Query query,String destination){
+    public MessageObject(int eventType,Query query,String from,String destination){
+        this.from=from;
         this.eventType=eventType;
         this.query=query;
         this.destination=destination;
     }
 
-    public MessageObject(int eventType){
+    public MessageObject(int eventType,String from){
         this.eventType=eventType;
+        this.from=from;
 
     }
 
     public int getEventType() {
         return eventType;
+    }
+    public String getFrom(){
+        return this.from;
     }
 
     public Query getPersistedEngine() {

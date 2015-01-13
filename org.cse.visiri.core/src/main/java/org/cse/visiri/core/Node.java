@@ -187,7 +187,7 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void dynamicCompleted() {
+    public void dynamicCompleted(String from) {
 
 
 

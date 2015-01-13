@@ -309,7 +309,7 @@ public class Environment implements MessageListener {
     }
 
     public void sendEvent(int eventType){
-       topic.publish(new MessageObject(eventType));
+       topic.publish(new MessageObject(eventType,getNodeId()));
     }
 
 //    public void sendEngine(Query query,String destination){

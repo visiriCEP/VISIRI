@@ -119,7 +119,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
         System.out.println("Disp started");
     }
 
-    private void removeStreamDefinitions(){
+    private void removeStreamDefinitions(String from){
             Environment.getInstance().getRemovablesToDispatcher();
     }
 
@@ -136,7 +136,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void dynamicCompleted() {
+    public void dynamicCompleted(String from) {
         if(changedQueries!=null) {
             //This should executed after Dynamic adjustments are done
 
@@ -149,7 +149,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
                 }
             }
 
-            removeStreamDefinitions();
+            removeStreamDefinitions(from);
 
         }else{
             System.err.println("Changed queries are null");

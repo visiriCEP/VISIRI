@@ -15,5 +15,5 @@ public interface EnvironmentChangedCallback {
     public void startNode();
     public void stopNode();
     public void newEnginesRecieved();
-    public void dynamicCompleted();
+    public void dynamicCompleted(String from);
 }
