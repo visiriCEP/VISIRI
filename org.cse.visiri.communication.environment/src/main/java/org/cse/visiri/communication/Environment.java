@@ -300,7 +300,7 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                changedCallback.newEnginesRecieved();
+                changedCallback.newEnginesRecieved(messageObject.getFrom());
                 break;
             case Environment.EVENT_TYPE_DISPATCHER_NOTIFICATION:
                 changedCallback.dynamicCompleted();
@@ -309,7 +309,7 @@ public class Environment implements MessageListener {
     }
 
     public void sendEvent(int eventType){
-       topic.publish(new MessageObject(eventType));
+       topic.publish(new MessageObject(eventType,getNodeId()));
     }
 
 //    public void sendEngine(Query query,String destination){

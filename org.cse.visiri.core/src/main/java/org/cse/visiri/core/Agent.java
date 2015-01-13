@@ -73,6 +73,7 @@ public class Agent extends Thread {
             TransferbleEngine TREngines=engineHandler.getTransferableEngines();
             Map<String,List<Query>> transferableEngines=TREngines.getNodeTransferbleQueryMap();
             Set<StreamDefinition> removableEngines=TREngines.getCompletlyRemovedEvents();
+
             Environment.getInstance().addRemovablesToDispatcher(removableEngines);
 
             System.out.println("\nSelected nodes : "+transferableEngines.size());
