@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -159,6 +160,13 @@ public class EventClient {
         if(!this.streamDefinitionsList.contains(streamDefinition)){
             this.streamDefinitionsList.add(streamDefinition);
             streamRuntimeInfoHashMap.put(streamDefinition.getStreamId(),EventServerUtils.createStreamRuntimeInfo(streamDefinition));
+        }
+    }
+
+    public void removeStreamDefinition(Set<StreamDefinition> streamDefinitionSet){
+        for(StreamDefinition streamDefinition:streamDefinitionSet){
+            streamDefinitionsList.remove(streamDefinition);
+            streamRuntimeInfoHashMap.remove(streamDefinition.getStreamId());
         }
     }
 
