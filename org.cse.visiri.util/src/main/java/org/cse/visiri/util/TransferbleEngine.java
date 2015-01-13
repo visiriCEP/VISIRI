@@ -1,8 +1,4 @@
-package org.cse.visiri.util.costmodelcalc;
-
-import org.cse.visiri.util.Query;
-import org.cse.visiri.util.StreamDefinition;
-import org.cse.visiri.util.TransferbleQuery;
+package org.cse.visiri.util;
 
 import java.util.List;
 import java.util.Map;
