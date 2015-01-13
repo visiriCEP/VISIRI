@@ -300,7 +300,7 @@ public class Environment implements MessageListener {
                 changedCallback.stopNode();
                 break;
             case Environment.EVENT_TYPE_ENGINE_PASS:
-                changedCallback.newEnginesRecieved();
+                changedCallback.newEnginesRecieved(messageObject.getFrom());
                 break;
             case Environment.EVENT_TYPE_DISPATCHER_NOTIFICATION:
                 changedCallback.dynamicCompleted();
