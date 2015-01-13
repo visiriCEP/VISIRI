@@ -175,7 +175,7 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void newEnginesRecieved() {
+    public void newEnginesRecieved(String from) {
         //System.out.println("\n-------111  newEnginesReceived method : "+queries);
         List<Query> queries=Environment.getInstance().getAdditionalQueries();
         //System.out.println("\n-------newEnginesReceived method : "+queries);
@@ -187,7 +187,7 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     @Override
-    public void dynamicCompleted(String from) {
+    public void dynamicCompleted() {
 
 
 
