@@ -77,7 +77,7 @@ public class EngineHandler {
 
     }
 
-    public Map<String,List<Query>> getTransferableEngines(){
+    public TransferbleEngine getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
         //2. run Dynamic distribution algorithm to get query distribution algorithm
         //3. call "removeEngine" method for all transferable engines
@@ -100,7 +100,7 @@ public class EngineHandler {
         DynamicQueryDistributionAlgoImpliment dynamicQueryDistribution=new DynamicQueryDistributionAlgoImpliment();
 
         Map<String,List<Query>> nodeTransferbleQueryMap=dynamicQueryDistribution.getQueryDistribution(transferbleQueryList);
-
+        Set<StreamDefinition> completelyRemovedEvents=new HashSet<StreamDefinition>();
         for(Query query:transferbleQueryList){
             SiddhiCEPEngine siddhiCEPEngine=(SiddhiCEPEngine)queryEngineMap.get(query.getQueryId());
 
@@ -118,11 +118,21 @@ public class EngineHandler {
             nodeQueryMap.put(myNode,queryList);
             this.removeQueries(query,siddhiCEPEngine);
 
+            for(StreamDefinition streamDefinition:query.getInputStreamDefinitionsList()){
+                List<CEPEngine> cepEngineList=eventEngineMap.get(streamDefinition.getStreamId());
+                if(cepEngineList.isEmpty()){
+                    completelyRemovedEvents.add(streamDefinition);
+                }
+            }
+
         }
+
+
         //Sending buffering message to dispatcher
         Environment.getInstance().sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
+        TransferbleEngine transferbleEngine=new TransferbleEngine(nodeTransferbleQueryMap,completelyRemovedEvents);
 
-        return nodeTransferbleQueryMap;
+        return transferbleEngine;
 
     }
 
