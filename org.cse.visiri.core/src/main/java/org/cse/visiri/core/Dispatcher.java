@@ -23,7 +23,6 @@ public class Dispatcher implements EnvironmentChangedCallback {
     boolean started;
     private Map<String,List<Query>> changedQueries;
 
-
     public void initialize()
     {
         queries = new ArrayList<Query>();
@@ -120,8 +119,10 @@ public class Dispatcher implements EnvironmentChangedCallback {
         System.out.println("Disp started");
     }
 
-    private void removeStreamDefinitions(String from){
-            Environment.getInstance().getRemovablesToDispatcher();
+    private void removeStreamDefinitions(String senderId){
+
+        Set<StreamDefinition> completelyREmoveEventsSet=Environment.getInstance().getRemovablesToDispatcher();
+        engineHandler.dynamicRemoveEvents(senderId,completelyREmoveEventsSet);
     }
 
 
@@ -132,8 +133,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
     }
 
     @Override
-    public void newEnginesRecieved(String from) {
-        removeStreamDefinitions(from);
+    public void newEnginesRecieved(String senderId) {
+        removeStreamDefinitions(senderId);
         changedQueries=Environment.getInstance().getChangedQueries();
     }
 
@@ -150,7 +151,6 @@ public class Dispatcher implements EnvironmentChangedCallback {
                     engineHandler.dynamicUpdateOutputEventReceiver(nodeId,query);
                 }
             }
-
 
 
         }else{

@@ -118,6 +118,7 @@ public class EngineHandler {
             nodeQueryMap.put(myNode,queryList);
             this.removeQueries(query,siddhiCEPEngine);
 
+            //in order to get to know the event types which are completely removed from this node
             for(StreamDefinition streamDefinition:query.getInputStreamDefinitionsList()){
                 List<CEPEngine> cepEngineList=eventEngineMap.get(streamDefinition.getStreamId());
                 if(cepEngineList.isEmpty()){
@@ -313,6 +314,10 @@ public class EngineHandler {
             cepEngineList.add(cepEngine);
             eventEngineMap.put(streamId,cepEngineList);
         }
+    }
+
+    public void dynamicRemoveEvents(String nodeId,Set<StreamDefinition> streamDefinitionSet){
+        this.outputEventReceiver.removeEventsFromClient(nodeId,streamDefinitionSet);
     }
 
     public void dynamicUpdateOutputEventReceiver(String nodeId,Query query){

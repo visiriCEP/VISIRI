@@ -373,7 +373,7 @@ public class Environment implements MessageListener {
         return (List<Query>) hzInstance.getMap(NEW_DISTRIBUTION).get(getNodeId());
     }
 
-    public Set<String> getRemovablesToDispatcher(){
+    public Set<StreamDefinition> getRemovablesToDispatcher(){
         return hzInstance.getSet(REMOVING_EVENT_LIST);
     }
 
