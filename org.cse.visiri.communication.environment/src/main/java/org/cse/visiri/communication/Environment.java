@@ -346,6 +346,10 @@ public class Environment implements MessageListener {
     public void enableDynamic(){
         hzInstance.getMap(ENABLE_DYNAMIC).put(ENABLE_DYNAMIC,getNodeId());
     }
+
+    public void shutdownHazelcast(){
+        hzInstance.shutdown();
+    }
     public void disableDynamic(){
         hzInstance.getMap(ENABLE_DYNAMIC).put(ENABLE_DYNAMIC,"FALSE");
     }
