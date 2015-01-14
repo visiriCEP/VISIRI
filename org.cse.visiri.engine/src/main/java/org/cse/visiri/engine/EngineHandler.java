@@ -9,9 +9,7 @@ import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.*;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
@@ -27,6 +25,9 @@ public class EngineHandler {
     private TransferbleQuery transferbleQuery;
     private String identifier;
 
+    private BlockingQueue blockingQueue;
+    private final int queueCapacity = 100*1000;
+
 
     public EngineHandler(String identifier){
         this.identifier=identifier;
@@ -37,6 +38,7 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
+        this.blockingQueue=new ArrayBlockingQueue(queueCapacity);
     }
 
     public void start() throws Exception {
@@ -55,24 +57,38 @@ public class EngineHandler {
         }
 
 
+//        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
+//
+//            private ExecutorService pool = Executors.newFixedThreadPool(30);
+//            @Override
+//            public void receive(final Event event) {
+//                pool.submit(
+//                        new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
+//                                for(int i=0;i<cepEngineList.size();i++){
+//                                   cepEngineList.get(i).sendEvent(event);
+//                                }
+//                            }
+//                        }
+//                );
+//
+//            }
+//        },identifier);
+
         eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
 
-            private ExecutorService pool = Executors.newFixedThreadPool(30);
-            @Override
+           @Override
             public void receive(final Event event) {
-                pool.submit(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
-                                for(int i=0;i<cepEngineList.size();i++){
-                                   cepEngineList.get(i).sendEvent(event);
-                                }
-                            }
-                        }
-                );
 
-            }
+               try {
+                   blockingQueue.put(event);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+
+           }
         },identifier);
         System.out.println("ES trying to start. . .");
 
@@ -88,7 +104,30 @@ public class EngineHandler {
             }
         });
         t.start();
+        this.sendFromBlockingQueueStarts();
 
+    }
+
+    private void sendFromBlockingQueueStarts(){
+
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Event event=new Event();
+                try {
+                     event=(Event)blockingQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
+                                for(int i=0;i<cepEngineList.size();i++){
+                                   cepEngineList.get(i).sendEvent(event);
+                                }
+
+            }
+        });
+        t.start();
     }
 
     public TransferbleEngine getTransferableEngines(){
