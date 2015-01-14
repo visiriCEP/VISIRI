@@ -38,7 +38,8 @@ public class EngineHandler {
         this.eventServerConfig=new EventServerConfig(7211);
         this.myQueryList=new ArrayList<Query>();
         this.transferbleQuery=new TransferbleQuery();
-        this.blockingQueue=new ArrayBlockingQueue(queueCapacity);
+//        this.blockingQueue=new ArrayBlockingQueue(queueCapacity);
+        this.blockingQueue=new LinkedBlockingDeque();
     }
 
     public void start() throws Exception {
