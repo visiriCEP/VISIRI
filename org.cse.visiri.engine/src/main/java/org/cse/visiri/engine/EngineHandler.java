@@ -57,39 +57,39 @@ public class EngineHandler {
         }
 
 
-        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
-
-            private ExecutorService pool = Executors.newFixedThreadPool(30);
-            @Override
-            public void receive(final Event event) {
-                pool.submit(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
-                                for(int i=0;i<cepEngineList.size();i++){
-                                   cepEngineList.get(i).sendEvent(event);
-                                }
-                            }
-                        }
-                );
-
-            }
-        },identifier);
-
 //        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
 //
-//           @Override
+//            private ExecutorService pool = Executors.newFixedThreadPool(30);
+//            @Override
 //            public void receive(final Event event) {
+//                pool.submit(
+//                        new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
+//                                for(int i=0;i<cepEngineList.size();i++){
+//                                   cepEngineList.get(i).sendEvent(event);
+//                                }
+//                            }
+//                        }
+//                );
 //
-//               try {
-//                   blockingQueue.put(event);
-//               } catch (InterruptedException e) {
-//                   e.printStackTrace();
-//               }
-//
-//           }
+//            }
 //        },identifier);
+
+        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
+
+           @Override
+            public void receive(final Event event) {
+
+               try {
+                   blockingQueue.put(event);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+
+           }
+        },identifier);
         System.out.println("ES trying to start. . .");
 
         Thread t = new Thread(new Runnable() {
@@ -104,7 +104,7 @@ public class EngineHandler {
             }
         });
         t.start();
-//        this.sendFromBlockingQueueStarts();
+        this.sendFromBlockingQueueStarts();
 
     }
 
@@ -113,18 +113,20 @@ public class EngineHandler {
         Thread t=new Thread(new Runnable() {
             @Override
             public void run() {
-                Event event=new Event();
-                try {
-                     event=(Event)blockingQueue.take();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while (true) {
+                    Event event = new Event();
+                    try {
+                        event = (Event) blockingQueue.take();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    List<CEPEngine> cepEngineList = eventEngineMap.get(event.getStreamId());
+                    for (int i = 0; i < cepEngineList.size(); i++) {
+                        cepEngineList.get(i).sendEvent(event);
+                    }
+
                 }
-
-                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
-                    for(int i=0;i<cepEngineList.size();i++){
-                             cepEngineList.get(i).sendEvent(event);
-                       }
-
             }
         });
         t.start();
