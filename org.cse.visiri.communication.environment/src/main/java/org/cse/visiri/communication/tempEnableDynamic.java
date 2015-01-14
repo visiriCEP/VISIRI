@@ -11,6 +11,7 @@ public class tempEnableDynamic {
       // HazelcastInstance hz = Hazelcast.newHazelcastInstance();
         Environment.getInstance();
         Environment.getInstance().enableDynamic();
+        Environment.getInstance().shutdownHazelcast();
         System.out.println("Done.");
     }
 }
