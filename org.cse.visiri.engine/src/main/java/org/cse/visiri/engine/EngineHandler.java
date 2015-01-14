@@ -9,6 +9,9 @@ import org.cse.visiri.communication.eventserver.server.StreamCallback;
 import org.cse.visiri.util.*;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Malinda Kumarasinghe on 10/31/2014.
@@ -51,13 +54,24 @@ public class EngineHandler {
             streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
 
+
         eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
+
+            private ExecutorService pool = Executors.newFixedThreadPool(30);
             @Override
-            public void receive(Event event) {
-                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
-                for(int i=0;i<cepEngineList.size();i++){
-                    cepEngineList.get(i).sendEvent(event);
-                }
+            public void receive(final Event event) {
+                pool.submit(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
+                                for(int i=0;i<cepEngineList.size();i++){
+                                   cepEngineList.get(i).sendEvent(event);
+                                }
+                            }
+                        }
+                );
+
             }
         },identifier);
         System.out.println("ES trying to start. . .");
