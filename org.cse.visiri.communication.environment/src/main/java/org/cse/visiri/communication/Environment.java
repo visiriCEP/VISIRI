@@ -11,6 +11,8 @@ import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.Queue;
 
@@ -59,7 +61,19 @@ public class Environment implements MessageListener {
 
     private ITopic<Object> topic;
 
+
+    private void deleteCheckFile(){
+        try {
+            File f = new File("VISIRI_check.txt");
+            f.delete();
+            System.out.println("Existing VISIRI_check file deleted !");
+
+        }catch (Exception e){
+            System.out.println("Check file not found !");
+        }
+    }
     private Environment() {
+
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
 
@@ -70,6 +84,8 @@ public class Environment implements MessageListener {
 
 
         hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),false);
+
+        deleteCheckFile();
     }
 
     public void setReady(){
