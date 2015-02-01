@@ -19,8 +19,8 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
-    public final double costThreshold = 180;
-    public final double queryCountThreshold = 80;
+    public final double costVariability = 500;
+    public final double queryVariability = 80;
     public final double utilizationThreshold = 10;
 
     private final int randSeed = 1;
@@ -123,7 +123,7 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
                 //filter ones above threshold
                 for (Iterator<String> iter = candidateNodes.iterator(); iter.hasNext(); ) {
                     String nodeId = iter.next();
-                    if ( nodeQueryTable.get(nodeId).size() > minQueries + queryCountThreshold) {
+                    if ( nodeQueryTable.get(nodeId).size() > minQueries + queryVariability) {
                         iter.remove(); // Error line
                     }
                 }
@@ -132,31 +132,26 @@ public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
             //------------ STEP 2---------
             //minimum total cost
-            double minCost = Collections.min(costs.values());
+            double minCost = Double.POSITIVE_INFINITY;
+            //find min cost
+            for(String candidate : candidateNodes)
+            {
+                double thisCost = costs.get(candidate);
+                if(minCost > thisCost)
+                {
+                    minCost = thisCost;
+                }
+            }
 
             //filter ones above threshold
             for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
             {
                 String nodeId = iter.next();
-                if(costs.get(nodeId) > minCost + costThreshold)
+                if(costs.get(nodeId) > minCost + costVariability)
                 {
                     iter.remove();
                 }
             }
-
-            /*
-            // min cpu utilization
-            double minUtil = Collections.min(utilizations.values());
-            //filter ones above utilization threshold
-            for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
-            {
-                String nodeId = iter.next();
-                if(utilizations.get(nodeId) > minUtil + utilizationThreshold)
-                {
-                    iter.remove();
-                }
-            }
-            */
 
             //types of events used
             //------------- STEP 3 ------------------
