@@ -19,9 +19,7 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFDistributionAlgo extends QueryDistributionAlgo {
 
-    public final double queryCountThreshold = 80;
-    public final double utilizationThreshold = 10;
-
+    public final double queryCountThreshold = 30;
 
     @Override
     public QueryDistribution getQueryDistribution(QueryDistributionParam param) {
