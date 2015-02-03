@@ -173,4 +173,8 @@ public class Dispatcher implements EnvironmentChangedCallback {
     public UtilizationUpdater getUtilizationUpdater() {
         return utilizationUpdater;
     }
+
+    public EngineHandler getEngineHandler() {
+        return engineHandler;
+    }
 }

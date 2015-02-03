@@ -99,6 +99,9 @@ public class NodeGUI {
                     if(runningMode==1){
                         if(dispatcher!=null) {
                             uu = dispatcher.getUtilizationUpdater();
+                            if(dispatcher.getEngineHandler()!=null){
+                                rs=dispatcher.getEngineHandler().getEventRateStore();
+                            }
                         }
 
                     }else if(runningMode==2 || runningMode==3){
@@ -114,7 +117,7 @@ public class NodeGUI {
                         Utilization u=uu.update();
                         memory = 100-u.getFreeMemoryPercentage();
                         cpu=u.getJVMCpuUtilization();
-                        throughput=rs.getInstantRate();
+                        throughput=rs.getAverageRate();
                     }catch(NullPointerException e){
 
                     }
@@ -154,6 +157,7 @@ public class NodeGUI {
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
                 startButton.setEnabled(false);
+                stopButton.setEnabled(true);
             }
         });
         startProcessingNodeButton.addActionListener(new ActionListener() {
