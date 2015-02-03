@@ -32,10 +32,10 @@ public class UtilizationUpdater {
         double cpuUsage=bean.getSystemCpuLoad();  //Returns the "recent cpu usage" for the whole system
         double systemRecentUsage=bean.getSystemLoadAverage(); //Returns the system load average for the last minute
 
-        utilization.setJVMCpuUtilization(jvmUsage);
+        utilization.setJVMCpuUtilization(jvmUsage*100);
         utilization.setAverageSystemLoad(systemRecentUsage);
 
-        double freeMemoryPercentage=getMemoryUsingSigar();
+        double freeMemoryPercentage=getMemoryUsingMXBeans();
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
         utilization.setAverageSystemLoad(cpuUsage);
@@ -59,7 +59,7 @@ public class UtilizationUpdater {
         double tot=bean.getTotalPhysicalMemorySize();
 
         double perc=(free/tot)*100;     //free memory percentage
-        System.out.println(perc);
+        ///System.out.println(perc);
 
         return  perc;
 

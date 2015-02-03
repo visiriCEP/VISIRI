@@ -44,7 +44,7 @@ public class EventRateStore {
 
     }
 
-    public void increment(String message){
+    public void increment(){
         Long mil=System.currentTimeMillis();
 
         instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
@@ -54,7 +54,7 @@ public class EventRateStore {
         avgMap[avgPos]=mil;
 
         if(avgPos%Configuration.EVENT_RATE_FREQ==0){
-            System.out.print(".");
+            //System.out.print(".");
            // System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
         }
     }

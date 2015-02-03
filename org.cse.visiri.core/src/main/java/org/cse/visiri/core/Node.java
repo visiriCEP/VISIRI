@@ -198,4 +198,12 @@ public class Node implements EnvironmentChangedCallback{
     public List<Query> getQueries() {
         return queries;
     }
+
+    public UtilizationUpdater getUtilizationUpdater() {
+        return utilizationUpdater;
+    }
+
+    public EngineHandler getEngineHandler() {
+        return engineHandler;
+    }
 }

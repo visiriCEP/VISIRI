@@ -166,4 +166,11 @@ public class Dispatcher implements EnvironmentChangedCallback {
         Environment.getInstance().clearChangedQueries();
     }
 
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public UtilizationUpdater getUtilizationUpdater() {
+        return utilizationUpdater;
+    }
 }

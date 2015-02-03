@@ -67,7 +67,7 @@ public class FootballSource {
             while((ev = reader.getNextEvent()) != null)
             {
                 client.sendEvent(ev);
-                eventRateStore.increment("players");
+                eventRateStore.increment();
 
                 sent++;
                 if(sent % 1000 == 0) {

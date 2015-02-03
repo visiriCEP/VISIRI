@@ -4,14 +4,17 @@ import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
+import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.EnvironmentChangedCallback;
 import org.cse.visiri.core.Dispatcher;
 import org.cse.visiri.core.Node;
+import org.cse.visiri.util.EventRateStore;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
+import org.cse.visiri.util.Utilization;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -28,6 +31,11 @@ import java.util.List;
  * Created by lasitha on 1/15/15.
  */
 public class NodeGUI {
+    private byte runningMode;   //0-no mode
+                                //1-dispatcher
+                                //2-empty node
+                                //3-random evaluation node
+
     private JComboBox selectionComboBox;
     private JButton startButton;
     private JButton stopButton;
@@ -52,6 +60,7 @@ public class NodeGUI {
     private JPanel dispatherTabelPanel;
     private JPanel processorTabelPanel;
     private JComboBox nodeTypeComboBox;
+    private JButton startProcessingNodeButton;
 
 
     private ChartFrame throughputChartFrame;
@@ -77,42 +86,44 @@ public class NodeGUI {
         memoryChartPanel.add(memoryChartFrame.getContentPanel());
         memoryChartPanel.repaint();
 
-        selectionComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (selectionComboBox.getSelectedIndex() == 0) {
-                    dispatcherPanel.setVisible(false);
-                    nodePanel.setVisible(true);
-                    node=new Node();
-                    //drawProcessorTable(node.getQueries());
-                } else {
-                    dispatcherPanel.setVisible(true);
-                    nodePanel.setVisible(false);
-                    drawDispatcherTable();
-                    dispatcher=new Dispatcher();
-                    dispatcher.initialize();
-                }
-                tabbedGraphPanel.setVisible(true);
-                //selectionComboBox.setEnabled(false);
-            }
-        });
-
-
-
         Thread t=new Thread(new Runnable() {
             public void run()
             {
                 while (true) {
-                    double val = new Random().nextDouble()*200;
-                    throughputChartFrame.refreshChart(val);
-                    val=new Random().nextDouble()*100;
-                    memoryChartFrame.refreshChart(val);
+                    double memory=0;
+                    double throughput=0;
+                    double cpu=0;
+                    double network=0;
+                    UtilizationUpdater uu=null;
+                    EventRateStore rs=null;
+                    if(runningMode==1){
+                        if(dispatcher!=null) {
+                            uu = dispatcher.getUtilizationUpdater();
+                        }
 
-
-                    setUtilizationValues((int)(new Random().nextDouble()*100),(int)(new Random().nextDouble()*100),(int)(new Random().nextDouble()*100));
+                    }else if(runningMode==2 || runningMode==3){
+                        if(node!=null){
+                            uu=node.getUtilizationUpdater();
+                            if(node.getEngineHandler()!=null){
+                                rs=node.getEngineHandler().getEventRateStore();
+                            }
+                        }
+                    }
 
                     try {
-                        Thread.sleep(500);
+                        Utilization u=uu.update();
+                        memory = 100-u.getFreeMemoryPercentage();
+                        cpu=u.getJVMCpuUtilization();
+                        throughput=rs.getInstantRate();
+                    }catch(NullPointerException e){
+
+                    }
+                    throughputChartFrame.refreshChart(throughput);
+                    memoryChartFrame.refreshChart(memory);
+                    setUtilizationValues((int)cpu,(int)memory,(int)network);
+
+                    try {
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -121,11 +132,36 @@ public class NodeGUI {
         });
         t.start();
 
-        nodeTypeComboBox.addActionListener(new ActionListener() {
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectionComboBox.getSelectedIndex() == 0) {
+                    dispatcherPanel.setVisible(false);
+                    nodePanel.setVisible(true);
+                    node=new Node();
+                    runningMode=2;
+                    //drawProcessorTable(node.getQueries());
+                } else {
+                    dispatcherPanel.setVisible(true);
+                    nodePanel.setVisible(false);
+                    //drawDispatcherTable(dispatcher.getQueries());
+                    dispatcher=new Dispatcher();
+                    dispatcher.initialize();
+                    runningMode=1;
+                    System.out.println("Dispatcher started");
+                }
+                tabbedGraphPanel.setVisible(true);
+                selectionComboBox.setEnabled(false);
+                startButton.setEnabled(false);
+            }
+        });
+        startProcessingNodeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(nodeTypeComboBox.getSelectedIndex()==0){
                     node.initialize();
+                    runningMode=2;
                     System.out.println("Node Started");
                 }else{
                     node.initialize();
@@ -149,12 +185,15 @@ public class NodeGUI {
 //        Thread.sleep(40*1000);
 
                     try {
+                        runningMode=3;
                         node.start();
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
                     System.out.println("Random Evaluation Node started");
                 }
+                nodeTypeComboBox.setEnabled(false);
+                startProcessingNodeButton.setEnabled(false);
             }
         });
     }
@@ -208,18 +247,26 @@ public class NodeGUI {
         frame.setVisible(true);
     }
 
-    public void drawDispatcherTable(){
+    public void drawDispatcherTable(List<Query> queryList1){
         if(dispatcherTableScrollPane==null) {
-            Object rowData[][] = new Object[100][2];
+            Object rowData[][] = new Object[queryList1.size()][2];
 
-            for (int i = 0; i < 10; i++) {
-                rowData[i][0] = "stream" + i;
-                rowData[i][1]="";
-                for (int j = 0; j <3 ; j++) {
-                    rowData[i][1] =rowData[i][1]+ "10.10.10." + j+"/ ";
-                }
+//            for (int i = 0; i < 10; i++) {
+//                rowData[i][0] = "stream" + i;
+//                rowData[i][1]="";
+//                for (int j = 0; j <3 ; j++) {
+//                    rowData[i][1] =rowData[i][1]+ "10.10.10." + j+"/ ";
+//                }
+//
+//            }
 
+            int i=0;
+            for(Query q:queryList1){
+                rowData[i][0]=q.getQueryId();
+                rowData[i][1]=q.getQuery();
+                i++;
             }
+
             Object columnNames[] = {"Stream", "Node"};
             JTable table = new JTable(rowData, columnNames);
 
