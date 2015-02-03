@@ -22,6 +22,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private UtilizationUpdater utilizationUpdater;
     boolean started;
     private Map<String,List<Query>> changedQueries;
+    private GUICallback guiCallback;
 
     public void initialize()
     {
@@ -66,6 +67,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
             queries.add(q);
             engineHandler.addQuery(q);
         }
+        guiCallback.queriesChanged();
     }
 
     @Override
@@ -176,5 +178,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
 
     public EngineHandler getEngineHandler() {
         return engineHandler;
+    }
+
+    public void setGuiCallback(GUICallback guiCallback) {
+        this.guiCallback=guiCallback;
     }
 }

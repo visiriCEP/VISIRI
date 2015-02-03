@@ -1,15 +1,12 @@
 package org.cse.visiri.app.gui;
 
-import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
-
-import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
 import org.cse.visiri.communication.Environment;
-import org.cse.visiri.communication.EnvironmentChangedCallback;
 import org.cse.visiri.core.Dispatcher;
+import org.cse.visiri.core.GUICallback;
 import org.cse.visiri.core.Node;
 import org.cse.visiri.util.EventRateStore;
 import org.cse.visiri.util.Query;
@@ -17,12 +14,10 @@ import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.Utilization;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 
@@ -30,7 +25,7 @@ import java.util.List;
 /**
  * Created by lasitha on 1/15/15.
  */
-public class NodeGUI {
+public class NodeGUI implements GUICallback {
     private byte runningMode;   //0-no mode
                                 //1-dispatcher
                                 //2-empty node
@@ -69,7 +64,10 @@ public class NodeGUI {
     private Node node;
     private Dispatcher dispatcher;
 
+    private boolean guiCallbackSet;
+
     public NodeGUI() {
+
 
         dispatcherPanel.setVisible(false);
         nodePanel.setVisible(false);
@@ -117,7 +115,7 @@ public class NodeGUI {
                         Utilization u=uu.update();
                         memory = 100-u.getFreeMemoryPercentage();
                         cpu=u.getJVMCpuUtilization();
-                        throughput=rs.getAverageRate();
+                        throughput=rs.getAverageRate()*1000;
                     }catch(NullPointerException e){
 
                     }
@@ -130,6 +128,7 @@ public class NodeGUI {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    setGUICallback();
                 }
             }
         });
@@ -143,8 +142,9 @@ public class NodeGUI {
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
                     node=new Node();
+
+                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
                     runningMode=2;
-                    //drawProcessorTable(node.getQueries());
                 } else {
                     dispatcherPanel.setVisible(true);
                     nodePanel.setVisible(false);
@@ -198,8 +198,38 @@ public class NodeGUI {
                 }
                 nodeTypeComboBox.setEnabled(false);
                 startProcessingNodeButton.setEnabled(false);
+
             }
         });
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                node=null;
+                dispatcher=null;
+                dispatcherPanel.setVisible(false);
+                nodePanel.setVisible(false);
+                selectionComboBox.setEnabled(true);
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+                nodeTypeComboBox.setEnabled(true);
+                startProcessingNodeButton.setEnabled(true);
+                System.out.println("Stopped");
+            }
+        });
+    }
+
+    public void setGUICallback(){
+        if(!guiCallbackSet) {
+            if (runningMode == 1) {
+                if (dispatcher != null) {
+                    dispatcher.setGuiCallback(this);
+                }
+            } else if (runningMode == 2 || runningMode == 3) {
+                if (node != null) {
+                    node.setGuiCallback(this);
+                }
+            }
+        }
     }
 
     public void setUtilizationValues(int cpu,int memory,int network){
@@ -319,4 +349,16 @@ public class NodeGUI {
         }
     }
 
+    @Override
+    public void queriesChanged() {
+        if(runningMode==1){
+            if(dispatcher!=null) {
+                drawDispatcherTable(dispatcher.getQueries());
+            }
+        }else if(runningMode==2||runningMode==3){
+            if(node!=null) {
+                drawProcessorTable(node.getQueries());
+            }
+        }
+    }
 }

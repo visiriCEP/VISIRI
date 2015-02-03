@@ -27,6 +27,8 @@ public class Node implements EnvironmentChangedCallback{
     private boolean started ;
     private Agent agent;
 
+    private GUICallback guiCallback;
+
     public  void initialize()
     {
         queries = new ArrayList<Query>();
@@ -122,7 +124,7 @@ public class Node implements EnvironmentChangedCallback{
         System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
 //        send ready message
         Environment.getInstance().setReady();
-
+        guiCallback.queriesChanged();
     }
 
     @Override
@@ -205,5 +207,9 @@ public class Node implements EnvironmentChangedCallback{
 
     public EngineHandler getEngineHandler() {
         return engineHandler;
+    }
+
+    public void setGuiCallback(GUICallback guiCallback) {
+        this.guiCallback = guiCallback;
     }
 }

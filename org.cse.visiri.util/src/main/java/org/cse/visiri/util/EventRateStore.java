@@ -28,21 +28,21 @@ public class EventRateStore {
         }
 
         for(int i=0;i<avgMapSize;i++){
-            avgMap[i]=startTime;
+            avgMap[i]=0L;
         }
-        initialIncrement();
+        // initialIncrement();
     }
 
-    public void initialIncrement(){
-        Long mil=System.currentTimeMillis();
-
-        instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
-        instantMap[instantPos]=mil;
-
-        avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
-        avgMap[avgPos]=mil;
-
-    }
+//    public void initialIncrement(){
+//        Long mil=System.currentTimeMillis();
+//
+//        instantPos = (++instantPos >= instantMapSize) ? 0 : instantPos;
+//        instantMap[instantPos]=mil;
+//
+//        avgPos = (++avgPos >= avgMapSize) ? 0 : avgPos;
+//        avgMap[avgPos]=mil;
+//
+//    }
 
     public void increment(){
         Long mil=System.currentTimeMillis();
@@ -55,33 +55,47 @@ public class EventRateStore {
 
         if(avgPos%Configuration.EVENT_RATE_FREQ==0){
             //System.out.print(".");
-           // System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
+            // System.out.println(message+" ## Ins : "+getInstantRate()+"\tAvg : "+getAverageRate());
         }
     }
 
 
 
     public double getInstantRate(){
+        try{
+            int idxLast=instantPos;
+            int idxFirst=(instantPos + 1)%(instantMapSize);
 
-        int idxLast=instantPos;
-        int idxFirst=(instantPos + 1)%(instantMapSize);
+            long last=instantMap[idxLast];
+            long first=instantMap[idxFirst];
 
-        long last=instantMap[idxLast];
-        long first=instantMap[idxFirst];
-
-        double avg=((double)instantMapSize)/(double)(last-first+1);
-        return avg*1000;
-
+            double avg=((double)instantMapSize)/(double)(last-first+1);
+            return avg*1000;
+        }catch (ArrayIndexOutOfBoundsException e){
+            return 0;
+        }
     }
     public double getAverageRate(){
-        int idxLast=avgPos;
-        int idxFirst=(avgPos + 1)%(avgMapSize);
 
-        long last=avgMap[idxLast];
-        long first=avgMap[idxFirst];
 
-        double avg=((double)avgMapSize)/(double)(last-first+1);
-        return avg*1000;
+        if(avgMap[0]==0)
+                return 0;
+
+        try {
+            Long mil=System.currentTimeMillis();
+
+            int idxLast = avgPos;
+            int idxFirst = (avgPos + 1) % (avgMapSize);
+
+           // long last = avgMap[idxLast];
+            long last = mil;
+            long first = avgMap[idxFirst];
+
+            double avg = ((double) avgMapSize) / (double) (last - first + 1);
+            return avg * 1000;
+        }catch (ArrayIndexOutOfBoundsException e){
+            return 0;
+        }
     }
 
 //    private void printMap(){
@@ -98,7 +112,24 @@ public class EventRateStore {
 
         EventRateStore eventRateStore=new EventRateStore();
 
-        eventRateStore.getAverageRate();
+        // eventRateStore.getAverageRate();
+
+        for(int i=0;i<50;i++){
+            //eventRateStore.increment();
+            System.out.println(eventRateStore.getAverageRate());
+        }
+
+        eventRateStore.increment();
+
+        for(int i=0;i<5000;i++){
+            //eventRateStore.increment();
+
+            if(i%100==0)
+                eventRateStore.increment();
+
+
+            System.out.println(eventRateStore.getAverageRate());
+        }
 /*
         for(int i=0;i<5000000;i++){
             eventRateStore.increment(i+" dd");
@@ -118,9 +149,9 @@ public class EventRateStore {
 
         }
 */
-        for(int i=0;i<25;i++){
-            eventRateStore.getAverageRate();
-        }
+//        for(int i=0;i<25;i++){
+//            eventRateStore.getAverageRate();
+//        }
 
     }
 
