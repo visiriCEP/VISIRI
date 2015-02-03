@@ -59,15 +59,17 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
+        int algoId=QueryDistributionAlgo.SCTXPF_PLUS_ALGO;
         CostModelCalculator costCal = new CostModelCalculator();
-        System.out.print("Calculating costs...");
-        for(Query q: queries)
-        {
-            double cost = costCal.calculateCost(q);
-            q.setCost(cost);
+        if(algoId==QueryDistributionAlgo.SCTXPF_PLUS_ALGO) {
+            System.out.print("Calculating costs...");
+            for (Query q : queries) {
+                double cost = costCal.calculateCost(q);
+                q.setCost(cost);
+            }
+            System.out.println("... Done!");
         }
-        System.out.println("... Done!");
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(algoId);
         QueryDistributionParam params = QueryDistributionParam.fromEnvironment();
         params.setQueries(queries);
         QueryDistribution dist = algo.getQueryDistribution(params);
@@ -193,4 +195,7 @@ public class Node implements EnvironmentChangedCallback{
 
     }
 
+    public List<Query> getQueries() {
+        return queries;
+    }
 }

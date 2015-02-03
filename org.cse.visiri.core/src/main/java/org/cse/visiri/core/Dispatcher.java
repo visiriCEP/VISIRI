@@ -76,6 +76,11 @@ public class Dispatcher implements EnvironmentChangedCallback {
     @Override
     public void bufferingStart() {
         List<String> bufList=Environment.getInstance().getBufferingEventList();
+        System.out.println("buflist***"+bufList.size());
+        for(String s:bufList){
+            System.out.println(s);
+        }
+        System.out.println("***");
         engineHandler.eventServerBufferStart(bufList);
     }
 
@@ -122,7 +127,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private void removeStreamDefinitions(String senderId){
 
         Set<StreamDefinition> completelyREmoveEventsSet=Environment.getInstance().getRemovablesToDispatcher();
-        engineHandler.dynamicRemoveEvents(senderId,completelyREmoveEventsSet);
+//        engineHandler.dynamicRemoveEvents(senderId,completelyREmoveEventsSet);
     }
 
 
