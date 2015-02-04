@@ -3,6 +3,7 @@ package org.cse.visiri.core;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.EnvironmentChangedCallback;
+import org.cse.visiri.engine.DirectPassEngine;
 import org.cse.visiri.engine.EngineHandler;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;

@@ -14,6 +14,8 @@ import java.util.*;
 public class OutputEventReceiver {
    private Map<String,EventClient> destinationToClientMap;
    private Map<String,List<EventClient>> eventToClientsMap;
+
+
     public void receiveEvent(){}
     public void stop(){};
     public void start(){};

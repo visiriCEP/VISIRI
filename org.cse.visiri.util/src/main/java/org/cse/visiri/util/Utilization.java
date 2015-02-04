@@ -11,8 +11,13 @@ public class Utilization implements Serializable {
     private double freeMemoryPercentage;
     private double averageSystemLoad;
     private double overallUtilizationValue;
+    private double recentCpuUsage;
 
     public Utilization(){};
+
+    public Utilization(double cpuUtilization){
+        this.setJVMCpuUtilization(cpuUtilization);
+    }
 
     public double getAverageSystemLoad() {
         return averageSystemLoad;
@@ -26,15 +31,17 @@ public class Utilization implements Serializable {
         return freeMemoryPercentage;
     }
 
+    public void setRecentCpuUsage(double recentCpuUsage){
+        this.recentCpuUsage=recentCpuUsage;
+    }
+
+    public double getRecentCpuUsage(){
+        return this.recentCpuUsage;
+    }
+
     public void setFreeMemoryPercentage(double freeMemoryPercentage) {
         this.freeMemoryPercentage = freeMemoryPercentage;
     }
-
-
-    public Utilization(double cpuUtilization){
-        this.setJVMCpuUtilization(cpuUtilization);
-    }
-
 
     public double getJVMCpuUtilization() {
         return JVMCpuUtilization;
@@ -46,8 +53,9 @@ public class Utilization implements Serializable {
     }
 
     public double getOverallUtilizationValue(){
-        calculateOverallUtilizationValue();
-        return overallUtilizationValue;
+        //calculateOverallUtilizationValue();
+        //return overallUtilizationValue;
+        return (100-freeMemoryPercentage);
     }
 
     public void setJVMCpuUtilization(double JVMCpuUtilization) {

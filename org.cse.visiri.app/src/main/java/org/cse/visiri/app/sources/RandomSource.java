@@ -82,7 +82,7 @@ public class RandomSource {
             StreamDefinition def = defs.get(defIdx);
             Event ev = generateEvent(def);
             cl.sendEvent(ev);
-
+            Thread.sleep(1);
             if(i % freq == 0)
             {
                 //Thread.sleep(1000);

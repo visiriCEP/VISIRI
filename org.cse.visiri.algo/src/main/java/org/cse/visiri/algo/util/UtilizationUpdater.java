@@ -21,7 +21,7 @@ public class UtilizationUpdater {
     }
 
     public void start(){
-        Environment.getInstance().setNodeUtilizations(utilization);
+        //Environment.getInstance().setNodeUtilizations(utilization);
     }
 
     public Utilization update(){
@@ -29,16 +29,17 @@ public class UtilizationUpdater {
                 .getOperatingSystemMXBean();
 
         double jvmUsage=bean.getProcessCpuLoad(); //Returns the "recent cpu usage" for the Java Virtual Machine process
-        double cpuUsage=bean.getSystemCpuLoad();  //Returns the "recent cpu usage" for the whole system
+        double recentCpuUsage=bean.getSystemCpuLoad();  //Returns the "recent cpu usage" for the whole system
         double systemRecentUsage=bean.getSystemLoadAverage(); //Returns the system load average for the last minute
 
         utilization.setJVMCpuUtilization(jvmUsage);
         utilization.setAverageSystemLoad(systemRecentUsage);
+        utilization.setRecentCpuUsage(recentCpuUsage);
 
         double freeMemoryPercentage=getMemoryUsingSigar();
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
-        utilization.setAverageSystemLoad(cpuUsage);
+
         return utilization;
 
     }
