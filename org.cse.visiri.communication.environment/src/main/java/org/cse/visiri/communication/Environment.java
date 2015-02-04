@@ -37,10 +37,12 @@ public class Environment implements MessageListener {
     private final String REMOVING_EVENT_LIST = "REMOVING_EVENT_LIST";
     private final String BUFFERING_EVENT_LIST = "BUFFERING_EVENT_LIST";
     private final String ENABLE_DYNAMIC = "ENABLE_DYNAMIC";
+    private final String ENABLE_DYNAMIC2 = "ENABLE_DYNAMIC2";
     private final String NEW_DISTRIBUTION = "NEW_DISTRIBUTION";
     private final String NEW_DISTRIBUTION_TO_DISPATCHER = "NEW_DISTRIBUTION_TO_DISPATCHER";
     private final String NODE_READY_MAP = "NODE_READY_MAP";
     private final String UTILIZATION_MAP = "UTILIZATION_MAP";
+    private final String EVENT_RATE_MAP = "EVENT_RATE_MAP";
     private final String NODE_QUERY_MAP = "NODE_QUERY_MAP";
     private final String ORIGINAL_TO_DEPLOYED_MAP = "ORIGINAL_TO_DEPLOYED_MAP";
     private final String SUBSCRIBER_MAP = "SUBSCRIBER_MAP";
@@ -86,6 +88,7 @@ public class Environment implements MessageListener {
         hzInstance.getMap(NODE_READY_MAP).put(getNodeId(),false);
 
         deleteCheckFile();
+        enableDynamic2();
     }
 
     public void setReady(){
@@ -132,6 +135,10 @@ public class Environment implements MessageListener {
 
     public void setNodeUtilization(String nodeIp, Double value) {
         hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+    }
+
+    public void setNodeEventRate(String nodeIp, Double value) {
+        hzInstance.getMap(EVENT_RATE_MAP).put(nodeIp, value);
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
@@ -233,6 +240,10 @@ public class Environment implements MessageListener {
 
     public Map<String, Utilization> getNodeUtilizations() {
         return hzInstance.getMap(UTILIZATION_MAP);
+    }
+
+    public Map<String, Double> getNodeEventRates() {
+        return hzInstance.getMap(EVENT_RATE_MAP);
     }
 
     public void setNodeUtilizations(Utilization utilization) {
@@ -358,6 +369,22 @@ public class Environment implements MessageListener {
         else
             return false;
     }
+
+    public Boolean checkDynamic2(){
+        Boolean temp= (Boolean) hzInstance.getMap(ENABLE_DYNAMIC2).get(ENABLE_DYNAMIC2);
+
+        if(temp!=null && temp.equals(true))
+            return true;
+        else
+            return false;
+    }
+    public void enableDynamic2(){
+        hzInstance.getMap(ENABLE_DYNAMIC2).put(ENABLE_DYNAMIC2,true);
+    }
+    public void disableDynamic2(){
+        hzInstance.getMap(ENABLE_DYNAMIC2).put(ENABLE_DYNAMIC2,false);
+    }
+
 
     public void enableDynamic(){
         hzInstance.getMap(ENABLE_DYNAMIC).put(ENABLE_DYNAMIC,getNodeId());
