@@ -39,34 +39,7 @@ public class Agent extends Thread {
 
             if(!Environment.getInstance().checkTransferInprogress()){
 
-
-//                if(Environment.getInstance().checkDynamic()){
-//                        System.out.println("Dynamic adjustments started . . . ");
-//                        transferEngines();
-//                        Environment.getInstance().disableDynamic();
-//                      // break;
-//                }else{
-//                   // System.out.println("check . . .");
-//                }
-
-                    Utilization utilization=utilizationUpdater.update();
-
-                    double utilizationLevel=utilization.getOverallUtilizationValue();
-                    memCount+=utilizationLevel;
-                    count++;
-                    windowQueue.add(utilizationLevel);
-                    double utilizationLevelAvg=windowQueue.getAverage();
-
-                System.out.println("**********************");
-                System.out.println("JVM usage : " +utilization.getJVMCpuUtilization());
-                System.out.println("Average CPU load : "+ utilization.getAverageSystemLoad());
-                System.out.println("Free memory persentage : "+utilization.getFreeMemoryPercentage());
-                System.out.println("Recent CPU usage : "+utilization.getRecentCpuUsage());
-                System.out.println("***********************");
-
-                    if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-//                       transferEngines();
-                    }
+                 checkUtilization();
 
             }
             try {
@@ -74,6 +47,21 @@ public class Agent extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void checkUtilization(){
+        Utilization utilization=utilizationUpdater.update();
+
+        double utilizationLevel=utilization.getOverallUtilizationValue();
+        memCount+=utilizationLevel;
+        count++;
+        windowQueue.add(utilizationLevel);
+        double utilizationLevelAvg=windowQueue.getAverage();
+
+
+        if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
+                       transferEngines();
         }
     }
 
