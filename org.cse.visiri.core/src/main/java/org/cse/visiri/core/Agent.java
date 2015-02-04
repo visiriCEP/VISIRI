@@ -17,14 +17,19 @@ public class Agent extends Thread {
     private EngineHandler engineHandler;
     private Queue<Double> utilizationLevelQueue;
     private WindowQueue windowQueue;
+    private double memCount;
+    private int count;
 
-    public Agent(EngineHandler engineHandler){
+    public Agent(EngineHandler engineHandler,UtilizationUpdater utilizationUpdater){
         environment = Environment.getInstance();
         this.engineHandler=engineHandler;
-        this.utilizationUpdater=new UtilizationUpdater();
+        //this.utilizationUpdater=new UtilizationUpdater();
+        this.utilizationUpdater=utilizationUpdater;
         this.utilizationUpdater.start();
         utilizationLevelQueue=new ArrayDeque<Double>();
         windowQueue=new WindowQueue(6);
+        this.memCount=0;
+        this.count=0;
     }
 
     public void run(){
@@ -47,6 +52,8 @@ public class Agent extends Thread {
                     Utilization utilization=utilizationUpdater.update();
 
                     double utilizationLevel=utilization.getOverallUtilizationValue();
+                    memCount+=utilizationLevel;
+                    count++;
                     windowQueue.add(utilizationLevel);
                     double utilizationLevelAvg=windowQueue.getAverage();
 
@@ -99,6 +106,10 @@ public class Agent extends Thread {
             Environment.getInstance().createNewTransferable(transferableEngines);
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
             System.out.println("\nENGINE_PASS Message sent");
+    }
+
+    public double getOverallAverageMemory(){
+        return memCount/count;
     }
 
 }

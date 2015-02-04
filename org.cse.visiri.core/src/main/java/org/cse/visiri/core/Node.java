@@ -40,7 +40,7 @@ public class Node implements EnvironmentChangedCallback{
         utilizationUpdater = new UtilizationUpdater();
         utilizationUpdater.start();
         engineHandler = new EngineHandler("Node");
-        agent=new Agent(engineHandler);
+        agent=new Agent(engineHandler,utilizationUpdater);
 
     }
 
@@ -57,6 +57,7 @@ public class Node implements EnvironmentChangedCallback{
         engineHandler.stop();
         utilizationUpdater.stop();
         agent.stop();
+        System.out.println("***Overall system average memory - "+agent.getOverallAverageMemory());
     }
 
     public void addQueries(List<Query> queries)
