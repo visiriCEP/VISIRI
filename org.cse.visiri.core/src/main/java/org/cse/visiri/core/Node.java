@@ -187,7 +187,7 @@ public class Node implements EnvironmentChangedCallback{
             System.out.println("\n"+queries.size()+" engines received");
             engineHandler.addNewQueries(queries);
         }
-
+        guiCallback.newEnginesRecieved(from);
     }
 
     @Override

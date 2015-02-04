@@ -84,6 +84,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
         }
         System.out.println("***");
         engineHandler.eventServerBufferStart(bufList);
+        guiCallback.bufferingStart();
     }
 
 //    @Override

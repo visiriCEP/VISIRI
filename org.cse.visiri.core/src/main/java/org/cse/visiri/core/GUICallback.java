@@ -5,4 +5,6 @@ package org.cse.visiri.core;
  */
 public interface GUICallback {
     public void queriesChanged();
+    public void newEnginesRecieved(String from);
+    public void bufferingStart();
 }

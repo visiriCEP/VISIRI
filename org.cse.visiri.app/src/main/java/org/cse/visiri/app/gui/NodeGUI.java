@@ -56,6 +56,7 @@ public class NodeGUI implements GUICallback {
     private JPanel processorTabelPanel;
     private JComboBox nodeTypeComboBox;
     private JButton startProcessingNodeButton;
+    private JLabel statusLabel;
 
 
     private ChartFrame throughputChartFrame;
@@ -67,7 +68,6 @@ public class NodeGUI implements GUICallback {
     private boolean guiCallbackSet;
 
     public NodeGUI() {
-
 
         dispatcherPanel.setVisible(false);
         nodePanel.setVisible(false);
@@ -115,7 +115,7 @@ public class NodeGUI implements GUICallback {
                         Utilization u=uu.update();
                         memory = 100-u.getFreeMemoryPercentage();
                         cpu=u.getJVMCpuUtilization();
-                        throughput=rs.getAverageRate()*1000;
+                        throughput=rs.getAverageRate();
                     }catch(NullPointerException e){
 
                     }
@@ -128,7 +128,6 @@ public class NodeGUI implements GUICallback {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    setGUICallback();
                 }
             }
         });
@@ -138,6 +137,7 @@ public class NodeGUI implements GUICallback {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setStatusLabel("Starting...");
                 if (selectionComboBox.getSelectedIndex() == 0) {
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
@@ -153,11 +153,13 @@ public class NodeGUI implements GUICallback {
                     dispatcher.initialize();
                     runningMode=1;
                     System.out.println("Dispatcher started");
+                    setStatusLabel("Dispatcher started");
                 }
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
                 startButton.setEnabled(false);
                 stopButton.setEnabled(true);
+                setGUICallback();
             }
         });
         startProcessingNodeButton.addActionListener(new ActionListener() {
@@ -167,6 +169,7 @@ public class NodeGUI implements GUICallback {
                     node.initialize();
                     runningMode=2;
                     System.out.println("Node Started");
+                    setStatusLabel("Node started");
                 }else{
                     node.initialize();
                     RandomEvaluation ev = new RandomEvaluation();
@@ -184,10 +187,8 @@ public class NodeGUI implements GUICallback {
                         //node.subscribeToStream(outputStream,sinkIp+":6666");
                         node.subscribeToStream(outputStream, Environment.getInstance().getNodeId()+":6666");
                     }
-
 //        System.out.println("Starting in 30 seconds");
 //        Thread.sleep(40*1000);
-
                     try {
                         runningMode=3;
                         node.start();
@@ -195,9 +196,11 @@ public class NodeGUI implements GUICallback {
                         e1.printStackTrace();
                     }
                     System.out.println("Random Evaluation Node started");
+                    setStatusLabel("Random evaluation node started");
                 }
                 nodeTypeComboBox.setEnabled(false);
                 startProcessingNodeButton.setEnabled(false);
+
 
             }
         });
@@ -214,6 +217,7 @@ public class NodeGUI implements GUICallback {
                 nodeTypeComboBox.setEnabled(true);
                 startProcessingNodeButton.setEnabled(true);
                 System.out.println("Stopped");
+                setStatusLabel("Stopped");
             }
         });
     }
@@ -297,7 +301,7 @@ public class NodeGUI implements GUICallback {
             int i=0;
             for(Query q:queryList1){
                 rowData[i][0]=q.getQueryId();
-                rowData[i][1]=q.getQuery();
+                rowData[i][1]=q.getOutputStreamDefinition();
                 i++;
             }
 
@@ -360,5 +364,20 @@ public class NodeGUI implements GUICallback {
                 drawProcessorTable(node.getQueries());
             }
         }
+        setStatusLabel("New queries added");
+    }
+
+    @Override
+    public void newEnginesRecieved(String from) {
+        setStatusLabel("New Engines received from "+from);
+    }
+
+    @Override
+    public void bufferingStart() {
+        setStatusLabel("Buffering started");
+    }
+
+    public void setStatusLabel(String statusText){
+        statusLabel.setText("Status: "+statusText);
     }
 }
