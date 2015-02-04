@@ -8,6 +8,7 @@ public class Configuration {
     private static int nodeType;
     public final static int INSTANT_EVENT_COUNT=100;
     public final static int AVERAGE_EVENT_COUNT=20000;
+    public final static int MAX_EVENT_RATE=5000;
     public final static int AGENT_UPDATE_PERIOD=5000;
     public final static Double UTILIZATION_THRESHOULD=90.0;
     public final static int ENGINE_TYPE_DIRECT=0;
