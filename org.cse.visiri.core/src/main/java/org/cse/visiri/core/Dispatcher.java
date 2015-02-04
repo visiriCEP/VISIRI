@@ -67,7 +67,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
             queries.add(q);
             engineHandler.addQuery(q);
         }
-        guiCallback.queriesChanged();
+        if(guiCallback!=null) {
+            guiCallback.queriesChanged();
+        }
     }
 
     @Override

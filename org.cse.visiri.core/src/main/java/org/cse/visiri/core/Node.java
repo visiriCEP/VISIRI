@@ -124,7 +124,9 @@ public class Node implements EnvironmentChangedCallback{
         System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
 //        send ready message
         Environment.getInstance().setReady();
-        guiCallback.queriesChanged();
+        if(guiCallback!=null) {
+            guiCallback.queriesChanged();
+        }
     }
 
     @Override

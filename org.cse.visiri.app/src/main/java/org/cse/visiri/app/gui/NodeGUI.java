@@ -141,17 +141,18 @@ public class NodeGUI implements GUICallback {
                 if (selectionComboBox.getSelectedIndex() == 0) {
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
-                    node=new Node();
-
-                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
                     runningMode=2;
+                    node=new Node();
+                    setGUICallback();
+                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 } else {
                     dispatcherPanel.setVisible(true);
                     nodePanel.setVisible(false);
                     //drawDispatcherTable(dispatcher.getQueries());
-                    dispatcher=new Dispatcher();
-                    dispatcher.initialize();
                     runningMode=1;
+                    dispatcher=new Dispatcher();
+                    setGUICallback();
+                    dispatcher.initialize();
                     System.out.println("Dispatcher started");
                     setStatusLabel("Dispatcher started");
                 }
@@ -159,7 +160,6 @@ public class NodeGUI implements GUICallback {
                 selectionComboBox.setEnabled(false);
                 startButton.setEnabled(false);
                 stopButton.setEnabled(true);
-                setGUICallback();
             }
         });
         startProcessingNodeButton.addActionListener(new ActionListener() {
@@ -289,21 +289,46 @@ public class NodeGUI implements GUICallback {
         if(dispatcherTableScrollPane==null) {
             Object rowData[][] = new Object[queryList1.size()][2];
 
-//            for (int i = 0; i < 10; i++) {
-//                rowData[i][0] = "stream" + i;
-//                rowData[i][1]="";
-//                for (int j = 0; j <3 ; j++) {
-//                    rowData[i][1] =rowData[i][1]+ "10.10.10." + j+"/ ";
-//                }
-//
-//            }
-
             int i=0;
-            for(Query q:queryList1){
-                rowData[i][0]=q.getQueryId();
-                rowData[i][1]=q.getOutputStreamDefinition();
-                i++;
+            List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
+            ///Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
+
+            for(Query q : queryList1){
+                ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
             }
+
+            Map<String,List<String>> destinationNodeMap;
+
+            //Have to check about whether dispatcher or processing node
+            if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
+                destinationNodeMap=Environment.getInstance().getEventNodeMapping();
+            }else {
+                destinationNodeMap=Environment.getInstance().getSubscriberMapping();
+            }
+
+
+            for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
+                String streamId = streamDefinition.getStreamId();
+                List<String> nodeIpList=destinationNodeMap.get(streamId);
+                if(nodeIpList != null) {
+                    rowData[i][0]=streamId;
+                    for (String nodeIp : nodeIpList) {
+                        if(rowData[i][1]!=null) {
+                            rowData[i][1] = rowData[i][1] + ", " + nodeIp;
+                        }else{
+                            rowData[i][1] = nodeIp;
+                        }
+                    }
+                    i++;
+                }
+            }
+
+
+
+
+
+
+
 
             Object columnNames[] = {"Stream", "Node"};
             JTable table = new JTable(rowData, columnNames);
@@ -377,7 +402,19 @@ public class NodeGUI implements GUICallback {
         setStatusLabel("Buffering started");
     }
 
-    public void setStatusLabel(String statusText){
+    public void setStatusLabel(final String statusText){
         statusLabel.setText("Status: "+statusText);
+        Thread t=new Thread(){
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(10000);
+                }catch (InterruptedException e){
+
+                }
+                statusLabel.setText("");
+            }
+        };
+        t.start();
     }
 }

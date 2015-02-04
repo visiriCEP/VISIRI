@@ -35,7 +35,7 @@ public class UtilizationUpdater {
         utilization.setJVMCpuUtilization(jvmUsage*100);
         utilization.setAverageSystemLoad(systemRecentUsage);
 
-        double freeMemoryPercentage=getMemoryUsingMXBeans();
+        double freeMemoryPercentage=getMemoryUsingSigar();
 
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
         utilization.setAverageSystemLoad(cpuUsage);
