@@ -5,6 +5,7 @@ import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
 import org.cse.visiri.communication.Environment;
+import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.core.Dispatcher;
 import org.cse.visiri.core.GUICallback;
 import org.cse.visiri.core.Node;
@@ -57,6 +58,8 @@ public class NodeGUI implements GUICallback {
     private JComboBox nodeTypeComboBox;
     private JButton startProcessingNodeButton;
     private JLabel statusLabel;
+    private JComboBox bufferingModeComboBox;
+    private JButton dispatherStartButton;
 
 
     private ChartFrame throughputChartFrame;
@@ -152,9 +155,6 @@ public class NodeGUI implements GUICallback {
                     runningMode=1;
                     dispatcher=new Dispatcher();
                     setGUICallback();
-                    dispatcher.initialize();
-                    System.out.println("Dispatcher started");
-                    setStatusLabel("Dispatcher started");
                 }
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
@@ -207,6 +207,8 @@ public class NodeGUI implements GUICallback {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                node.stop();
+                dispatcher.stop();
                 node=null;
                 dispatcher=null;
                 dispatcherPanel.setVisible(false);
@@ -218,6 +220,19 @@ public class NodeGUI implements GUICallback {
                 startProcessingNodeButton.setEnabled(true);
                 System.out.println("Stopped");
                 setStatusLabel("Stopped");
+            }
+        });
+        dispatherStartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(bufferingModeComboBox.getSelectedIndex()==0){
+                    EventServer.setBufferingEnabled(true);
+                }else if(bufferingModeComboBox.getSelectedIndex()==1){
+                    EventServer.setBufferingEnabled(false);
+                }
+                dispatcher.initialize();
+                System.out.println("Dispatcher started");
+                setStatusLabel("Dispatcher started");
             }
         });
     }
@@ -251,8 +266,6 @@ public class NodeGUI implements GUICallback {
         }else{
             memoryProgressBar.setForeground(Color.lightGray);
         }
-
-
         networkProgressBar.setValue(network);
         networkPresentageLabel.setText(network+"%");
         if(network>75){
@@ -276,8 +289,6 @@ public class NodeGUI implements GUICallback {
                 e2.printStackTrace();
             }
         }
-
-
         frame.setContentPane(new NodeGUI().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -322,14 +333,6 @@ public class NodeGUI implements GUICallback {
                     i++;
                 }
             }
-
-
-
-
-
-
-
-
             Object columnNames[] = {"Stream", "Node"};
             JTable table = new JTable(rowData, columnNames);
 

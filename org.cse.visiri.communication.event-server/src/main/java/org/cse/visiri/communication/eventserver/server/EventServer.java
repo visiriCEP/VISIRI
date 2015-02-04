@@ -33,17 +33,18 @@ public class EventServer {
 
     private String identifier;
 
+    private static boolean bufferingEnabled=true;
+
 
 
     ////////////////////
-
-    private List<String> prevBuffed;
+    //private List<String> prevBuffed;
     ////////////////////
 
 
     public EventServer(EventServerConfig eventServerConfig, List<StreamDefinition> streamDefinitions, StreamCallback streamCallback,String identifier) {
 
-        prevBuffed=new ArrayList<String>();
+        //prevBuffed=new ArrayList<String>();
         ///////////////////////
         this.identifier=identifier;
         eventRateStore=new EventRateStore();
@@ -132,12 +133,14 @@ public class EventServer {
                                 if(eventBufferQueueMap.get(streamId)==null){
                                     streamCallback.receive(eventStream);
                                     //System.out.println("event received----------------------------- "+streamId);
-                                    if(prevBuffed.contains(streamId)){
-                                        System.out.println("sending prev buffered stream "+streamId);
-                                    }
+//                                    if(prevBuffed.contains(streamId)){
+//                                        System.out.println("sending prev buffered stream "+streamId);
+//                                    }
                                 }else{
-                                    eventBufferQueueMap.get(streamId).add(eventStream);
-                                    System.out.print(" ** ");
+                                    if(bufferingEnabled) {
+                                        eventBufferQueueMap.get(streamId).add(eventStream);
+                                        System.out.print(" ** ");
+                                    }
                                 }
                             }
                         } catch (Exception e) {
@@ -193,14 +196,15 @@ public class EventServer {
 //    }
 
     public void bufferingStart(List<String> bufferingEventList){
-        System.out.println("buffering start***");
-        for(String buffEventId:bufferingEventList){
-            System.out.println(buffEventId);
-            eventBufferQueueMap.put(buffEventId,new LinkedList());
-
-            prevBuffed.add(buffEventId);
+        if(bufferingEnabled) {
+            System.out.println("buffering start***");
+            for (String buffEventId : bufferingEventList) {
+                System.out.println(buffEventId);
+                eventBufferQueueMap.put(buffEventId, new LinkedList());
+                //prevBuffed.add(buffEventId);
+            }
+            System.out.println("******");
         }
-        System.out.println("******");
     }
     public void bufferingStop(){
         Thread t = new Thread(new Runnable() {
@@ -248,5 +252,9 @@ public class EventServer {
                 return dataArray;
             }
         }
+    }
+
+    public static void setBufferingEnabled(boolean bufferingEnabled) {
+        bufferingEnabled = bufferingEnabled;
     }
 }
