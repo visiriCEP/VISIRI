@@ -9,6 +9,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,7 @@ public class EventClient {
                 try {
                     while (true) {
                         Event eventStream = (Event) blockingQueue.take();
+                        //System.out.println(System.currentTimeMillis()+" receive from blocking queue");
                         String streamID = eventStream.getStreamId();
                         StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoHashMap.get(streamID);
                         Object[] event = eventStream.getData();
@@ -113,6 +115,8 @@ public class EventClient {
                       //  outputStream.flush();
                     //        System.out.println("sent event-- : " + eventStream.getStreamId()+".");
                     }
+                }catch(SocketException e){
+
                 }catch(Exception e){
                     e.printStackTrace();
                 }

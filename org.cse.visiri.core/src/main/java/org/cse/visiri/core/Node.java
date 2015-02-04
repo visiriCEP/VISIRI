@@ -27,6 +27,8 @@ public class Node implements EnvironmentChangedCallback{
     private boolean started ;
     private Agent agent;
 
+    private GUICallback guiCallback;
+
     public  void initialize()
     {
         queries = new ArrayList<Query>();
@@ -59,15 +61,17 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
+        int algoId=QueryDistributionAlgo.SCTXPF_PLUS_ALGO;
         CostModelCalculator costCal = new CostModelCalculator();
-        System.out.print("Calculating costs...");
-        for(Query q: queries)
-        {
-            double cost = costCal.calculateCost(q);
-            q.setCost(cost);
+        if(algoId==QueryDistributionAlgo.SCTXPF_PLUS_ALGO) {
+            System.out.print("Calculating costs...");
+            for (Query q : queries) {
+                double cost = costCal.calculateCost(q);
+                q.setCost(cost);
+            }
+            System.out.println("... Done!");
         }
-        System.out.println("... Done!");
-        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(QueryDistributionAlgo.SCTXPF_PLUS_ALGO);
+        QueryDistributionAlgo algo = AlgoFactory.createAlgorithm(algoId);
         QueryDistributionParam params = QueryDistributionParam.fromEnvironment();
         params.setQueries(queries);
         QueryDistribution dist = algo.getQueryDistribution(params);
@@ -120,7 +124,9 @@ public class Node implements EnvironmentChangedCallback{
         System.out.println("\nQueries changed. added " + addedQueries.size() + " queries" );
 //        send ready message
         Environment.getInstance().setReady();
-
+        if(guiCallback!=null) {
+            guiCallback.queriesChanged();
+        }
     }
 
     @Override
@@ -183,7 +189,7 @@ public class Node implements EnvironmentChangedCallback{
             System.out.println("\n"+queries.size()+" engines received");
             engineHandler.addNewQueries(queries);
         }
-
+        guiCallback.newEnginesRecieved(from);
     }
 
     @Override
@@ -193,4 +199,19 @@ public class Node implements EnvironmentChangedCallback{
 
     }
 
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public UtilizationUpdater getUtilizationUpdater() {
+        return utilizationUpdater;
+    }
+
+    public EngineHandler getEngineHandler() {
+        return engineHandler;
+    }
+
+    public void setGuiCallback(GUICallback guiCallback) {
+        this.guiCallback = guiCallback;
+    }
 }

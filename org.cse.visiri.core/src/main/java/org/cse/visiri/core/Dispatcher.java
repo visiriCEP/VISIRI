@@ -23,6 +23,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private UtilizationUpdater utilizationUpdater;
     boolean started;
     private Map<String,List<Query>> changedQueries;
+    private GUICallback guiCallback;
 
     public void initialize()
     {
@@ -67,6 +68,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
             queries.add(q);
             engineHandler.addQuery(q);
         }
+        if(guiCallback!=null) {
+            guiCallback.queriesChanged();
+        }
     }
 
     @Override
@@ -77,7 +81,13 @@ public class Dispatcher implements EnvironmentChangedCallback {
     @Override
     public void bufferingStart() {
         List<String> bufList=Environment.getInstance().getBufferingEventList();
+        System.out.println("buflist***"+bufList.size());
+        for(String s:bufList){
+            System.out.println(s);
+        }
+        System.out.println("***");
         engineHandler.eventServerBufferStart(bufList);
+        guiCallback.bufferingStart();
     }
 
 //    @Override
@@ -123,7 +133,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private void removeStreamDefinitions(String senderId){
 
         Set<StreamDefinition> completelyREmoveEventsSet=Environment.getInstance().getRemovablesToDispatcher();
-        engineHandler.dynamicRemoveEvents(senderId,completelyREmoveEventsSet);
+//        engineHandler.dynamicRemoveEvents(senderId,completelyREmoveEventsSet);
     }
 
 
@@ -162,4 +172,19 @@ public class Dispatcher implements EnvironmentChangedCallback {
         Environment.getInstance().clearChangedQueries();
     }
 
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public UtilizationUpdater getUtilizationUpdater() {
+        return utilizationUpdater;
+    }
+
+    public EngineHandler getEngineHandler() {
+        return engineHandler;
+    }
+
+    public void setGuiCallback(GUICallback guiCallback) {
+        this.guiCallback=guiCallback;
+    }
 }

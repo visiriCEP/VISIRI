@@ -452,4 +452,48 @@ public class Evaluation {
 
         return queries;
     }
-}
+
+    public List<Query> getQuery() {
+
+        StreamDefinition inputStreamDef = new StreamDefinition();
+        inputStreamDef.setStreamId("players");
+        List<Query> qList = new ArrayList<Query>();
+
+        inputStreamDef.addAttribute("sid", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ts", StreamDefinition.Type.STRING);
+        inputStreamDef.addAttribute("x", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("y", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("z", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("v", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("a", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vx", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vy", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("vz", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ax", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("ay", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("az", StreamDefinition.Type.INTEGER);
+
+        List<StreamDefinition> inputStreamDefinitionList = new ArrayList<StreamDefinition>();
+        inputStreamDefinitionList.add(inputStreamDef);
+
+        StreamDefinition outputStreamdef1 = new StreamDefinition();
+        outputStreamdef1.setStreamId("stopplayer");
+        outputStreamdef1.addAttribute("sid", StreamDefinition.Type.INTEGER);
+        outputStreamdef1.addAttribute("avgV", StreamDefinition.Type.INTEGER);
+//        outputStreamdef1.addAttribute("y", StreamDefinition.Type.INTEGER);
+//        outputStreamdef1.addAttribute("z", StreamDefinition.Type.INTEGER);
+//        outputStreamdef1.addAttribute("v", StreamDefinition.Type.INTEGER);
+//        outputStreamdef1.addAttribute("a", StreamDefinition.Type.INTEGER);
+
+        String q1 = "from players#window.time(5sec) " +
+                "select sid,max(v) as avgV " +
+//                "group by sid having avgV>12 " +
+                "insert into stopplayer;";
+        Query query1 = new Query(q1, inputStreamDefinitionList, outputStreamdef1, "1", Configuration.ENGINE_TYPE_SIDDHI, 1.0);
+        qList.add(query1);
+
+        return qList;
+    }
+
+
+    }

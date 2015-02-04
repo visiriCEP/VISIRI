@@ -59,7 +59,7 @@ public class StockSource {
                 while((ev = reader.getNextEvent()) != null)
                 {
                     client.sendEvent(ev);
-                    eventRateStore.increment("StockSource");
+                    eventRateStore.increment();
 
                     if(sent % frequency == 0) {
                         Thread.sleep(1000);

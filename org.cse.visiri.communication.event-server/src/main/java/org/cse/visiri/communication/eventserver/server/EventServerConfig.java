@@ -5,7 +5,7 @@ package org.cse.visiri.communication.eventserver.server;
  */
 public class EventServerConfig {
 
-    private int numberOfThreads=15;
+    private int numberOfThreads=25;
     private int port;
     private int eventRateStoreFrequency = 10000;
 

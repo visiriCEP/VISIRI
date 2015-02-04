@@ -16,7 +16,7 @@ public class RandomSource {
 
     EventClient cl;
     Random r = new Random(1);
-    private final int EVENT_COUNT = 5000* 1000;
+    private final int EVENT_COUNT = 15000* 1000;
     RandomEvaluation ev = new RandomEvaluation();
 
     private List<StreamDefinition> getDefinitions()
@@ -82,12 +82,12 @@ public class RandomSource {
             StreamDefinition def = defs.get(defIdx);
             Event ev = generateEvent(def);
             cl.sendEvent(ev);
-            Thread.sleep(1);
-            if(i % freq == 0)
-            {
-                //Thread.sleep(1000);
-                System.out.println("Sent " + i);
-            }
+            //Thread.sleep(1);
+//            if(i % freq == 0)
+//            {
+//                Thread.sleep(1);
+//                System.out.println("Sent " + i);
+//            }
         }
 
         System.out.println("Finished");

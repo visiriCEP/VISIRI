@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by lasitha on 12/2/14.
  */
-public class SiddhiDistributedPersistenceHandler implements PersistenceStore,Serializable {
+public class SiddhiDistributedPersistenceHandler implements PersistenceStore {
 
     //HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(new Config().setInstanceName(UUID.randomUUID().toString()));
     Map<String, Map<String, byte[]>> persistenceMap = Environment.getInstance().getPersistenceMapping();//new HashMap<String, Map<String, byte[]>>();//hazelcastInstance.getMap("persistenceMap");

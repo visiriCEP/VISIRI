@@ -87,6 +87,7 @@ public class OutputEventReceiver {
             for (int i = 0; i < eventClientList.size(); i++) {
                 EventClient eventClient = eventClientList.get(i);
                 eventClient.sendEvent(event);
+                //System.out.print(" , ");
             }
         }else{
             System.out.println("eventClientList is null for "+event.getStreamId());

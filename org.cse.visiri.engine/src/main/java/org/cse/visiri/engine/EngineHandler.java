@@ -28,6 +28,8 @@ public class EngineHandler {
     private BlockingQueue blockingQueue;
     private final int queueCapacity = 100*1000;
 
+    private EventRateStore eventRateStore;
+
 
     public EngineHandler(String identifier){
         this.identifier=identifier;
@@ -40,6 +42,8 @@ public class EngineHandler {
         this.transferbleQuery=new TransferbleQuery();
 //        this.blockingQueue=new ArrayBlockingQueue(queueCapacity);
         this.blockingQueue=new LinkedBlockingDeque();
+
+        eventRateStore=new EventRateStore();
     }
 
     public void start() throws Exception {
@@ -82,7 +86,7 @@ public class EngineHandler {
 
            @Override
             public void receive(final Event event) {
-
+                eventRateStore.increment();
                try {
                    blockingQueue.put(event);
                } catch (InterruptedException e) {
@@ -427,5 +431,9 @@ public class EngineHandler {
             EventClient eventClient=new EventClient(fullIp,nodeStreamDefinitionListMap.get(nodeIp));
             outputEventReceiver.addDestinationIp(nodeIp,eventClient);
         }
+    }
+
+    public EventRateStore getEventRateStore() {
+        return eventRateStore;
     }
 }
