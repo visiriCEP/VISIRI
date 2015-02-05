@@ -13,9 +13,9 @@ import java.util.*;
  */
 public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistributionAlgo{
 
-    public final double costThreshold = 10;
-    public final double utilizationThreshold = 10;
-
+    public final double costThreshold = 500;
+    public final double utilizationThreshold = 30;
+    public final double rateThreshold = 2000;
     private final int seed= 1;
     private Random randomizer = new Random(seed);
 
@@ -49,6 +49,7 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
+        Map<String,Double> nodeEventRates = env.getNodeEventRates();
 
         for(String str: nodeList)
         {
@@ -157,32 +158,50 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
             usedEventTypes.add(def.getStreamId());
         }
 
-        //number of common event streams
-        int commonMax = 0;
-        List<String> maximumCommonEventNodes = new ArrayList<String>();
-        //find nodes with maximum common event
-        for(String node: candidateNodes)
-        {
-            //find common count
-            Set<String> curTypes = new HashSet<String>(usedEventTypes);
-            curTypes.retainAll(nodeEventTypes.get(node));
-            int count = curTypes.size();
+//        //number of common event streams
+//        int commonMax = 0;
+//        List<String> maximumCommonEventNodes = new ArrayList<String>();
+//        //find nodes with maximum common event
+//        for(String node: candidateNodes)
+//        {
+//            //find common count
+//            Set<String> curTypes = new HashSet<String>(usedEventTypes);
+//            curTypes.retainAll(nodeEventTypes.get(node));
+//            int count = curTypes.size();
+//
+//            if(count == commonMax)
+//            {
+//                maximumCommonEventNodes.add(node);
+//            }
+//            else if(count > commonMax)
+//            {
+//                commonMax = count;
+//                maximumCommonEventNodes.clear();
+//                maximumCommonEventNodes.add(node);
+//            }
+//        }
+//
+//        candidateNodes.retainAll(maximumCommonEventNodes);
 
-            if(count == commonMax)
+        //minimum total cost
+        double minRate = Double.MIN_VALUE;
+        for(String node : candidateNodes)
+        {
+            if(minRate < nodeEventRates.get(node))
             {
-                maximumCommonEventNodes.add(node);
-            }
-            else if(count > commonMax)
-            {
-                commonMax = count;
-                maximumCommonEventNodes.clear();
-                maximumCommonEventNodes.add(node);
+                minRate = nodeEventRates.get(node);
             }
         }
 
-        candidateNodes.retainAll(maximumCommonEventNodes);
-
-        // TODO : EVENT RATES
+        //filter ones above threshold
+        for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
+        {
+            String nodeId = iter.next();
+            if(nodeEventRates.get(nodeId) > minRate + rateThreshold)
+            {
+                iter.remove();
+            }
+        }
 
         // TODO : EVENT TYPES
 
