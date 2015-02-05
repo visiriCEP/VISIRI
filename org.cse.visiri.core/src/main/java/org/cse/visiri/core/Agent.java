@@ -32,6 +32,12 @@ public class Agent extends Thread {
         this.count=0;
     }
 
+    private void updateEventRate(){
+        Double x=engineHandler.getEventRateStore().getAverageRate();
+        System.out.println("Rate : "+ x);
+       Environment.getInstance().setNodeEventRate(x);
+    }
+
     private void checkEventRate(){
         if(Environment.getInstance().checkDynamic2()) {
             Map<String, Double> rates = Environment.getInstance().getNodeEventRates();
@@ -56,10 +62,10 @@ public class Agent extends Thread {
         System.out.println("Agent started . . .");
         while(true){
 
-
+            updateEventRate();
             if(!Environment.getInstance().checkTransferInprogress()){
 
-                 checkUtilization();
+                 //checkUtilization();
 
             }
             try {
