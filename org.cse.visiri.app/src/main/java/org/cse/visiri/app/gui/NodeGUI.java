@@ -207,8 +207,12 @@ public class NodeGUI implements GUICallback {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                node.stop();
-                dispatcher.stop();
+                if(node!=null) {
+                    node.stop();
+                }
+                if(dispatcher!=null) {
+                    dispatcher.stop();
+                }
                 node=null;
                 dispatcher=null;
                 dispatcherPanel.setVisible(false);
