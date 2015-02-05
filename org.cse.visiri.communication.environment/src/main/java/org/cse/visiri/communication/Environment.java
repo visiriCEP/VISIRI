@@ -137,8 +137,8 @@ public class Environment implements MessageListener {
         hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
     }
 
-    public void setNodeEventRate(String nodeIp, Double value) {
-        hzInstance.getMap(EVENT_RATE_MAP).put(nodeIp, value);
+    public void setNodeEventRate( Double value) {
+        hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
