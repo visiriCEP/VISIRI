@@ -12,11 +12,7 @@ public class CostModelCalculator {
     DirectEngCostModelCalculator directCal;
     SiddhiCostModelCalculator siddhiCal ;
 
-    public CostModelCalculator()
-    {
-        directCal = new DirectEngCostModelCalculator();
-        siddhiCal = new FastSiddhiCostModelCalculator();
-    }
+    
 
     public double calculateCost(final Query q){
         // consider every query has same cost for simplicity
@@ -24,9 +20,17 @@ public class CostModelCalculator {
 
 
         if(q.getEngineId()==0){//CEPEngine.ENGINE_TYPE_DIRECT
+            if(directCal == null)
+            {
+                directCal = new DirectEngCostModelCalculator();
+            }
             return directCal.calculateCost(q);
         }
         else if(q.getEngineId()== 1){ //CEPEngine.ENGINE_TYPE_SIDDHI
+            if(siddhiCal == null)
+            {
+                siddhiCal = new SiddhiCostModelCalculator();
+            }
             return siddhiCal.calculateCost(q);
         }
 
