@@ -1,5 +1,6 @@
 package org.cse.visiri.app;
 
+import org.cse.visiri.app.util.RandomMeasure;
 import org.cse.visiri.communication.eventserver.client.EventClient;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.communication.eventserver.server.EventServerConfig;
@@ -32,10 +33,24 @@ public class RandomSingleNode implements StreamCallback {
 
     public RandomSingleNode() throws Exception {
 
-        RandomEvaluation ev = new RandomEvaluation();
+        RandomMeasure ev = new RandomMeasure();
         inDef = ev.getInputDefinitions();
         outDef = ev.getOutputDefinitions();
         queries = ev.getQueries();
+        start();
+    }
+    public RandomSingleNode(List<StreamDefinition> inDef,  List<StreamDefinition> outDef,
+            List<Query> queries) throws Exception {
+
+        this.inDef = inDef;
+        this.outDef = outDef;
+        this.queries = queries;
+
+        start();
+    }
+
+    private void start() throws Exception
+    {
 
 
         receiver = new OutputEventReceiver();
@@ -48,9 +63,6 @@ public class RandomSingleNode implements StreamCallback {
         EventServerConfig conf = new EventServerConfig(EventServer.DEFAULT_PORT);
         server = new EventServer(conf,inDef,this,"Node");
         server.start();
-
-
-
     }
 
     private void initSiddhi()
@@ -148,6 +160,7 @@ public class RandomSingleNode implements StreamCallback {
 
 
     public static void main(String[] arg) throws Exception {
+
         RandomSingleNode rs = new RandomSingleNode();
 
         Scanner sc = new Scanner(System.in);
