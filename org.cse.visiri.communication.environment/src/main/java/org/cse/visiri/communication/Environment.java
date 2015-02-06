@@ -246,6 +246,22 @@ public class Environment implements MessageListener {
         return hzInstance.getMap(EVENT_RATE_MAP);
     }
 
+    public Double getNodeEventRatesAverage() {
+
+        Map<String, Double> map= hzInstance.getMap(EVENT_RATE_MAP);
+        double sum=0;
+
+        List<Double> eventRateArray= (List<Double>) map.values();
+
+        for(Double value:eventRateArray){
+            sum+=value;
+        }
+
+        double averageValue=sum/eventRateArray.size();
+
+        return averageValue;
+    }
+
     public void setNodeUtilizations(Utilization utilization) {
         hzInstance.getMap(UTILIZATION_MAP).put(getNodeId(),utilization);
     }
