@@ -1,6 +1,7 @@
 package org.cse.visiri.app;
 
 import junit.framework.TestCase;
+import org.cse.visiri.app.util.RandomMeasure;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public class RandomEvaluationTest extends TestCase {
 
-    RandomEvaluation ev = new RandomEvaluation();
+    RandomMeasure ev = new RandomMeasure();
 
 //    public void testGetInputDefinitions() throws Exception {
 //
