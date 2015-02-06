@@ -57,9 +57,10 @@ public class TransferbleQuery {
 
         int i=0;
         for(Query query:queryArray){
-//            costArray[i]=costModelCalculator.calculateCost(query);
+
             costArray[i]=query.getCost();
             costRateValueArray[i]=eventRates[i]*costArray[i];  // cost * eventRate
+           // costRateValueArray[i]=eventRates[i]; //just the event rate for dynamic test only
             costRateQueryMap.put(costRateValueArray[i],query);
             i++;
         }

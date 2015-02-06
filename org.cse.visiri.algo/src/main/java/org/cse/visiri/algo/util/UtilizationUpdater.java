@@ -3,9 +3,7 @@ package org.cse.visiri.algo.util;
 import com.sun.management.OperatingSystemMXBean;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.util.Utilization;
-import org.hyperic.sigar.Mem;
-import org.hyperic.sigar.Sigar;
-import org.hyperic.sigar.SigarException;
+import org.hyperic.sigar.*;
 
 import java.lang.management.ManagementFactory;
 
@@ -32,12 +30,14 @@ public class UtilizationUpdater {
         double recentCpuUsage=bean.getSystemCpuLoad();  //Returns the "recent cpu usage" for the whole system
         double systemRecentUsage=bean.getSystemLoadAverage(); //Returns the system load average for the last minute
 
+
+
         utilization.setJVMCpuUtilization(jvmUsage*100);
         utilization.setAverageSystemLoad(systemRecentUsage);
         utilization.setRecentCpuUsage(recentCpuUsage);
 
-        double freeMemoryPercentage=getMemoryUsingMXBeans();
-
+        //double freeMemoryPercentage=getMemoryUsingMXBeans();
+        double freeMemoryPercentage=getMemoryUsingSigar();
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
 
         return utilization;
@@ -60,7 +60,7 @@ public class UtilizationUpdater {
         double tot=bean.getTotalPhysicalMemorySize();
 
         double perc=(free/tot)*100;     //free memory percentage
-        ///System.out.println(perc);
+
 
         return  perc;
 
@@ -74,6 +74,14 @@ public class UtilizationUpdater {
         } catch (SigarException e) {
             e.printStackTrace();
         }
+
+//        NetInfo netInfo=null;
+//        try {
+//             netInfo=sigar.getNetInfo();
+//        } catch (SigarException e) {
+//            e.printStackTrace();
+//        }
+
 
 //        System.out.println("Actual total free system memory: "
 //                + mem.getActualFree() / 1024 / 1024+ " MB");
@@ -100,6 +108,7 @@ public class UtilizationUpdater {
         System.out.println(runtime.totalMemory()); //Returns the total amount of memory in the Java virtual machine.
         System.out.println(runtime.freeMemory());//Returns the amount of free memory in the Java Virtual Machine.
         System.out.println(runtime.maxMemory()); //Returns the maximum amount of memory that the Java virtual machine will attempt to use.
+
 
     }
 

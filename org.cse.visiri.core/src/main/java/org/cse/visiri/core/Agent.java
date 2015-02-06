@@ -36,6 +36,7 @@ public class Agent extends Thread {
         Double x=engineHandler.getEventRateStore().getAverageRate();
         System.out.println("Rate : "+ x);
        Environment.getInstance().setNodeEventRate(x);
+
     }
 
     private void checkEventRate(){
@@ -87,7 +88,7 @@ public class Agent extends Thread {
 
 
         if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-                       transferEngines();
+//                       transferEngines();
         }
     }
 
