@@ -9,14 +9,25 @@ import org.cse.visiri.util.Query;
  */
 public class CostModelCalculator {
 
+    DirectEngCostModelCalculator directCal;
+    SiddhiCostModelCalculator siddhiCal ;
+
+    public CostModelCalculator()
+    {
+        directCal = new DirectEngCostModelCalculator();
+        siddhiCal = new FastSiddhiCostModelCalculator();
+    }
+
     public double calculateCost(final Query q){
         // consider every query has same cost for simplicity
     //    System.out.println(q.getEngineId()+":"+q.getQuery());
+
+
         if(q.getEngineId()==0){//CEPEngine.ENGINE_TYPE_DIRECT
-            return new DirectEngCostModelCalculator().calculateCost(q);
+            return directCal.calculateCost(q);
         }
         else if(q.getEngineId()== 1){ //CEPEngine.ENGINE_TYPE_SIDDHI
-            return new SiddhiCostModelCalculator().calculateCost(q);
+            return siddhiCal.calculateCost(q);
         }
 
 
