@@ -7,6 +7,7 @@ import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
+import org.cse.visiri.util.costmodelcalc.FastSiddhiCostModelCalculator;
 
 import java.util.*;
 
@@ -114,12 +115,14 @@ public class DistributionEval {
             queries = qg.generateQueries(queryCount,inDef,outDef);
 
             CostModelCalculator costCal = new CostModelCalculator();
+            FastSiddhiCostModelCalculator fastCal = new FastSiddhiCostModelCalculator();
             System.out.print("Calculating costs ");
             int cnt =0;
             for(Query q: queries)
             {
                 cnt++;
-                double cost = costCal.calculateCost(q);
+                double cost =fastCal.calculateCost(q);
+
                 q.setCost(cost);
                 if(cnt%100 == 0)
                 {
