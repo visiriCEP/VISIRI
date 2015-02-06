@@ -17,6 +17,10 @@ public class RandomEvaluation {
 
     private List<StreamDefinition> in,out;
     private  List<Query> queries;
+
+    final int inAttrCntMin = 3, inAttrCntMax= 5;
+    final int outAttrCntMin = 1, outAttrCntMax= 3;
+    //final int inDefCount = 500, outDefCount = 50,queryCount=4000;
     public RandomEvaluation()
     {
         final int seed = 12;
@@ -26,10 +30,9 @@ public class RandomEvaluation {
 
         RandomQueryGenerator qg ;
         qg = new FilteredQueryGenerator(seed,filteringLevel);
-        //final int inDefCount = 500, outDefCount = 50,queryCount=4000;
 
-        final int inAttrCntMin = 3, inAttrCntMax= 5;
-        final int outAttrCntMin = 1, outAttrCntMax= 3;
+
+
 
         in= qg.generateDefinitions(inDefCount,inAttrCntMin,inAttrCntMax);
         out = qg.generateDefinitions(outDefCount,outAttrCntMin,outAttrCntMax);
