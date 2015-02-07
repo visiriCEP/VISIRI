@@ -55,8 +55,7 @@ public class Agent extends Thread {
         if(Environment.getInstance().checkDynamic2()){
             Map<String, Double> ratesMap = Environment.getInstance().getNodeEventRates();
             double sum=0;
-
-            List<Double> eventRateArray= (List<Double>) ratesMap.values();
+            Collection<Double> eventRateArray=ratesMap.values();
 
             for(Double value:eventRateArray){
                 sum+=value;
