@@ -80,7 +80,7 @@ public class Environment implements MessageListener {
 
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-        hzInstance.getLock( "hazelLock" );
+        lock=hzInstance.getLock( "hazelLock" );
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
