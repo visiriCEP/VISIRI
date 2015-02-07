@@ -67,6 +67,7 @@ public class Agent extends Thread {
 
             System.out.println("My Rate="+ratesMap.get(Environment.getInstance().getNodeId()));
             System.out.println("Avg Rate="+averageValue);
+            System.out.println("Average rate gap = "+rateGap);
 
             if(rateGap>Configuration.MAX_EVENT_RATE_GAP){
                 if(Environment.getInstance().checkDynamic2()) {

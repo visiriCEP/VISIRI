@@ -29,7 +29,7 @@ public class CostModelCalculator {
         else if(q.getEngineId()== 1){ //CEPEngine.ENGINE_TYPE_SIDDHI
             if(siddhiCal == null)
             {
-                siddhiCal = new SiddhiCostModelCalculator();
+                siddhiCal = new FastSiddhiCostModelCalculator();
             }
             return siddhiCal.calculateCost(q);
         }
