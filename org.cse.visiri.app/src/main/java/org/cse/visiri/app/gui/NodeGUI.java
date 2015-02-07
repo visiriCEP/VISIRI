@@ -145,16 +145,14 @@ public class NodeGUI implements GUICallback {
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
                     runningMode=2;
-                    node=new Node();
-                    setGUICallback();
+
                     ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 } else {
                     dispatcherPanel.setVisible(true);
                     nodePanel.setVisible(false);
                     //drawDispatcherTable(dispatcher.getQueries());
                     runningMode=1;
-                    dispatcher=new Dispatcher();
-                    setGUICallback();
+
                 }
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
@@ -165,12 +163,17 @@ public class NodeGUI implements GUICallback {
         startProcessingNodeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if(nodeTypeComboBox.getSelectedIndex()==0){
+                    node=new Node();
+                    setGUICallback();
                     node.initialize();
                     runningMode=2;
                     System.out.println("Node Started");
                     setStatusLabel("Node started");
                 }else{
+                    node=new Node();
+                    setGUICallback();
                     node.initialize();
                     RandomEvaluation ev = new RandomEvaluation();
                     java.util.List<Query> queryList= ev.getQueries();
@@ -234,6 +237,8 @@ public class NodeGUI implements GUICallback {
                 }else if(bufferingModeComboBox.getSelectedIndex()==1){
                     EventServer.setBufferingEnabled(false);
                 }
+                dispatcher=new Dispatcher();
+                setGUICallback();
                 dispatcher.initialize();
                 System.out.println("Dispatcher started");
                 setStatusLabel("Dispatcher started");
