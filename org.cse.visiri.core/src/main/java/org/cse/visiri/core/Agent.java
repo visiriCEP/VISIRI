@@ -72,7 +72,7 @@ public class Agent extends Thread {
             if(rateGap>Configuration.MAX_EVENT_RATE_GAP){
                 if(Environment.getInstance().checkDynamic2()) {
                     Environment.getInstance().disableDynamic2();
-                    transferEngines();
+                   // transferEngines();
                 }
             }
         }
@@ -94,6 +94,7 @@ public class Agent extends Thread {
             if(!Environment.getInstance().checkTransferInprogress()){
 
                  //checkUtilization();
+                checkEventComparison();
             }
             try {
                 sleep(Configuration.AGENT_UPDATE_PERIOD);

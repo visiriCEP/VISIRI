@@ -1,7 +1,6 @@
 package org.cse.visiri.algo.util;
 
 import com.sun.management.OperatingSystemMXBean;
-import org.cse.visiri.communication.Environment;
 import org.cse.visiri.util.Utilization;
 import org.hyperic.sigar.*;
 
@@ -12,7 +11,6 @@ import java.lang.management.ManagementFactory;
  */
 public class UtilizationUpdater {
     private Utilization utilization;
-
 
     public UtilizationUpdater(){
         this.utilization=new Utilization();
@@ -60,7 +58,6 @@ public class UtilizationUpdater {
         double tot=bean.getTotalPhysicalMemorySize();
 
         double perc=(free/tot)*100;     //free memory percentage
-
 
         return  perc;
 

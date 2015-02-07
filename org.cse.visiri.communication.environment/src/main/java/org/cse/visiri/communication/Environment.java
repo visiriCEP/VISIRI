@@ -80,7 +80,7 @@ public class Environment implements MessageListener {
 
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-        lock=hzInstance.getLock( "hazelLock" );
+        lock=hzInstance.getLock( hzInstance.getMap(EVENT_RATE_MAP) );
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -142,6 +142,7 @@ public class Environment implements MessageListener {
 
     public void setNodeEventRate( Double value) {
         lock.lock();
+
         try {
             hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
         } finally {

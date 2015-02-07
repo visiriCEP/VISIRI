@@ -291,7 +291,7 @@ public class NodeGUI implements GUICallback {
         JFrame frame = new JFrame("NodeGUI");
 
         try {
-            //UIManager.setLookAndFeel(new SyntheticaBlackStarLookAndFeel());
+           // UIManager.setLookAndFeel(new SyntheticaBlackStarLookAndFeel());
             //UIManager.setLookAndFeel(new NimbusLookAndFeel());
         } catch (Exception e) {
             e.printStackTrace();

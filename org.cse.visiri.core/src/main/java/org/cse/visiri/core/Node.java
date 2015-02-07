@@ -196,8 +196,6 @@ public class Node implements EnvironmentChangedCallback{
     @Override
     public void dynamicCompleted() {
 
-
-
     }
 
     public List<Query> getQueries() {
