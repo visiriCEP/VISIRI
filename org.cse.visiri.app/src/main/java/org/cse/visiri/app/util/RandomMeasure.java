@@ -1,8 +1,5 @@
-package org.cse.visiri.app;
+package org.cse.visiri.app.util;
 
-import org.cse.visiri.app.util.FilteredQueryGenerator;
-import org.cse.visiri.app.util.RandomQueryGenerator;
-import org.cse.visiri.app.util.Reader;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
@@ -13,7 +10,7 @@ import java.util.List;
 /**
  * Created by visiri on 12/6/14.
  */
-public class RandomEvaluation {
+public class RandomMeasure {
 
     private List<StreamDefinition> in,out;
     private  List<Query> queries;
@@ -21,18 +18,15 @@ public class RandomEvaluation {
     final int inAttrCntMin = 3, inAttrCntMax= 5;
     final int outAttrCntMin = 1, outAttrCntMax= 3;
     //final int inDefCount = 500, outDefCount = 50,queryCount=4000;
-    public RandomEvaluation()
+    public RandomMeasure()
     {
-        final int seed = 12;
-        final double filteringLevel = 4.1;
-
-        int inDefCount = Reader.readConfig().get("input_def_count"), outDefCount = Reader.readConfig().get("output_def_count"),queryCount=Reader.readConfig().get("query_count");
+        final int seed = 111;
+        final double filteringLevel = 3;
+        final int queryType =2;
+        int inDefCount = 100, outDefCount =20,queryCount=500;
 
         RandomQueryGenerator qg ;
-        qg = new FilteredQueryGenerator(seed,filteringLevel);
-
-
-
+        qg = new FilteredQueryGenerator(seed,filteringLevel,queryType);
 
         in= qg.generateDefinitions(inDefCount,inAttrCntMin,inAttrCntMax);
         out = qg.generateDefinitions(outDefCount,outAttrCntMin,outAttrCntMax);

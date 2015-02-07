@@ -23,7 +23,6 @@ public class Agent extends Thread {
     public Agent(EngineHandler engineHandler,UtilizationUpdater utilizationUpdater){
         environment = Environment.getInstance();
         this.engineHandler=engineHandler;
-        //this.utilizationUpdater=new UtilizationUpdater();
         this.utilizationUpdater=utilizationUpdater;
         this.utilizationUpdater.start();
         utilizationLevelQueue=new ArrayDeque<Double>();
@@ -36,6 +35,7 @@ public class Agent extends Thread {
         Double x=engineHandler.getEventRateStore().getAverageRate();
         System.out.println("Rate : "+ x);
        Environment.getInstance().setNodeEventRate(x);
+
     }
 
     private void checkEventRate(){
@@ -46,6 +46,33 @@ public class Agent extends Thread {
                   Environment.getInstance().disableDynamic2();
                   transferEngines();
                }
+            }
+        }
+    }
+
+    private void checkEventComparison(){
+
+        if(Environment.getInstance().checkDynamic2()){
+            Map<String, Double> ratesMap = Environment.getInstance().getNodeEventRates();
+            double sum=0;
+
+            List<Double> eventRateArray= (List<Double>) ratesMap.values();
+
+            for(Double value:eventRateArray){
+                sum+=value;
+            }
+
+            double averageValue=sum/eventRateArray.size();
+            double rateGap=ratesMap.get(Environment.getInstance().getNodeId())-averageValue;
+
+            System.out.println("My Rate="+ratesMap.get(Environment.getInstance().getNodeId()));
+            System.out.println("Avg Rate="+averageValue);
+
+            if(rateGap>Configuration.MAX_EVENT_RATE_GAP){
+                if(Environment.getInstance().checkDynamic2()) {
+                    Environment.getInstance().disableDynamic2();
+                    transferEngines();
+                }
             }
         }
     }
@@ -66,7 +93,6 @@ public class Agent extends Thread {
             if(!Environment.getInstance().checkTransferInprogress()){
 
                  //checkUtilization();
-
             }
             try {
                 sleep(Configuration.AGENT_UPDATE_PERIOD);
@@ -87,7 +113,7 @@ public class Agent extends Thread {
 
 
         if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-                       transferEngines();
+//                       transferEngines();
         }
     }
 
