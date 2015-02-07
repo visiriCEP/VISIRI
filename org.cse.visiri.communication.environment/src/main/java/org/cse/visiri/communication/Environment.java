@@ -56,7 +56,7 @@ public class Environment implements MessageListener {
     private EnvironmentChangedCallback changedCallback = null;
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
-    private Lock lock=null;
+
 
     // private static TransactionOptions options=null;
   //  private static TransactionContext transaction =null;
@@ -80,7 +80,7 @@ public class Environment implements MessageListener {
 
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-        lock=hzInstance.getLock( hzInstance.getMap(EVENT_RATE_MAP) );
+
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -141,8 +141,8 @@ public class Environment implements MessageListener {
 
 
     public void setNodeEventRate( Double value) {
+        Lock lock=hzInstance.getLock(EVENT_RATE_MAP);
         lock.lock();
-
         try {
             hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
         } finally {
