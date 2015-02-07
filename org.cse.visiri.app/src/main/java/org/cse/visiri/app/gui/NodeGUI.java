@@ -146,7 +146,7 @@ public class NodeGUI implements GUICallback {
                     nodePanel.setVisible(true);
                     runningMode=2;
 
-                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
+                    //ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 } else {
                     dispatcherPanel.setVisible(true);
                     nodePanel.setVisible(false);
