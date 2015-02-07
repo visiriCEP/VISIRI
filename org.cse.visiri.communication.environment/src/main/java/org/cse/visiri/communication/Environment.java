@@ -137,8 +137,8 @@ public class Environment implements MessageListener {
         hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
     }
 
-    public void setNodeEventRate(String nodeIp, Double value) {
-        hzInstance.getMap(EVENT_RATE_MAP).put(nodeIp, value);
+    public void setNodeEventRate( Double value) {
+        hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
@@ -244,6 +244,22 @@ public class Environment implements MessageListener {
 
     public Map<String, Double> getNodeEventRates() {
         return hzInstance.getMap(EVENT_RATE_MAP);
+    }
+
+    public Double getNodeEventRatesAverage() {
+
+        Map<String, Double> map= hzInstance.getMap(EVENT_RATE_MAP);
+        double sum=0;
+
+        List<Double> eventRateArray= (List<Double>) map.values();
+
+        for(Double value:eventRateArray){
+            sum+=value;
+        }
+
+        double averageValue=sum/eventRateArray.size();
+
+        return averageValue;
     }
 
     public void setNodeUtilizations(Utilization utilization) {

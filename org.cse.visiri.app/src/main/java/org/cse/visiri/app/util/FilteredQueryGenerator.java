@@ -5,6 +5,7 @@ import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +17,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
 
     private double complexity = 2;
     private final int maximumLengthWindow = 1000;
-
+    private int fixedQueryType = -1;
 
 
     public  FilteredQueryGenerator(int seed)
@@ -28,6 +29,46 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
         super(seed);
         this.complexity = complexity;
     }
+    public FilteredQueryGenerator(int seed,double complexity, int queryType)
+    {
+        super(seed);
+        this.complexity = complexity;
+        fixedQueryType = queryType;
+    }
+
+    protected int nextQueryType()
+    {
+        if(fixedQueryType < 0) {
+            int numTypes = 5;
+            return randomizer.nextInt(numTypes);
+        }
+        else {
+            return  fixedQueryType;
+        }
+    }
+
+    @Override
+    protected String newCondition(List<StreamDefinition.Attribute> attrs)
+    {
+        int attrIdx =  randomizer.nextInt(attrs.size());
+        String attrName = attrs.get(attrIdx).getName();
+        String op,valStr;
+        double value = randomizer.nextFloat() * 100;///(complexity/2.0);
+        if(randomizer.nextBoolean()) {
+            op = "<";
+            valStr = new DecimalFormat("#0.0#").format(value);
+        }
+        else
+        {
+            op = ">" ;
+         //   value = 100-value;
+            valStr = new DecimalFormat("#0.0#").format(value);
+        }
+        String cond = String.format("%s %s %s",attrName,op,valStr);
+
+        return cond;
+    }
+
     @Override
     protected Query generateQuery(List<StreamDefinition> inputs, List<StreamDefinition> outputs)
     {
@@ -37,14 +78,14 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
         StreamDefinition inputDef= inputs.get(inputIndex);
         StreamDefinition outputDef =outputs.get(outputIndex);
 
-        int numTypes = 5;
+        //int numTypes = 5;
         //Query types
         // 0: filter 1
         // 1: filter 2
         // 2: window
         // 3 4: window + filter 1
 
-        int queryType = randomizer.nextInt(numTypes);
+        int queryType =nextQueryType();
 
 
         String template = "from %s%s%s " +
@@ -52,7 +93,7 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
                 " insert into %s ";
 
         String varInput, varCondition,varWindow, varInAttr, varOutput;
-        varInput=varCondition=varWindow= varInAttr= varOutput="";
+        varCondition=varWindow= varInAttr= "";
 
         varInput = inputDef.getStreamId();
         varOutput = outputDef.getStreamId();
