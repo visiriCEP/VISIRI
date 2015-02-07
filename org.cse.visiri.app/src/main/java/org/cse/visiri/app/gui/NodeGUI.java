@@ -86,7 +86,7 @@ public class NodeGUI implements GUICallback {
         memoryChartPanel.setLayout(new GridLayout());
         memoryChartPanel.add(memoryChartFrame.getContentPanel());
         memoryChartPanel.repaint();
-
+//
         Thread t=new Thread(new Runnable() {
             public void run()
             {
@@ -244,6 +244,7 @@ public class NodeGUI implements GUICallback {
                 dispatcher.initialize();
                 System.out.println("Dispatcher started");
                 setStatusLabel("Dispatcher started");
+                dispatherStartButton.setEnabled(false);
             }
         });
     }
