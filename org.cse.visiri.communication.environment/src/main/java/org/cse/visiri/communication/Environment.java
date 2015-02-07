@@ -15,6 +15,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.Queue;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -55,8 +56,9 @@ public class Environment implements MessageListener {
     private EnvironmentChangedCallback changedCallback = null;
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
+    private Lock lock=null;
 
-   // private static TransactionOptions options=null;
+    // private static TransactionOptions options=null;
   //  private static TransactionContext transaction =null;
 
 
@@ -78,7 +80,7 @@ public class Environment implements MessageListener {
 
         Config cfg = new Config();
         hzInstance = Hazelcast.newHazelcastInstance(cfg);
-
+        hzInstance.getLock( "hazelLock" );
         bufferingEventList = new ArrayList<String>();
 
         topic = hzInstance.getTopic ("VISIRI");
@@ -102,9 +104,10 @@ public class Environment implements MessageListener {
         Map readyMap=hzInstance.getMap(NODE_READY_MAP);
 
         for(String ip :  nodes){
-            if(readyMap.get(ip)==null) {
+            if(readyMap.get(ip)==null){
                 return false;
             }
+
             else if(!(Boolean)readyMap.get(ip)){
                 return false;
             }
@@ -136,8 +139,16 @@ public class Environment implements MessageListener {
         hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
     }
 
-    public void setNodeEventRate(String nodeIp, Double value) {
-        hzInstance.getMap(EVENT_RATE_MAP).put(nodeIp, value);
+
+    public void setNodeEventRate( Double value) {
+        lock.lock();
+        try {
+            hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
+        } finally {
+            lock.unlock();
+        }
+
+
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
@@ -245,15 +256,20 @@ public class Environment implements MessageListener {
         return hzInstance.getMap(EVENT_RATE_MAP);
     }
 
-    public Double getNodeEventRatesAvg() {
+    public Double getNodeEventRatesAverage() {
+
         Map<String, Double> map= hzInstance.getMap(EVENT_RATE_MAP);
-        Double tot = 0D;
-        int n=0;
-        for(String key : map.keySet()){
-            tot+=map.get(key);
-            n++;
+        double sum=0;
+
+        List<Double> eventRateArray= (List<Double>) map.values();
+
+        for(Double value:eventRateArray){
+            sum+=value;
         }
-        return tot/n;
+
+        double averageValue=sum/eventRateArray.size();
+
+        return averageValue;
     }
 
     public void setNodeUtilizations(Utilization utilization) {
