@@ -86,7 +86,7 @@ public class NodeGUI implements GUICallback {
         memoryChartPanel.setLayout(new GridLayout());
         memoryChartPanel.add(memoryChartFrame.getContentPanel());
         memoryChartPanel.repaint();
-//
+
         Thread t=new Thread(new Runnable() {
             public void run()
             {
