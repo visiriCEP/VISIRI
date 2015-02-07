@@ -102,10 +102,9 @@ public class Environment implements MessageListener {
         Map readyMap=hzInstance.getMap(NODE_READY_MAP);
 
         for(String ip :  nodes){
-            if(readyMap.get(ip)==null){
+            if(readyMap.get(ip)==null) {
                 return false;
             }
-
             else if(!(Boolean)readyMap.get(ip)){
                 return false;
             }
@@ -137,8 +136,8 @@ public class Environment implements MessageListener {
         hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
     }
 
-    public void setNodeEventRate( Double value) {
-        hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
+    public void setNodeEventRate(String nodeIp, Double value) {
+        hzInstance.getMap(EVENT_RATE_MAP).put(nodeIp, value);
     }
 
     public void addQueryDistribution(QueryDistribution queryDistribution) {
@@ -246,20 +245,15 @@ public class Environment implements MessageListener {
         return hzInstance.getMap(EVENT_RATE_MAP);
     }
 
-    public Double getNodeEventRatesAverage() {
-
+    public Double getNodeEventRatesAvg() {
         Map<String, Double> map= hzInstance.getMap(EVENT_RATE_MAP);
-        double sum=0;
-
-        List<Double> eventRateArray= (List<Double>) map.values();
-
-        for(Double value:eventRateArray){
-            sum+=value;
+        Double tot = 0D;
+        int n=0;
+        for(String key : map.keySet()){
+            tot+=map.get(key);
+            n++;
         }
-
-        double averageValue=sum/eventRateArray.size();
-
-        return averageValue;
+        return tot/n;
     }
 
     public void setNodeUtilizations(Utilization utilization) {

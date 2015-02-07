@@ -28,6 +28,9 @@ public class RandomEvaluationNode {
 
         RandomEvaluation ev = new RandomEvaluation();
         List<Query> queryList= ev.getQueries();
+//        for (int i = 0; i <queryList.size() ; i++) {
+//            System.out.println(queryList.get(i).getQuery());
+//        }
         node.addQueries(queryList);
         HashMap<String,StreamDefinition> subscribeMap=new HashMap<String, StreamDefinition>();
 
