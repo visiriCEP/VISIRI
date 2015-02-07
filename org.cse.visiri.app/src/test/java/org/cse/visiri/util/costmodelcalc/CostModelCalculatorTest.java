@@ -83,7 +83,7 @@ public class CostModelCalculatorTest extends TestCase {
                 "insert into outStock;";
         Query query3=new Query(queryString3,defs,outputStreamDefinition,"3", Configuration.ENGINE_TYPE_SIDDHI);
 
-        String queryString4="from stock[Open > 25]#window.lengthBatch(1600 ) "+
+        String queryString4="from stock[Open > 25]#window.lengthBatch(1600 milliseconds ) "+
                 " select max(Open) as Open, avg(Open) as High "+
                 "insert into outStock2;";
         Query query4=new Query(queryString4,defs,outputStreamDefinition2,"4", Configuration.ENGINE_TYPE_SIDDHI);

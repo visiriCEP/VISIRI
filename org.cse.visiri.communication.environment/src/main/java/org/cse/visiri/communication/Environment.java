@@ -2,10 +2,6 @@ package org.cse.visiri.communication;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
-
-import com.hazelcast.transaction.TransactionContext;
-import com.hazelcast.transaction.TransactionOptions;
-import com.hazelcast.transaction.impl.Transaction;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
@@ -14,7 +10,6 @@ import org.cse.visiri.util.Utilization;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.Queue;
 
 /**
  * Created by Geeth on 2014-10-31.

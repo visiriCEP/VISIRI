@@ -1,6 +1,6 @@
 package org.cse.visiri.app.gui;
 
-import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
+//import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
@@ -283,7 +283,7 @@ public class NodeGUI implements GUICallback {
         JFrame frame = new JFrame("NodeGUI");
 
         try {
-            UIManager.setLookAndFeel(new SyntheticaBlackStarLookAndFeel());
+           // UIManager.setLookAndFeel(new SyntheticaBlackStarLookAndFeel());
             //UIManager.setLookAndFeel(new NimbusLookAndFeel());
         } catch (Exception e) {
             e.printStackTrace();

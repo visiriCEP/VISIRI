@@ -16,9 +16,10 @@ import java.util.List;
 public class FilteredQueryGenerator extends RandomQueryGenerator{
 
     private double complexity = 2;
-    private final int maximumLengthWindow = 1000;
+    private final int maximumLengthWindow = 2000;
     private int fixedQueryType = -1;
 
+    private final boolean timeMode = true;
 
     public  FilteredQueryGenerator(int seed)
     {
@@ -45,6 +46,25 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
         else {
             return  fixedQueryType;
         }
+    }
+
+    ///--------------- time vs length --------------
+
+    private String windowUnit = timeMode? " milliseconds":"";
+
+    protected String nextWindowType()
+    {
+        String normal,batch;
+        if(timeMode)
+        {
+            normal = "time" ;
+            batch = "timeBatch";
+        }
+        else {
+            normal = "length";
+            batch = "lengthBatch";
+        }
+        return (randomizer.nextFloat() > 0.88) ? normal:batch;
     }
 
     @Override
@@ -136,10 +156,10 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             }
             case 2: //window
             {
-                String type = randomizer.nextFloat() < 0.88 ? "lengthBatch" : "length";
-                int window = Math.min((int)(200*complexity),maximumLengthWindow);
+                String type = nextWindowType();
+                int window = Math.min((int)(300*complexity),maximumLengthWindow);
                 int batchCount = 5 + randomizer.nextInt(window);
-                varWindow="#window."+type+"("+batchCount+") ";
+                varWindow="#window."+type+"("+batchCount+windowUnit+") ";
 
                 List<String> inps = new ArrayList<String>();
                 for (int i = 0; i < outAttrs.size(); i++) {
@@ -158,10 +178,10 @@ public class FilteredQueryGenerator extends RandomQueryGenerator{
             {
                 String cond = generateMultipleConditions(inAttrs,(int)(2*complexity));
                 varCondition = "[" + cond + "]";
-                String type = randomizer.nextFloat() < 0.88 ? "lengthBatch" : "length";
-                int window = Math.min((int)(200*complexity),maximumLengthWindow);
+                String type = nextWindowType();
+                int window = Math.min((int)(300*complexity),maximumLengthWindow);
                 int batchCount = 5 + randomizer.nextInt(window);
-                varWindow="#window."+type+"("+batchCount+") ";
+                varWindow="#window."+type+"("+batchCount+windowUnit+") ";
 
                 List<String> inps = new ArrayList<String>();
 
