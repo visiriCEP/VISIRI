@@ -192,6 +192,8 @@ public class NodeGUI implements GUICallback {
                     }
 //        System.out.println("Starting in 30 seconds");
 //        Thread.sleep(40*1000);
+
+                    //
                     try {
                         runningMode=3;
                         node.start();
