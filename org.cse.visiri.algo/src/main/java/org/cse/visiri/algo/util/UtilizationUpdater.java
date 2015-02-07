@@ -1,7 +1,6 @@
 package org.cse.visiri.algo.util;
 
 import com.sun.management.OperatingSystemMXBean;
-import org.cse.visiri.communication.Environment;
 import org.cse.visiri.util.Utilization;
 import org.hyperic.sigar.*;
 
