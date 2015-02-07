@@ -62,7 +62,7 @@ public class Node implements EnvironmentChangedCallback{
 
     public void addQueries(List<Query> queries)
     {
-        int algoId=QueryDistributionAlgo.SCTXPF_ALGO;
+        int algoId=QueryDistributionAlgo.SCTXPF_PLUS_ALGO;
         CostModelCalculator costCal = new CostModelCalculator();
         if(algoId==QueryDistributionAlgo.SCTXPF_PLUS_ALGO) {
             System.out.print("Calculating costs...");
