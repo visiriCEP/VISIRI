@@ -90,7 +90,7 @@ public class DynamicSource_1 {
                 Event ev = generateEvent(def);
                 cl.sendEvent(ev);
             }
-            Thread.sleep(1);
+            //Thread.sleep(1);
             if(i % freq == 0)
             {
                 System.out.println("Sent " + i);

@@ -13,7 +13,6 @@ import java.lang.management.ManagementFactory;
 public class UtilizationUpdater {
     private Utilization utilization;
 
-
     public UtilizationUpdater(){
         this.utilization=new Utilization();
     }
@@ -60,7 +59,6 @@ public class UtilizationUpdater {
         double tot=bean.getTotalPhysicalMemorySize();
 
         double perc=(free/tot)*100;     //free memory percentage
-
 
         return  perc;
 
