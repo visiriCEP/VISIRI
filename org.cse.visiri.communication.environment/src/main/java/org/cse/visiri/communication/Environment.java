@@ -152,24 +152,24 @@ public class Environment implements MessageListener {
 
 
     public void setNodeEventRate( Double value) {
-        try {
-            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
-            lock.tryLock(1, TimeUnit.SECONDS);
-            try {
-                hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
-            } finally {
-                lock.unlock();
-            }
-        }catch(InterruptedException e){
-        }
-
-//        IMap map=hzInstance.getMap(EVENT_RATE_MAP);
-//        map.lock("1");
-//        try{
-//            map.put(getNodeId(),value);
-//        }finally {
-//            map.unlock("1");
+//        try {
+//            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
+//            lock.tryLock(1, TimeUnit.SECONDS);
+//            try {
+//                hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
+//            } finally {
+//                lock.unlock();
+//            }
+//        }catch(InterruptedException e){
 //        }
+
+        IMap map=hzInstance.getMap(EVENT_RATE_MAP);
+        map.lock(getNodeId());
+        try{
+            map.put(getNodeId(),value);
+        }finally {
+            map.unlock(getNodeId());
+        }
 
     }
 
