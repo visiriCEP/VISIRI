@@ -89,12 +89,12 @@ public class Agent extends Thread {
         System.out.println("Agent started . . .");
         while(true){
 
-            updateEventRate();
-            if(!Environment.getInstance().checkTransferInprogress()){
+            //updateEventRate();
+            //if(!Environment.getInstance().checkTransferInprogress()){
 
-                 //checkUtilization();
-                checkEventComparison();
-            }
+                 checkUtilization();
+               // checkEventComparison();
+         //   }
             try {
                 sleep(Configuration.AGENT_UPDATE_PERIOD);
             } catch (InterruptedException e) {
@@ -111,10 +111,9 @@ public class Agent extends Thread {
         count++;
         windowQueue.add(utilizationLevel);
         double utilizationLevelAvg=windowQueue.getAverage();
-
-
+        Environment.getInstance().setNodeUtilizations(utilization);  //this has to be changed
         if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-//                       transferEngines();
+                       transferEngines();
         }
     }
 
