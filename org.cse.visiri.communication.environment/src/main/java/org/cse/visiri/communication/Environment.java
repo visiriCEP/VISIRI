@@ -138,15 +138,12 @@ public class Environment implements MessageListener {
     }
 
     public void setNodeUtilization(String nodeIp, Double value) {
+        IMap map = hzInstance.getMap(UTILIZATION_MAP);
+        map.lock(nodeIp);
         try {
-            Lock lock = hzInstance.getLock(UTILIZATION_MAP);
-            lock.tryLock(1, TimeUnit.SECONDS);
-            try {
-                hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
-            } finally {
-                lock.unlock();
-            }
-        }catch(InterruptedException e){
+            hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+        } finally {
+            map.unlock(nodeIp);
         }
     }
 
