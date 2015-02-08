@@ -139,7 +139,7 @@ public class Environment implements MessageListener {
 
     public void setNodeUtilization(String nodeIp, Double value) {
         try {
-            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
+            Lock lock = hzInstance.getLock(UTILIZATION_MAP);
             lock.tryLock(1, TimeUnit.SECONDS);
             try {
                 hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
