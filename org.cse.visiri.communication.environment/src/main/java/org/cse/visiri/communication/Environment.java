@@ -128,7 +128,6 @@ public class Environment implements MessageListener {
         return (Integer.parseInt(hzInstance.getMap(NODE_LIST).get(getNodeId()).toString()));
     }
 
-
     public void setChangedCallback(EnvironmentChangedCallback callback) {
         this.changedCallback = callback;
     }
@@ -446,20 +445,16 @@ public class Environment implements MessageListener {
 
     public Boolean checkTransferInprogress(){
         boolean val=true;
+        IMap map = hzInstance.getMap(NEW_DISTRIBUTION);
         try {
-            Lock lock = hzInstance.getLock(NEW_DISTRIBUTION);
-            lock.tryLock(10, TimeUnit.MILLISECONDS);
-            try {
-                if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
-                    val=false;
-                }else{
-                    val= true;
-                }
-            } finally {
-                lock.unlock();
+            map.lockMap(500,TimeUnit.MILLISECONDS);
+            if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
+                val=false;
+            }else{
+                val= true;
             }
-        }catch(InterruptedException e){
-
+        } finally {
+            map.unlockMap();
         }
         return val;
     }
