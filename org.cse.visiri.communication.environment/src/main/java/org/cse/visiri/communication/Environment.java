@@ -15,7 +15,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+
+import static java.util.concurrent.TimeUnit.*;
 
 /**
  * Created by Geeth on 2014-10-31.
@@ -71,7 +74,6 @@ public class Environment implements MessageListener {
             File f = new File("VISIRI_check.txt");
             f.delete();
             System.out.println("Existing VISIRI_check file deleted !");
-
         }catch (Exception e){
             System.out.println("Check file not found !");
         }
@@ -136,25 +138,38 @@ public class Environment implements MessageListener {
     }
 
     public void setNodeUtilization(String nodeIp, Double value) {
-        hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+        try {
+            Lock lock = hzInstance.getLock(UTILIZATION_MAP);
+            lock.tryLock(1, TimeUnit.SECONDS);
+            try {
+                hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
+        }
     }
 
 
     public void setNodeEventRate( Double value) {
-//        Lock lock=hzInstance.getLock(EVENT_RATE_MAP);
-//        lock.lock();
-//        try {
-//            hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
-//        } finally {
-//            lock.unlock();
-//        }
-        IMap map=hzInstance.getMap(EVENT_RATE_MAP);
-        map.lock("1");
-        try{
-            map.put(getNodeId(),value);
-        }finally {
-            map.unlock("1");
+        try {
+            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
+            lock.tryLock(1, TimeUnit.SECONDS);
+            try {
+                hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
         }
+
+//        IMap map=hzInstance.getMap(EVENT_RATE_MAP);
+//        map.lock("1");
+//        try{
+//            map.put(getNodeId(),value);
+//        }finally {
+//            map.unlock("1");
+//        }
 
     }
 
@@ -433,11 +448,23 @@ public class Environment implements MessageListener {
 
 
     public Boolean checkTransferInprogress(){
-        if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
-            return false;
-        }else{
-            return true;
+        boolean val=true;
+        try {
+            Lock lock = hzInstance.getLock(NEW_DISTRIBUTION);
+            lock.tryLock(10, TimeUnit.MILLISECONDS);
+            try {
+                if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
+                    val=false;
+                }else{
+                    val= true;
+                }
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
+
         }
+        return val;
     }
 
 
