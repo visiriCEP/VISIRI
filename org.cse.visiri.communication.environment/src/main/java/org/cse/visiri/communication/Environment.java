@@ -144,21 +144,17 @@ public class Environment implements MessageListener {
 
 
     public void setNodeEventRate( Double value) {
-try {
-    Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
-    lock.tryLock(2, TimeUnit.SECONDS);
-    try {
-        hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
-    } finally {
         try {
-            lock.unlock();
-        } catch (IllegalMonitorStateException ex) {
-            // WARNING Critical section guarantee can be broken
-        }
-    }
-}catch(InterruptedException e){
+            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
+            lock.tryLock(1, TimeUnit.SECONDS);
+            try {
+                hzInstance.getMap(EVENT_RATE_MAP).put(getNodeId(), value);
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
 
-}
+        }
 
 
 
@@ -447,11 +443,23 @@ try {
 
 
     public Boolean checkTransferInprogress(){
-        if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
-            return false;
-        }else{
-            return true;
+        boolean val=true;
+        try {
+            Lock lock = hzInstance.getLock(NEW_DISTRIBUTION);
+            lock.tryLock(10, TimeUnit.MILLISECONDS);
+            try {
+                if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
+                    val=false;
+                }else{
+                    val= true;
+                }
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
+
         }
+        return val;
     }
 
 
