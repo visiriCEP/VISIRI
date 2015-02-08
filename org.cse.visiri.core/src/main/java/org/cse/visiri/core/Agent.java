@@ -89,7 +89,7 @@ public class Agent extends Thread {
         System.out.println("Agent started . . .");
         while(true){
 
-            //updateEventRate();
+            updateEventRate();
             //if(!Environment.getInstance().checkTransferInprogress()){
 
                  checkUtilization();
@@ -113,7 +113,7 @@ public class Agent extends Thread {
         double utilizationLevelAvg=windowQueue.getAverage();
         Environment.getInstance().setNodeUtilizations(utilization);  //this has to be changed
         if(utilizationLevelAvg>=Configuration.UTILIZATION_THRESHOULD){
-                       transferEngines();
+                       //transferEngines();
         }
     }
 
