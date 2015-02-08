@@ -90,11 +90,11 @@ public class Agent extends Thread {
         while(true){
 
             updateEventRate();
-            //if(!Environment.getInstance().checkTransferInprogress()){
+            if(!Environment.getInstance().checkTransferInprogress()){
 
                  checkUtilization();
                // checkEventComparison();
-         //   }
+            }
             try {
                 sleep(Configuration.AGENT_UPDATE_PERIOD);
             } catch (InterruptedException e) {
