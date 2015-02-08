@@ -74,7 +74,6 @@ public class Environment implements MessageListener {
             File f = new File("VISIRI_check.txt");
             f.delete();
             System.out.println("Existing VISIRI_check file deleted !");
-
         }catch (Exception e){
             System.out.println("Check file not found !");
         }
@@ -139,7 +138,16 @@ public class Environment implements MessageListener {
     }
 
     public void setNodeUtilization(String nodeIp, Double value) {
-        hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+        try {
+            Lock lock = hzInstance.getLock(EVENT_RATE_MAP);
+            lock.tryLock(1, TimeUnit.SECONDS);
+            try {
+                hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+            } finally {
+                lock.unlock();
+            }
+        }catch(InterruptedException e){
+        }
     }
 
 
@@ -153,10 +161,7 @@ public class Environment implements MessageListener {
                 lock.unlock();
             }
         }catch(InterruptedException e){
-
         }
-
-
 
 //        IMap map=hzInstance.getMap(EVENT_RATE_MAP);
 //        map.lock("1");
