@@ -49,8 +49,8 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         Map<String,Set<String>> nodeEventTypes = new HashMap<String, Set<String>>();
         Map<String,Double> costs = new HashMap<String, Double>();
         List<String> dispatcherList = new ArrayList<String>(env.getNodeIdList(Environment.NODE_TYPE_DISPATCHER));
-        Map<String,Double> nodeEventRates = env.getNodeEventRates();
-
+//        Map<String,Double> nodeEventRates = env.getNodeEventRates();
+        Map<String,Double> nodeEventRates = new HashMap<String, Double>();
         for(String str: nodeList)
         {
             //calculate costs of each node
@@ -187,6 +187,10 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         double minRate = Double.MIN_VALUE;
         for(String node : candidateNodes)
         {
+            if(!nodeEventRates.containsKey(node))
+            {
+                nodeEventRates.put(node,0.0);
+            }
             if(minRate < nodeEventRates.get(node))
             {
                 minRate = nodeEventRates.get(node);
