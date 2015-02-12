@@ -103,12 +103,13 @@ public class Agent extends Thread {
 
     public void run(){
         System.out.println("Agent started . . .");
+        while(agentEnabled){
 
         while(true){
             updateEventRate();
             //if(!Environment.getInstance().checkTransferInprogress()){
-               // checkManualDynamic();
-               // checkUtilization();
+                checkManualDynamic();
+               //  checkUtilization();
                // checkEventComparison();
             //}
             try {
