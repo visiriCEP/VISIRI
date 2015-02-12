@@ -512,7 +512,7 @@ public class Evaluation {
     public List<Query> getFireQueries(){
         List<Query> queryList=new ArrayList<Query>();
 
-        String q1 = "from temparature[temparature > 150] " +
+        String q1 = "from temparature[temparature > 90] " +
                 "select roomId,floorNumber,90 as fireIntensity " +
                 "insert into Fire;";
         Query query1=new Query(q1,getFireInputDefinitionList(),getFireOutputDefinition(),"1",Configuration.ENGINE_TYPE_SIDDHI);
@@ -537,6 +537,30 @@ public class Evaluation {
         Query query4=new Query(q4,getFireInputDefinitionList(),getFireOutputDefinition(),"4",Configuration.ENGINE_TYPE_SIDDHI);
         queryList.add(query4);
 
+        String q5=" from e1=smokeLevel[smokeLevel >= 90] -> e2=temparature[temparature >= 80]\n" +
+                "select e1.roomId,e1.floorNumber, 60 as fireIntensity\n" +
+                "insert into Fire";
+        Query query5=new Query(q5,getFireInputDefinitionList(),getFireOutputDefinition(),"5",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query5);
+
+        String q6=" from e1=smokeLevel[smokeLevel >= 60] -> e2=temparature[temparature >= 90]\n" +
+                "select e1.roomId,e1.floorNumber, 80 as fireIntensity\n" +
+                "insert into Fire";
+        Query query6=new Query(q6,getFireInputDefinitionList(),getFireOutputDefinition(),"6",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query6);
+
+
+        String q7="from temparature[temparature > 60] \" +\n" +
+                "                \"select roomId,floorNumber,60 as fireIntensity \" +\n" +
+                "                \"insert into Fire;";
+        Query query7=new Query(q7,getFireInputDefinitionList(),getFireOutputDefinition(),"7",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query7);
+
+        String q8="from smokeLevel[smokeLevel>55] \" +\n" +
+                "                \"select roomId,floorNumber, 50 as fireIntensity \" +\n" +
+                "                \"insert into Fire;";
+        Query query8=new Query(q8,getFireInputDefinitionList(),getFireOutputDefinition(),"8",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query8);
 
         return queryList;
     }
