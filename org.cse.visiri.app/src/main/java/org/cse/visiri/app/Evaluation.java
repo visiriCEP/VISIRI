@@ -509,5 +509,53 @@ public class Evaluation {
         return qList;
     }
 
+    public List<Query> getFireQueries(){
+        List<Query> queryList=new ArrayList<Query>();
 
+        String q1 = "from temparature[temparature > 150] " +
+                "select roomId,floorNumber,\"high\" as fireIntensity " +
+                "insert into Fire;";
+        Query query1=new Query(q1,getFireInputDefinitionList(),getFireOutputDefinition(),"1",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query1);
+
+        String q2 = "from smokeLevel[smokeLevel>75] " +
+                "select roomId,floorNumber,\"high\" as fireIntensity " +
+                "insert into Fire;";
+        Query query2=new Query(q1,getFireInputDefinitionList(),getFireOutputDefinition(),"1",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query2);
+
+        return queryList;
     }
+
+    public List<StreamDefinition> getFireInputDefinitionList(){
+        List<StreamDefinition> streamDefinitionList=new ArrayList<StreamDefinition>();
+        StreamDefinition inputStreamDef = new StreamDefinition();
+        inputStreamDef.setStreamId("temparature");
+
+        inputStreamDef.addAttribute("temparatureSensorId", StreamDefinition.Type.INTEGER);
+        inputStreamDef.addAttribute("roomId",StreamDefinition.Type.STRING);
+        inputStreamDef.addAttribute("temparature", StreamDefinition.Type.FLOAT);
+        inputStreamDef.addAttribute("floorNumber", StreamDefinition.Type.INTEGER);
+
+        StreamDefinition inputStreamDecision2=new StreamDefinition();
+        inputStreamDecision2.setStreamId("smokeLevel");
+
+        inputStreamDecision2.addAttribute("smokeSensorId", StreamDefinition.Type.INTEGER);
+        inputStreamDecision2.addAttribute("roomId", StreamDefinition.Type.STRING);
+        inputStreamDecision2.addAttribute("floorNumber", StreamDefinition.Type.INTEGER);
+        inputStreamDecision2.addAttribute("smokeLevel", StreamDefinition.Type.INTEGER);
+
+        streamDefinitionList.add(inputStreamDef);
+
+        return streamDefinitionList;
+    }
+    public StreamDefinition getFireOutputDefinition(){
+        StreamDefinition streamDefinition=new StreamDefinition();
+        streamDefinition.setStreamId("Fire");
+        streamDefinition.addAttribute("roomId", StreamDefinition.Type.STRING);
+        streamDefinition.addAttribute("floorNumber",StreamDefinition.Type.INTEGER);
+        streamDefinition.addAttribute("fireIntensity",StreamDefinition.Type.STRING);
+
+        return streamDefinition;
+    }
+}

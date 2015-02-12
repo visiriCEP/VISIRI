@@ -21,4 +21,6 @@ public interface GUICallback {
     public void queriesChanged();
     public void newEnginesRecieved(String from);
     public void bufferingStart();
+    public void dynamicCompleted();
+    public void dispathcerStarted();
 }

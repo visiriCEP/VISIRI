@@ -47,7 +47,7 @@ public class NodeGUI implements GUICallback {
                                 //3-random evaluation node
 
     private JComboBox selectionComboBox;
-    private JButton startButton;
+    private JButton selectButton;
     private JButton stopButton;
     private JPanel mainPanel;
     private JPanel selectedPanel;
@@ -62,10 +62,10 @@ public class NodeGUI implements GUICallback {
     private JTabbedPane tabbedGraphPanel;
     private JProgressBar cpuProgressBar;
     private JProgressBar memoryProgressBar;
-    private JProgressBar networkProgressBar;
+
     private JLabel cpuPresentageLabel;
     private JLabel memoryPresentageLabel;
-    private JLabel networkPresentageLabel;
+
     private JPanel memoryChartPanel;
     private JPanel dispatherTabelPanel;
     private JPanel processorTabelPanel;
@@ -74,6 +74,7 @@ public class NodeGUI implements GUICallback {
     private JLabel statusLabel;
     private JComboBox bufferingModeComboBox;
     private JButton dispatherStartButton;
+    private JLabel runningModeLabel;
 
 
     private ChartFrame throughputChartFrame;
@@ -90,7 +91,7 @@ public class NodeGUI implements GUICallback {
         nodePanel.setVisible(false);
 
         tabbedGraphPanel.setVisible(false);
-        throughputChartFrame =new ChartFrame("Throughput");
+        throughputChartFrame =new ChartFrame("Event Rate");
         memoryChartFrame=new ChartFrame("Memory",100);
 
         throughputChartLoadPanel.setLayout(new GridLayout());
@@ -101,6 +102,8 @@ public class NodeGUI implements GUICallback {
         memoryChartPanel.add(memoryChartFrame.getContentPanel());
         memoryChartPanel.repaint();
 //
+        ipAddressLabel.setVisible(false);
+        runningModeLabel.setVisible(false);
         Thread t=new Thread(new Runnable() {
             public void run()
             {
@@ -108,7 +111,6 @@ public class NodeGUI implements GUICallback {
                     double memory=0;
                     double throughput=0;
                     double cpu=0;
-                    double network=0;
                     UtilizationUpdater uu=null;
                     EventRateStore rs=null;
                     if(runningMode==1){
@@ -131,14 +133,14 @@ public class NodeGUI implements GUICallback {
                     try {
                         Utilization u=uu.update();
                         memory = 100-u.getFreeMemoryPercentage();
-                        cpu=u.getJVMCpuUtilization();
+                        cpu=u.getRecentCpuUsage();
                         throughput=rs.getAverageRate();
                     }catch(NullPointerException e){
 
                     }
                     throughputChartFrame.refreshChart(throughput);
                     memoryChartFrame.refreshChart(memory);
-                    setUtilizationValues((int)cpu,(int)memory,(int)network);
+                    setUtilizationValues((int)cpu,(int)memory);
 
                     try {
                         Thread.sleep(1000);
@@ -151,27 +153,37 @@ public class NodeGUI implements GUICallback {
         t.start();
 
 
-        startButton.addActionListener(new ActionListener() {
+        selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setStatusLabel("Starting...");
+                setStatusLabel("selecting...");
                 if (selectionComboBox.getSelectedIndex() == 0) {
+                    runningModeLabel.setText("Dispatcher Node");
+                    runningModeLabel.setVisible(true);
+                    ipAddressLabel.setVisible(true);
+
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
-                    runningMode=2;
-
-                    //ipAddressLabel.setText(Environment.getInstance().getNodeId());
+                    runningMode = 2;
+                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 } else {
+                    runningModeLabel.setText("Processing Node");
+                    runningModeLabel.setVisible(true);
+                    ipAddressLabel.setVisible(true);
+
                     dispatcherPanel.setVisible(true);
                     nodePanel.setVisible(false);
+                    bufferingModeComboBox.setEnabled(true);
                     //drawDispatcherTable(dispatcher.getQueries());
-                    runningMode=1;
-
+                    runningMode = 1;
+                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 }
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
-                startButton.setEnabled(false);
+                selectButton.setEnabled(false);
                 stopButton.setEnabled(true);
+                stopButton.setText("Deselect");
+                setStatusLabel("selected", 2);
             }
         });
         startProcessingNodeButton.addActionListener(new ActionListener() {
@@ -219,6 +231,7 @@ public class NodeGUI implements GUICallback {
                 }
                 nodeTypeComboBox.setEnabled(false);
                 startProcessingNodeButton.setEnabled(false);
+                stopButton.setText("Stop");
 
 
             }
@@ -237,10 +250,16 @@ public class NodeGUI implements GUICallback {
                 dispatcherPanel.setVisible(false);
                 nodePanel.setVisible(false);
                 selectionComboBox.setEnabled(true);
-                startButton.setEnabled(true);
+                selectButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 nodeTypeComboBox.setEnabled(true);
                 startProcessingNodeButton.setEnabled(true);
+                tabbedGraphPanel.setVisible(false);
+                runningModeLabel.setVisible(false);
+                ipAddressLabel.setVisible(false);
+                processorTableScrollPane=null;
+                dispatcherTableScrollPane=null;
+                Environment.getInstance().stop();
                 System.out.println("Stopped");
                 setStatusLabel("Stopped");
             }
@@ -259,6 +278,8 @@ public class NodeGUI implements GUICallback {
                 System.out.println("Dispatcher started");
                 setStatusLabel("Dispatcher started");
                 dispatherStartButton.setEnabled(false);
+                bufferingModeComboBox.setEnabled(false);
+                stopButton.setText("Stop");
             }
         });
     }
@@ -277,7 +298,7 @@ public class NodeGUI implements GUICallback {
         }
     }
 
-    public void setUtilizationValues(int cpu,int memory,int network){
+    public void setUtilizationValues(int cpu,int memory){
         cpuProgressBar.setValue(cpu);
         cpuPresentageLabel.setText(cpu+"%");
         if(cpu>75)
@@ -292,18 +313,11 @@ public class NodeGUI implements GUICallback {
         }else{
             memoryProgressBar.setForeground(Color.lightGray);
         }
-        networkProgressBar.setValue(network);
-        networkPresentageLabel.setText(network+"%");
-        if(network>75){
-            networkProgressBar.setForeground(Color.red);
-        }else {
-            networkProgressBar.setForeground(Color.lightGray);
-        }
+
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("NodeGUI");
-
         try {
            // UIManager.setLookAndFeel(new SyntheticaBlackStarLookAndFeel());
             //UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -318,82 +332,77 @@ public class NodeGUI implements GUICallback {
         frame.setContentPane(new NodeGUI().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(800,400);
+        frame.setSize(1000,400);
         frame.setVisible(true);
     }
 
     public void drawDispatcherTable(List<Query> queryList1){
-        if(dispatcherTableScrollPane==null) {
-            Object rowData[][] = new Object[queryList1.size()][2];
 
-            int i=0;
-            List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
-            ///Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
+        Object rowData[][] = new Object[queryList1.size()][2];
 
-            for(Query q : queryList1){
-                ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
-            }
+        int i=0;
+        List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
+        ///Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
 
-            Map<String,List<String>> destinationNodeMap;
+        for(Query q : queryList1){
+            ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
+        }
 
-            //Have to check about whether dispatcher or processing node
-            if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
-                destinationNodeMap=Environment.getInstance().getEventNodeMapping();
-            }else {
-                destinationNodeMap=Environment.getInstance().getSubscriberMapping();
-            }
+        Map<String,List<String>> destinationNodeMap;
+
+        //Have to check about whether dispatcher or processing node
+        if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
+            destinationNodeMap=Environment.getInstance().getEventNodeMapping();
+        }else {
+            destinationNodeMap=Environment.getInstance().getSubscriberMapping();
+        }
 
 
-            for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
-                String streamId = streamDefinition.getStreamId();
-                List<String> nodeIpList=destinationNodeMap.get(streamId);
-                if(nodeIpList != null) {
-                    rowData[i][0]=streamId;
-                    for (String nodeIp : nodeIpList) {
-                        if(rowData[i][1]!=null) {
-                            rowData[i][1] = rowData[i][1] + ", " + nodeIp;
-                        }else{
-                            rowData[i][1] = nodeIp;
-                        }
+        for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
+            String streamId = streamDefinition.getStreamId();
+            List<String> nodeIpList=destinationNodeMap.get(streamId);
+            if(nodeIpList != null) {
+                rowData[i][0]=streamId;
+                for (String nodeIp : nodeIpList) {
+                    if(rowData[i][1]!=null) {
+                        rowData[i][1] = rowData[i][1] + ", " + nodeIp;
+                    }else{
+                        rowData[i][1] = nodeIp;
                     }
-                    i++;
                 }
+                i++;
             }
-            Object columnNames[] = {"Stream", "Node"};
-            JTable table = new JTable(rowData, columnNames);
+        }
+        Object columnNames[] = {"Stream", "Node"};
+        JTable table = new JTable(rowData, columnNames);
 
-            dispatcherTableScrollPane = new JScrollPane(table);
-            //dispatcherTableScrollPane.setViewportView(table);
-            dispatcherTableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            dispatherTabelPanel.setLayout(new GridLayout());
+        dispatcherTableScrollPane = new JScrollPane(table);
+        //dispatcherTableScrollPane.setViewportView(table);
+        dispatcherTableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        dispatherTabelPanel.setLayout(new GridLayout());
+        if(dispatcherTableScrollPane==null) {
             dispatherTabelPanel.add(dispatcherTableScrollPane);
         }
+        dispatcherTableScrollPane.repaint();
+        dispatcherTableScrollPane.revalidate();
+        dispatherTabelPanel.repaint();
+        dispatherTabelPanel.revalidate();
+
     }
 
     public void drawProcessorTable(List<Query> queryList1) {
 
-        Object rowData[][] = new Object[queryList1.size()][2];
+        Object rowData[][] = new Object[queryList1.size()][3];
 
-//            rowData[0][0]="query0";
-//            rowData[0][1]="from cseEventStream[price==foo.price and foo.try>5 in foo] " +
-//                    "select symbol, avg(price) as avgPrice";
-//
-//            rowData[1][0]="query1";
-//            rowData[1][1]="from car [Id>=10]#window.time(1000) select brand,Id insert into filterCar;";
-//
-//            rowData[2][0]="query2";
-//            rowData[2][1]="from ABC " +
-//                "[ Att1 >= 50 ] select Att1 " +
-//                "insert into DER;";
-//
         int i=0;
         for(Query q:queryList1){
             rowData[i][0]=q.getQueryId();
             rowData[i][1]=q.getQuery();
+            rowData[i][2]=q.getCost();
             i++;
         }
 
-        Object columnNames[] = {"QueryId", "Query"};
+        Object columnNames[] = {"QueryId", "Query","Cost"};
         JTable table = new JTable(rowData, columnNames);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         if (processorTableScrollPane == null) {
@@ -423,7 +432,17 @@ public class NodeGUI implements GUICallback {
 
     @Override
     public void newEnginesRecieved(String from) {
-        setStatusLabel("New Engines received from "+from);
+//        if(runningMode==1){
+//            if(dispatcher!=null) {
+//                drawDispatcherTable(dispatcher.getQueries());
+//            }
+//        }else
+        if(runningMode==2||runningMode==3){
+            if(node!=null) {
+                drawProcessorTable(node.getQueries());
+            }
+        }
+        setStatusLabel("New Engines received from "+from,60);
     }
 
     @Override
@@ -431,17 +450,42 @@ public class NodeGUI implements GUICallback {
         setStatusLabel("Buffering started");
     }
 
+    @Override
+    public void dynamicCompleted() {
+        if(runningMode==1) {
+            if (dispatcher != null) {
+                drawDispatcherTable(dispatcher.getQueries());
+            }
+        }
+//        }else if(runningMode==2||runningMode==3){
+//            if(node!=null) {
+//                drawProcessorTable(node.getQueries());
+//            }
+//        }
+        setStatusLabel("Dynamic completed",60);
+    }
+
+    @Override
+    public void dispathcerStarted() {
+        setStatusLabel("Dispatcher ready",60);
+    }
+
     public void setStatusLabel(final String statusText){
+        setStatusLabel(statusText,60);
+    }
+    public void setStatusLabel(final String statusText, final int timeoutInSecs){
         statusLabel.setText("Status: "+statusText);
         Thread t=new Thread(){
             @Override
             public void run() {
                 try{
-                    Thread.sleep(10000);
+                    Thread.sleep(timeoutInSecs*1000);
                 }catch (InterruptedException e){
 
                 }
-                statusLabel.setText("");
+                if(statusLabel.getText().equals("Status: "+statusText)) {
+                    statusLabel.setText("");
+                }
             }
         };
         t.start();

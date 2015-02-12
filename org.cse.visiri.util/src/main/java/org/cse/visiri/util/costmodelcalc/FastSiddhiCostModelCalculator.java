@@ -32,7 +32,7 @@ public class FastSiddhiCostModelCalculator extends SiddhiCostModelCalculator {
     public FastSiddhiCostModelCalculator()
     {
         filterPattern = Pattern.compile("[<>]");
-        windowPattern = Pattern.compile("\\(\\s*([0-9]*).*\\)");
+        windowPattern = Pattern.compile("#window\\.[a-zA-Z]+\\(\\s*([0-9]+).*\\)");
     }
 
     @Override

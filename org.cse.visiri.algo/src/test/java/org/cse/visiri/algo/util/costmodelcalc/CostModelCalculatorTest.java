@@ -1,5 +1,6 @@
 package org.cse.visiri.algo.util.costmodelcalc;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
@@ -44,7 +45,8 @@ public class CostModelCalculatorTest extends TestCase {
         Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         double b=new CostModelCalculator().calculateCost(query1);
-        System.out.println(b);
+        //System.out.println(b);
+        Assert.assertTrue("window cost value negative",b>0);
     }
 
     public void testCalculateWindowCost2() throws Exception {
@@ -97,11 +99,10 @@ public class CostModelCalculatorTest extends TestCase {
         inputStreamDefinitionList.add(inputStreamDefinition1);
         String queryString="from cseEventStream[price==foo.price and foo.try>5 in foo] " +
                 "select symbol, avg(price) as avgPrice ";
-
-                //"from car [Id>=10]#window.time(1000) select brand,Id insert into filterCar;";
-//                "from StockExchangeStream[symbol == 'WSO2']#window.time( 1 year ) \n" +
-//                        "select max(price) as maxPrice, avg(price) as avgPrice, min(price) as minPrice\n" +
-//                        "insert into WSO2StockQuote for all-events ";
+//"from car [Id>=10]#window.time(1000) select brand,Id insert into filterCar;";
+        String queryString2="from StockExchangeStream[symbol == 'WSO2']#window.time( 1 year ) \n" +
+                        "select max(price) as maxPrice, avg(price) as avgPrice, min(price) as minPrice\n" +
+                        "insert into WSO2StockQuote for all-events ";
 //        "from ABC " +
 //                "[ Att1 >= 50 ] select Att1 " +
 //                "insert into DER;");
@@ -118,8 +119,10 @@ public class CostModelCalculatorTest extends TestCase {
         outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
 
         Query query1=new Query(queryString,inputStreamDefinitionList,outputStreamDefinition,"1", Configuration.ENGINE_TYPE_SIDDHI,1.0);
+        Query query2=new Query(queryString2,inputStreamDefinitionList,outputStreamDefinition,"2",Configuration.ENGINE_TYPE_SIDDHI,1.0);
 
         double b=new CostModelCalculator().calculateCost(query1);
-        System.out.println(b);
+        double b2=new CostModelCalculator().calculateCost(query2);
+        Assert.assertTrue("query two has small cost value",b<b2);
     }
 }

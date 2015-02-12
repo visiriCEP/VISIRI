@@ -48,8 +48,8 @@ public class UtilizationUpdater {
         utilization.setAverageSystemLoad(systemRecentUsage);
         utilization.setRecentCpuUsage(recentCpuUsage);
 
-        //double freeMemoryPercentage=getMemoryUsingMXBeans();
-        double freeMemoryPercentage=getMemoryUsingSigar();
+        double freeMemoryPercentage=getMemoryUsingMXBeans();
+        //double freeMemoryPercentage=getMemoryUsingSigar();
         utilization.setFreeMemoryPercentage(freeMemoryPercentage);
 
         return utilization;

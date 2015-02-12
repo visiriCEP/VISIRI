@@ -142,6 +142,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
             }
         }
         System.out.println("Disp started");
+        if(guiCallback!=null){
+            guiCallback.dispathcerStarted();
+        }
     }
 
     private void removeStreamDefinitions(String senderId){
@@ -183,6 +186,9 @@ public class Dispatcher implements EnvironmentChangedCallback {
         }
         //finally clear the environment
         engineHandler.eventServerBufferStop();
+        if(guiCallback!=null){
+            guiCallback.dynamicCompleted();
+        }
         Environment.getInstance().clearChangedQueries();
     }
 

@@ -28,9 +28,12 @@ public class RandomSource {
 
     public void start() throws  Exception
     {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the sink Ip :");
+        String sinkIp=sc.nextLine();
 
-        cl =// new EventClient("169.254.190.2:6666",getDefinitions());
-        new EventClient("localhost:7211",getDefinitions());
+        cl = new EventClient(sinkIp+":7211",getDefinitions());
+        //new EventClient("localhost:7211",getDefinitions());
         //7211
     }
 
