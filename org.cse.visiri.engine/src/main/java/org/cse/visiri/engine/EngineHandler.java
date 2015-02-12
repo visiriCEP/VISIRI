@@ -184,9 +184,10 @@ public class EngineHandler {
             //persist the siddhi engine
             //TODO use revision key
 
-            String revisionKey=(String)siddhiCEPEngine.saveState();
 
+           // String revisionKey=(String)siddhiCEPEngine.saveState();
             siddhiCEPEngine.stop();
+
             //removing query from all the lists and maps in EngineHandler
             queryList.remove(query);
             nodeQueryMap.put(myNode,queryList);
@@ -300,7 +301,7 @@ public class EngineHandler {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
         System.out.println("query "+n+"is about to resore");
-        cepEngine.restoreEngine();
+      //  cepEngine.restoreEngine();
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
 

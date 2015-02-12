@@ -21,7 +21,7 @@ public class Configuration {
 
     private static int nodeType;
     public final static int INSTANT_EVENT_COUNT=100;
-    public final static int AVERAGE_EVENT_COUNT=20000;
+    public final static int AVERAGE_EVENT_COUNT=2000;
     public final static int MAX_EVENT_RATE=5000;
     public final static int MAX_EVENT_RATE_GAP=500;
     public final static int AGENT_UPDATE_PERIOD=8000;
