@@ -388,6 +388,7 @@ public class NodeGUI implements GUICallback {
         if(addPane){
             dispatherTabelPanel.add(dispatcherTableScrollPane);
         }
+
         dispatcherTableScrollPane.repaint();
         dispatcherTableScrollPane.revalidate();
         dispatherTabelPanel.repaint();
