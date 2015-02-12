@@ -377,13 +377,18 @@ public class NodeGUI implements GUICallback {
         Object columnNames[] = {"Stream", "Node"};
         JTable table = new JTable(rowData, columnNames);
 
+        boolean addPane=false;
+        if(dispatcherTableScrollPane==null) {
+            addPane=true;
+        }
         dispatcherTableScrollPane = new JScrollPane(table);
         //dispatcherTableScrollPane.setViewportView(table);
         dispatcherTableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         dispatherTabelPanel.setLayout(new GridLayout());
-        if(dispatcherTableScrollPane==null) {
+        if(addPane){
             dispatherTabelPanel.add(dispatcherTableScrollPane);
         }
+
         dispatcherTableScrollPane.repaint();
         dispatcherTableScrollPane.revalidate();
         dispatherTabelPanel.repaint();
