@@ -550,15 +550,15 @@ public class Evaluation {
         queryList.add(query6);
 
 
-        String q7="from temparature[temparature > 60] \" +\n" +
-                "                \"select roomId,floorNumber,60 as fireIntensity \" +\n" +
-                "                \"insert into Fire;";
+        String q7="from temparature[temparature > 60]  \n" +
+                " select roomId,floorNumber,60 as fireIntensity  \n" +
+                " insert into Fire;";
         Query query7=new Query(q7,getFireInputDefinitionList(),getFireOutputDefinition(),"7",Configuration.ENGINE_TYPE_SIDDHI);
         queryList.add(query7);
 
-        String q8="from smokeLevel[smokeLevel>55] \" +\n" +
-                "                \"select roomId,floorNumber, 50 as fireIntensity \" +\n" +
-                "                \"insert into Fire;";
+        String q8="from smokeLevel[smokeLevel>55] \n" +
+                " select roomId,floorNumber, 50 as fireIntensity  \n" +
+                " insert into Fire;";
         Query query8=new Query(q8,getFireInputDefinitionList(),getFireOutputDefinition(),"8",Configuration.ENGINE_TYPE_SIDDHI);
         queryList.add(query8);
 

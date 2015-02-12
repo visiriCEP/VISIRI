@@ -228,4 +228,9 @@ public class Node implements EnvironmentChangedCallback{
     public void setGuiCallback(GUICallback guiCallback) {
         this.guiCallback = guiCallback;
     }
+
+    public void setAgentEnabled(boolean agentEnabled){
+        agent.setAgentEnabled(agentEnabled);
+    }
+
 }

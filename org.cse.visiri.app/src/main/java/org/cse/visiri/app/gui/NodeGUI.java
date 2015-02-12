@@ -20,6 +20,7 @@ package org.cse.visiri.app.gui;
 import org.cse.visiri.algo.util.UtilizationUpdater;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
+import org.cse.visiri.app.util.Reader;
 import org.cse.visiri.communication.Environment;
 import org.cse.visiri.communication.eventserver.server.EventServer;
 import org.cse.visiri.core.Dispatcher;
@@ -75,6 +76,7 @@ public class NodeGUI implements GUICallback {
     private JComboBox bufferingModeComboBox;
     private JButton dispatherStartButton;
     private JLabel runningModeLabel;
+    private JComboBox comboBox1;
 
 
     private ChartFrame throughputChartFrame;
@@ -195,6 +197,7 @@ public class NodeGUI implements GUICallback {
                     node=new Node();
                     setGUICallback();
                     node.initialize();
+                    setAgentEnabled();
                     runningMode=2;
                     System.out.println("Node Started");
                     setStatusLabel("Node started");
@@ -236,6 +239,7 @@ public class NodeGUI implements GUICallback {
 
 
             }
+
         });
         stopButton.addActionListener(new ActionListener() {
             @Override
@@ -308,7 +312,7 @@ public class NodeGUI implements GUICallback {
             cpuProgressBar.setForeground(Color.lightGray);
 
         memoryProgressBar.setValue(memory);
-        memoryPresentageLabel.setText(memory+"%");
+        memoryPresentageLabel.setText(memory + "%");
         if(memory>75){
             memoryProgressBar.setForeground(Color.red);
         }else{
@@ -495,5 +499,12 @@ public class NodeGUI implements GUICallback {
             }
         };
         t.start();
+    }
+    private void setAgentEnabled() {
+        if(Reader.readConfig().get("agent_enabled")==0){
+            node.setAgentEnabled(false);
+        }else{
+            node.setAgentEnabled(true);
+        }
     }
 }
