@@ -17,9 +17,10 @@
 package org.cse.visiri.util;
 
 
-import org.cse.visiri.util.Query;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 
 //TODO have to optimize the query selection
@@ -54,7 +55,7 @@ public class TransferbleQuery {
         queryArray= (Query[]) queryList.toArray(new Query[0]);
     }
 
-    public List<Query> detectTransferbleQuery(double[] eventRates,List<Query> qList){
+    public List<Query> detectTransferbleQuery(final double[] eventRates, final List<Query> qList){
         updateQueryArray(qList);
         List<Query> queryList=new ArrayList<Query>();
         if(eventRates.length!=queryArray.length){
@@ -64,27 +65,21 @@ public class TransferbleQuery {
 
         int size=queryArray.length;
 
-        double[] costArray=new double[size];
-        double[] costRateValueArray=new double[size];
-        Map<Double,Query> costRateQueryMap=new HashMap<Double, Query>();
-
-        int i=0;
-        for(Query query:queryArray){
-
-            costArray[i]=query.getCost();
-            costRateValueArray[i]=eventRates[i]*costArray[i];  // cost * eventRate
-           // costRateValueArray[i]=eventRates[i]; //just the event rate for dynamic test only
-            costRateQueryMap.put(costRateValueArray[i],query);
-            i++;
-        }
-
-        Arrays.sort(costRateValueArray);
+        Arrays.sort(queryArray,new Comparator<Query>() {
+            @Override
+            public int compare(Query o1, Query o2) {
+                double c1 = o1.getCost() *eventRates[qList.indexOf(o1)];
+                double c2 = o2.getCost() * eventRates[qList.indexOf(o2)];
+                double diff = (c1-c2) * 1000;
+                return (int) diff;
+            }
+        });
 
         int minIndex=(int)(size*(9.0/20));
         int maxIndex=(int)(size*(11.0/20));                          //get the middle 10% of the queries
 
         for(int j=minIndex;j<maxIndex;j++){
-            queryList.add(costRateQueryMap.get(costRateValueArray[j]));
+            queryList.add(queryArray[j]);
         }
 
         return queryList;
