@@ -32,6 +32,7 @@ public class Agent extends Thread {
     private WindowQueue windowQueue;
     private double memCount;
     private int count;
+    private boolean agentEnabled;
 
     public Agent(EngineHandler engineHandler,UtilizationUpdater utilizationUpdater){
         environment = Environment.getInstance();
@@ -100,7 +101,7 @@ public class Agent extends Thread {
 
     public void run(){
         System.out.println("Agent started . . .");
-        while(true){
+        while(agentEnabled){
 
             updateEventRate();
             //if(!Environment.getInstance().checkTransferInprogress()){
@@ -165,4 +166,7 @@ public class Agent extends Thread {
         return memCount/count;
     }
 
+    public void setAgentEnabled(boolean agentEnabled) {
+        this.agentEnabled = agentEnabled;
+    }
 }

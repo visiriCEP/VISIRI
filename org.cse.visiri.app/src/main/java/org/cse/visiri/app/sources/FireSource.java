@@ -44,7 +44,7 @@ public class FireSource {
         for(StreamDefinition def:defs) {
             //StreamDefinition def = defs.get(2);
             System.out.println("\nSending " + def.getStreamId() + " :");
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 1000; i++) {
                 Event ev = new Event();
                 ev.setStreamId(def.getStreamId());
                 Object[] dat = new Object[def.getAttributeList().size()];
