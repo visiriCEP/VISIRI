@@ -18,6 +18,7 @@ package org.cse.visiri.app.gui;
 
 //import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
 import org.cse.visiri.algo.util.UtilizationUpdater;
+import org.cse.visiri.app.Evaluation;
 import org.cse.visiri.app.RandomEvaluation;
 import org.cse.visiri.app.gui.chartpanel.ChartFrame;
 import org.cse.visiri.app.util.Reader;
@@ -76,7 +77,7 @@ public class NodeGUI implements GUICallback {
     private JComboBox bufferingModeComboBox;
     private JButton dispatherStartButton;
     private JLabel runningModeLabel;
-    private JComboBox comboBox1;
+    private JComboBox evaluationCaseCombo;
 
 
     private ChartFrame throughputChartFrame;
@@ -106,6 +107,8 @@ public class NodeGUI implements GUICallback {
 //
         ipAddressLabel.setVisible(false);
         runningModeLabel.setVisible(false);
+        evaluationCaseCombo.setVisible(false);
+
         Thread t=new Thread(new Runnable() {
             public void run()
             {
@@ -197,7 +200,7 @@ public class NodeGUI implements GUICallback {
                     node=new Node();
                     setGUICallback();
                     node.initialize();
-                    setAgentEnabled();
+                    //setAgentEnabled();
                     runningMode=2;
                     System.out.println("Node Started");
                     setStatusLabel("Node started");
@@ -205,8 +208,15 @@ public class NodeGUI implements GUICallback {
                     node=new Node();
                     setGUICallback();
                     node.initialize();
-                    RandomEvaluation ev = new RandomEvaluation();
-                    java.util.List<Query> queryList= ev.getQueries();
+                    java.util.List<Query> queryList=null;
+                    if(evaluationCaseCombo.getSelectedIndex()==0) {
+                        RandomEvaluation ev = new RandomEvaluation();
+                        queryList= ev.getQueries();
+                    }else if(evaluationCaseCombo.getSelectedIndex()==1){
+                        Evaluation ev=new Evaluation();
+                        queryList=ev.getFireQueries();
+                    }
+
                     node.addQueries(queryList);
                     HashMap<String,StreamDefinition> subscribeMap=new HashMap<String, StreamDefinition>();
 
@@ -285,6 +295,18 @@ public class NodeGUI implements GUICallback {
                 dispatherStartButton.setEnabled(false);
                 bufferingModeComboBox.setEnabled(false);
                 stopButton.setText("Stop");
+            }
+        });
+        nodeTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(nodeTypeComboBox.getSelectedIndex()==0){
+                    evaluationCaseCombo.setEnabled(false);
+                    evaluationCaseCombo.setVisible(false);
+                }else {
+                    evaluationCaseCombo.setEnabled(true);
+                    evaluationCaseCombo.setVisible(true);
+                }
             }
         });
     }
@@ -501,6 +523,7 @@ public class NodeGUI implements GUICallback {
         t.start();
     }
     private void setAgentEnabled() {
+        System.out.println(Reader.readConfig().get("agent_enabled"));
         if(Reader.readConfig().get("agent_enabled")==0){
             node.setAgentEnabled(false);
         }else{

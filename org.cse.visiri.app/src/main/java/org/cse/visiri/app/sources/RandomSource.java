@@ -29,7 +29,7 @@ public class RandomSource {
     public void start() throws  Exception
     {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the sink Ip :");
+        System.out.println("Enter the dispathcer Ip :");
         String sinkIp=sc.nextLine();
 
         cl = new EventClient(sinkIp+":7211",getDefinitions());
