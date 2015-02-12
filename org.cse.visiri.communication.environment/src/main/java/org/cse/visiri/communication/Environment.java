@@ -50,6 +50,8 @@ public class Environment implements MessageListener {
     private static HazelcastInstance hzInstance = null;
     private static Environment instance = null;
 
+    private String nodeId;
+
 
     // private static TransactionOptions options=null;
   //  private static TransactionContext transaction =null;
@@ -128,11 +130,14 @@ public class Environment implements MessageListener {
 
     public void setNodeUtilization(String nodeIp, Double value) {
         IMap map = hzInstance.getMap(UTILIZATION_MAP);
-        map.lock(nodeIp);
-        try {
-            hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
-        } finally {
-            map.unlock(nodeIp);
+        if(map.tryLock(nodeIp,100,TimeUnit.MILLISECONDS)) {
+            try {
+                hzInstance.getMap(UTILIZATION_MAP).put(nodeIp, value);
+            } finally {
+                try {
+                    map.unlock(nodeIp);
+                }catch (OperationTimeoutException e){}
+            }
         }
     }
 
@@ -150,11 +155,14 @@ public class Environment implements MessageListener {
 //        }
 
         IMap map=hzInstance.getMap(EVENT_RATE_MAP);
-        map.lock(getNodeId());
-        try{
-            map.put(getNodeId(),value);
-        }finally {
-            map.unlock(getNodeId());
+        if(map.tryLock(getNodeId(), 100, TimeUnit.MILLISECONDS)) {
+            try {
+                map.put(getNodeId(), value);
+            } finally {
+                try {
+                    map.unlock(getNodeId());
+                }catch (OperationTimeoutException e){}
+            }
         }
 
     }
@@ -248,7 +256,10 @@ public class Environment implements MessageListener {
     }
 
     public String getNodeId() {
-        return hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
+        if(nodeId==null) {
+            nodeId=hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
+        }
+        return nodeId;
     }
 
     public Map<String, List<Query>> getNodeQueryMap() {
