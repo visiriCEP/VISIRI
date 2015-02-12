@@ -33,6 +33,7 @@ public class Agent extends Thread {
     private double memCount;
     private int count;
     private boolean agentEnabled;
+    private boolean transferEnabled;
 
     public Agent(EngineHandler engineHandler,UtilizationUpdater utilizationUpdater){
         environment = Environment.getInstance();
@@ -43,6 +44,7 @@ public class Agent extends Thread {
         windowQueue=new WindowQueue(6);
         this.memCount=0;
         this.count=0;
+        this.transferEnabled=false;
     }
 
     private void updateEventRate(){
@@ -133,19 +135,21 @@ public class Agent extends Thread {
 
     private void transferEngines(){
 
-            TransferbleEngine TREngines=engineHandler.getTransferableEngines();
-            Map<String,List<Query>> transferableEngines=TREngines.getNodeTransferbleQueryMap();
-            Set<StreamDefinition> removableEngines=TREngines.getCompletlyRemovedEvents();
+        if(transferEnabled==false) {
+            transferEnabled=true;
+            TransferbleEngine TREngines = engineHandler.getTransferableEngines();
+            Map<String, List<Query>> transferableEngines = TREngines.getNodeTransferbleQueryMap();
+            Set<StreamDefinition> removableEngines = TREngines.getCompletlyRemovedEvents();
 
             Environment.getInstance().addRemovablesToDispatcher(removableEngines);
 
-            System.out.println("\nSelected nodes : "+transferableEngines.size());
+            System.out.println("\nSelected nodes : " + transferableEngines.size());
 
-            for(String ip : transferableEngines.keySet()){
-                List<Query> queries=transferableEngines.get(ip);
-                System.out.println("ip - "+ip+" : "+ queries.size());
+            for (String ip : transferableEngines.keySet()) {
+                List<Query> queries = transferableEngines.get(ip);
+                System.out.println("ip - " + ip + " : " + queries.size());
 
-                for(Query query : queries){
+                for (Query query : queries) {
                     System.out.println(query.getQueryId());
 
 //                    for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()){
@@ -160,6 +164,7 @@ public class Agent extends Thread {
             Environment.getInstance().createNewTransferable(transferableEngines);
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_ENGINE_PASS);
             System.out.println("\nENGINE_PASS Message sent");
+        }
     }
 
     public double getOverallAverageMemory(){
