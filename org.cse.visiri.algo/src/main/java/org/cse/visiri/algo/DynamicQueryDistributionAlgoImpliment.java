@@ -111,7 +111,12 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         double minUtil = Double.MAX_VALUE;
         for(String node : candidateNodes)
         {
-            double util = utilizations.get(node).getFreeMemoryPercentage();
+            double util=50;
+            try {
+                 util = utilizations.get(node).getFreeMemoryPercentage();
+            }catch(NullPointerException ex){
+
+            }
             util = 100 - util;
             if(util < minUtil)
             {
