@@ -513,16 +513,30 @@ public class Evaluation {
         List<Query> queryList=new ArrayList<Query>();
 
         String q1 = "from temparature[temparature > 150] " +
-                "select roomId,floorNumber,\"high\" as fireIntensity " +
+                "select roomId,floorNumber,90 as fireIntensity " +
                 "insert into Fire;";
         Query query1=new Query(q1,getFireInputDefinitionList(),getFireOutputDefinition(),"1",Configuration.ENGINE_TYPE_SIDDHI);
         queryList.add(query1);
 
         String q2 = "from smokeLevel[smokeLevel>75] " +
-                "select roomId,floorNumber,\"high\" as fireIntensity " +
+                "select roomId,floorNumber, 70 as fireIntensity " +
                 "insert into Fire;";
-        Query query2=new Query(q1,getFireInputDefinitionList(),getFireOutputDefinition(),"1",Configuration.ENGINE_TYPE_SIDDHI);
+        Query query2=new Query(q2,getFireInputDefinitionList(),getFireOutputDefinition(),"2",Configuration.ENGINE_TYPE_SIDDHI);
         queryList.add(query2);
+
+        String q3="from temparature[temparature >= 70]#window.time(5min) \n" +
+                " select roomId,floorNumber, avg(temparature) as fireIntensity\n" +
+                " having fireIntensity>50 \n" +
+                " insert into Fire for expired-events ";
+        Query query3=new Query(q3,getFireInputDefinitionList(),getFireOutputDefinition(),"3",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query3);
+
+        String q4="from smokeLevel[smokeLevel>75]#window.firstUnique(roomId) \n" +
+                "select roomId,floorNumber, 20 as fireIntensity\n" +
+                "insert into Fire ";
+        Query query4=new Query(q4,getFireInputDefinitionList(),getFireOutputDefinition(),"4",Configuration.ENGINE_TYPE_SIDDHI);
+        queryList.add(query4);
+
 
         return queryList;
     }
@@ -537,6 +551,8 @@ public class Evaluation {
         inputStreamDef.addAttribute("temparature", StreamDefinition.Type.FLOAT);
         inputStreamDef.addAttribute("floorNumber", StreamDefinition.Type.INTEGER);
 
+        streamDefinitionList.add(inputStreamDef);
+
         StreamDefinition inputStreamDecision2=new StreamDefinition();
         inputStreamDecision2.setStreamId("smokeLevel");
 
@@ -545,7 +561,7 @@ public class Evaluation {
         inputStreamDecision2.addAttribute("floorNumber", StreamDefinition.Type.INTEGER);
         inputStreamDecision2.addAttribute("smokeLevel", StreamDefinition.Type.INTEGER);
 
-        streamDefinitionList.add(inputStreamDef);
+        streamDefinitionList.add(inputStreamDecision2);
 
         return streamDefinitionList;
     }
@@ -554,7 +570,7 @@ public class Evaluation {
         streamDefinition.setStreamId("Fire");
         streamDefinition.addAttribute("roomId", StreamDefinition.Type.STRING);
         streamDefinition.addAttribute("floorNumber",StreamDefinition.Type.INTEGER);
-        streamDefinition.addAttribute("fireIntensity",StreamDefinition.Type.STRING);
+        streamDefinition.addAttribute("fireIntensity",StreamDefinition.Type.INTEGER);
 
         return streamDefinition;
     }
