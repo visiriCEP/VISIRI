@@ -34,32 +34,13 @@ public class NodeTest extends TestCase {
 
     public void testMainNode() throws Exception {
         node.initialize();
-
-        Scanner sc = new Scanner(System.in);
-       // System.out.println("");
-       int command =   1;//sc.nextInt();
+        int command =   1;//sc.nextInt();
 
         if(command != 1)
         {
             return;
         }
 
-//        // query 1
-//        StreamDefinition inputStreamDefinition1=new StreamDefinition();
-//        inputStreamDefinition1.setStreamId("car");
-//        inputStreamDefinition1.addAttribute("brand", StreamDefinition.Type.STRING);
-//        inputStreamDefinition1.addAttribute("Id", StreamDefinition.Type.INTEGER);
-//        inputStreamDefinition1.addAttribute("value", StreamDefinition.Type.INTEGER);
-//
-//        List<StreamDefinition> inputStreamDefinitionList=new ArrayList<StreamDefinition>();
-//        inputStreamDefinitionList.add(inputStreamDefinition1);
-//        String queryString="from car select brand,Id insert into filterCar;";
-//
-//        StreamDefinition outputStreamDefinition=new StreamDefinition();
-//        outputStreamDefinition.setStreamId("filterCar");
-//        outputStreamDefinition.addAttribute("brand", StreamDefinition.Type.STRING);
-//        outputStreamDefinition.addAttribute("Id", StreamDefinition.Type.INTEGER);
-//
         List<StreamDefinition> defs = new ArrayList<StreamDefinition>();
 
         StreamDefinition inputStreamDefinition1=new StreamDefinition();
@@ -88,27 +69,6 @@ public class NodeTest extends TestCase {
         outputStreamDefinition2.addAttribute("Open", StreamDefinition.Type.FLOAT);
         outputStreamDefinition2.addAttribute("High", StreamDefinition.Type.FLOAT);
 
-
-//        StreamDefinition outputStreamDefinition2=new StreamDefinition();
-//        outputStreamDefinition2.setStreamId("outStock2");
-//        outputStreamDefinition2.addAttribute("Index", StreamDefinition.Type.INTEGER);
-//        outputStreamDefinition2.addAttribute("Close", StreamDefinition.Type.FLOAT);
-//        outputStreamDefinition2.addAttribute("Low", StreamDefinition.Type.FLOAT);
-        //query 2
-//        StreamDefinition def1=new StreamDefinition();
-//        def1.setStreamId("ABC");
-//        def1.addAttribute("Att1", StreamDefinition.Type.INTEGER);
-//        def1.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-//
-//        List<StreamDefinition> inputStreamDefinitionList2=new ArrayList<StreamDefinition>();
-//        inputStreamDefinitionList2.add(def1);
-//        //String queryString2="from  ABC [ Att1 >= 50 ] select Att1, Att2 insert into StockQuote;";
-//        String queryString2="from  ABC select Att1, Att2 insert into StockQuote;";
-//        StreamDefinition outputDef=new StreamDefinition();
-//        outputDef.setStreamId("StockQuote");
-//        outputDef.addAttribute("Att1", StreamDefinition.Type.INTEGER);
-//        outputDef.addAttribute("Att2", StreamDefinition.Type.FLOAT);
-
         String queryString="from stock " +
                 "select Index,Open,High,Low,Close,Volume,Date " +
                 "insert into outStock;";
@@ -130,15 +90,7 @@ public class NodeTest extends TestCase {
                 " select max(Open) as Open, avg(Open) as High "+
                 "insert into outStock2;";
         Query query4=new Query(queryString4,defs,outputStreamDefinition2,"4", Configuration.ENGINE_TYPE_SIDDHI);
-//
-//
-////        String queryString5="from stock[Open>25]#window.length(2000) join"+
-////                "inputStream2#window.time(500)"+
-////                "select *"+
-////                "insert into outStock;";
-////        Query query5=new Query(queryString5,defs,outputStreamDefinition,"5", Configuration.ENGINE_TYPE_SIDDHI);
-//
-//
+
         String queryString5="from stock[Open > 25]#window.timeBatch( 1 hour ) "+
                 "select max(Open) as Open, avg(Open) as High "+
                 " insert into outStock2;";
@@ -157,20 +109,11 @@ public class NodeTest extends TestCase {
                 "insert into outStock2";
         Query query7=new Query(queryString7,defs,outputStreamDefinition2,"7", Configuration.ENGINE_TYPE_SIDDHI);
 
-        //--- add queries
         List<Query> queries = Arrays.asList(query1,query2,query3,query4,query5,query6,query7);
         node.addQueries(queries);
         node.subscribeToStream("outStock",Environment.getInstance().getNodeId()+":6666" );
         node.subscribeToStream("outStock2",Environment.getInstance().getNodeId()+":6666" );
 
-
-        System.out.println("Starting in 5 seconds");
-        Thread.sleep(5*1000);
-
-        node.start();
-
-        System.out.println("Started");
-        sc.next();
     }
 
     public void testSubNode() throws Exception {
@@ -205,33 +148,7 @@ public class NodeTest extends TestCase {
 
        }
        environment.sendEvent(Environment.EVENT_TYPE_QUERIES_CHANGED);
-//       while(node.recievedEvent==0){}
-//       assertEquals(Environment.EVENT_TYPE_QUERIES_CHANGED,node.recievedEvent);
-//
-//        node.recievedEvent=0;
-//        environment.sendEvent(Environment.EVENT_TYPE_BUFFERING_START);
-//        while(node.recievedEvent==0){}
-//        assertEquals(Environment.EVENT_TYPE_BUFFERING_START,node.recievedEvent);
-//
-//        node.recievedEvent=0;
-//        environment.sendEvent(Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED);
-//        while(node.recievedEvent==0){}
-//        assertEquals(Environment.EVENT_TYPE_EVENTSUBSCIBER_CHANGED,node.recievedEvent);
 
-//        node.recievedEvent=0;
-//        environment.sendEvent(Environment.EVENT_TYPE_NODES_CHANGED);
-//        while(node.recievedEvent==0){}
-//        assertEquals(Environment.EVENT_TYPE_NODES_CHANGED,node.recievedEvent);
-
-//        node.recievedEvent=0;
-//        environment.sendEvent(Environment.EVENT_TYPE_NODE_START);
-//        while(node.recievedEvent==0){}
-//        assertEquals(Environment.EVENT_TYPE_NODE_START,node.recievedEvent);
-
-//        node.recievedEvent=0;
-//        environment.sendEvent(Environment.EVENT_TYPE_NODE_STOP);
-//        while(node.recievedEvent==0){}
-//        assertEquals(Environment.EVENT_TYPE_NODE_STOP,node.recievedEvent);
     }
 
     public void testNodesChanged() throws Exception {
