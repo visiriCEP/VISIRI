@@ -291,6 +291,7 @@ public class EngineHandler {
 
         if(!Environment.getInstance().checkTransferInprogress()){
             Environment.getInstance().sendEvent(Environment.EVENT_TYPE_DISPATCHER_NOTIFICATION);
+            System.out.println("Dynamic completed message sent");
         }
         System.out.println("\nQuery adding completed");
     }

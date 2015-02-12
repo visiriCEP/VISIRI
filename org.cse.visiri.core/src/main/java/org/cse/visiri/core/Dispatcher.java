@@ -186,6 +186,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
         }
         //finally clear the environment
         engineHandler.eventServerBufferStop();
+        System.out.println("Buffering Stopped");
         if(guiCallback!=null){
             guiCallback.dynamicCompleted();
         }
