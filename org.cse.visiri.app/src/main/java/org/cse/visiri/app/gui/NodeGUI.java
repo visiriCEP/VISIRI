@@ -165,7 +165,7 @@ public class NodeGUI implements GUICallback {
                     dispatcherPanel.setVisible(false);
                     nodePanel.setVisible(true);
                     runningMode = 2;
-                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
+
                 } else {
                     runningModeLabel.setText("Processing Node");
                     runningModeLabel.setVisible(true);
@@ -176,8 +176,9 @@ public class NodeGUI implements GUICallback {
                     bufferingModeComboBox.setEnabled(true);
                     //drawDispatcherTable(dispatcher.getQueries());
                     runningMode = 1;
-                    ipAddressLabel.setText(Environment.getInstance().getNodeId());
+
                 }
+                ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
                 selectButton.setEnabled(false);
