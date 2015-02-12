@@ -178,7 +178,7 @@ public class NodeGUI implements GUICallback {
                     runningMode = 1;
 
                 }
-                ipAddressLabel.setText(Environment.getInstance().getNodeId());
+                //ipAddressLabel.setText(Environment.getInstance().getNodeId());
                 tabbedGraphPanel.setVisible(true);
                 selectionComboBox.setEnabled(false);
                 selectButton.setEnabled(false);

@@ -255,6 +255,7 @@ public class Environment implements MessageListener {
         instance=null;
     }
 
+
     public String getNodeId() {
         if(nodeId==null) {
             nodeId=hzInstance.getCluster().getLocalMember().getInetSocketAddress().getHostString();
@@ -449,7 +450,7 @@ public class Environment implements MessageListener {
         IMap map = hzInstance.getMap(NEW_DISTRIBUTION);
         try {
             map.lockMap(500,TimeUnit.MILLISECONDS);
-            if(hzInstance.getMap(NEW_DISTRIBUTION).size()==0){
+            if(map.size()==0){
                 val=false;
             }else{
                 val= true;
