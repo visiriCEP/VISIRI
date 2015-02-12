@@ -284,7 +284,7 @@ public class EngineHandler {
                 this.dynamicAddQuery(query,++n);
             } catch (Exception e) {
                 System.err.println("Dynamic : Failed to add new query" );
-                //e.printStackTrace();
+                e.printStackTrace();
             }
         }
         Environment.getInstance().clearNewAddedQueries();
