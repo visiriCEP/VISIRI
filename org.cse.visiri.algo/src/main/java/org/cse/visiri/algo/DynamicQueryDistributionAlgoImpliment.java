@@ -111,7 +111,12 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         double minUtil = Double.MAX_VALUE;
         for(String node : candidateNodes)
         {
-            double util = utilizations.get(node).getFreeMemoryPercentage();
+            double util=50;
+            try {
+                 util = utilizations.get(node).getFreeMemoryPercentage();
+            }catch(NullPointerException ex){
+
+            }
             util = 100 - util;
             if(util < minUtil)
             {
@@ -123,7 +128,13 @@ public class DynamicQueryDistributionAlgoImpliment extends DynamicQueryDistribut
         for(Iterator<String> iter = candidateNodes.iterator() ; iter.hasNext() ;)
         {
             String nodeId = iter.next();
-            double util = 100 - utilizations.get(nodeId).getFreeMemoryPercentage();
+            double util=50;
+            try {
+                util = 100 - utilizations.get(nodeId).getFreeMemoryPercentage();
+            }catch (NullPointerException e){
+
+            }
+
             if(util  > minUtil + utilizationThreshold)
             {
                 iter.remove();
