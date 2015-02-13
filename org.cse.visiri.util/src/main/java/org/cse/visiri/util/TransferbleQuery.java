@@ -73,8 +73,11 @@ public class TransferbleQuery {
             }
         });
 
-        int minIndex=(int)(size*(9.0/20));
-        int maxIndex=(int)(size*(11.0/20));                  //get the middle 10% of the queries
+        //int minIndex=(int)(size*(9.0/20));
+        //int maxIndex=(int)(size*(11.0/20));                  //get the middle 10% of the queries
+
+        int minIndex=(int)(size*(3.0/10));
+        int maxIndex=(int)(size*(7.0/10));
 
         for(int j=minIndex;j<maxIndex;j++){
             queryList.add(queryArray[j]);

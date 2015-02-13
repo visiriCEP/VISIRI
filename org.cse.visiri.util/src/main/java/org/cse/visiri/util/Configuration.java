@@ -25,7 +25,7 @@ public class Configuration {
     public final static int MAX_EVENT_RATE=5000;
     public final static int MAX_EVENT_RATE_GAP=500;
     public final static int AGENT_UPDATE_PERIOD=8000;
-    public final static Double UTILIZATION_THRESHOULD=80.0;
+    public final static Double UTILIZATION_THRESHOULD=90.0;
     public final static int ENGINE_TYPE_DIRECT=0;
     public final static int ENGINE_TYPE_SIDDHI=1;
 
