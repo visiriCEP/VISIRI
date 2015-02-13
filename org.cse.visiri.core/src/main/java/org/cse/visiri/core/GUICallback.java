@@ -19,7 +19,7 @@ package org.cse.visiri.core;
 
 public interface GUICallback {
     public void queriesChanged();
-    public void newEnginesRecieved(String from);
+    public void newEnginesRecieved(String from,int queryCount);
     public void bufferingStart();
     public void dynamicCompleted();
     public void dispathcerStarted();

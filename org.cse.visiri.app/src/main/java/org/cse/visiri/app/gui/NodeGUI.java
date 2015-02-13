@@ -138,7 +138,7 @@ public class NodeGUI implements GUICallback {
                     try {
                         Utilization u=uu.update();
                         memory = 100-u.getFreeMemoryPercentage();
-                        cpu=u.getRecentCpuUsage();
+                        cpu=u.getJVMCpuUtilization();
                         throughput=rs.getAverageRate();
                     }catch(NullPointerException e){
 
@@ -216,7 +216,7 @@ public class NodeGUI implements GUICallback {
                         Evaluation ev=new Evaluation();
                         queryList=ev.getFireQueries();
                     }
-
+                    evaluationCaseCombo.setEnabled(false);
                     node.addQueries(queryList);
                     HashMap<String,StreamDefinition> subscribeMap=new HashMap<String, StreamDefinition>();
 
@@ -240,8 +240,8 @@ public class NodeGUI implements GUICallback {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                    System.out.println("Random Evaluation Node started");
-                    setStatusLabel("Random evaluation node started");
+                    System.out.println("3Random Evaluation Node started");
+                    setStatusLabel("Main node started");
                 }
                 nodeTypeComboBox.setEnabled(false);
                 startProcessingNodeButton.setEnabled(false);
@@ -365,40 +365,20 @@ public class NodeGUI implements GUICallback {
 
     public void drawDispatcherTable(List<Query> queryList1){
 
-        Object rowData[][] = new Object[queryList1.size()][2];
-
+        Object rowData[][] = new Object[queryList1.size()][2]; //creates a 2d array to keep the table
+        Map<String, List<String>> nodeQueryMap=Environment.getInstance().getEventNodeMapping();
         int i=0;
-        List<StreamDefinition> ouputStreamDefinitionList=new ArrayList<StreamDefinition>();
-        ///Map<String,List<StreamDefinition>> nodeStreamDefinitionListMap=new HashMap<String, List<StreamDefinition>>();
-
-        for(Query q : queryList1){
-            ouputStreamDefinitionList.add(q.getOutputStreamDefinition());
-        }
-
-        Map<String,List<String>> destinationNodeMap;
-
-        //Have to check about whether dispatcher or processing node
-        if(Environment.getInstance().getNodeType()==Environment.NODE_TYPE_DISPATCHER){
-            destinationNodeMap=Environment.getInstance().getEventNodeMapping();
-        }else {
-            destinationNodeMap=Environment.getInstance().getSubscriberMapping();
-        }
-
-
-        for(StreamDefinition streamDefinition : ouputStreamDefinitionList){
-            String streamId = streamDefinition.getStreamId();
-            List<String> nodeIpList=destinationNodeMap.get(streamId);
-            if(nodeIpList != null) {
-                rowData[i][0]=streamId;
-                for (String nodeIp : nodeIpList) {
-                    if(rowData[i][1]!=null) {
-                        rowData[i][1] = rowData[i][1] + ", " + nodeIp;
-                    }else{
-                        rowData[i][1] = nodeIp;
-                    }
+        for(String streamId:nodeQueryMap.keySet()){
+            rowData[i][0] = streamId;
+            for(String node:nodeQueryMap.get(streamId)){
+                if(rowData[i][1]!=null) {
+                    rowData[i][1] = rowData[i][1] + ", " + node;
+                }else{
+                    rowData[i][1] = node;
                 }
-                i++;
             }
+            System.out.println(rowData[i][0] + "-" + rowData[i][1]);
+            i++;
         }
         Object columnNames[] = {"Stream", "Node"};
         JTable table = new JTable(rowData, columnNames);
@@ -412,6 +392,9 @@ public class NodeGUI implements GUICallback {
         dispatcherTableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         dispatherTabelPanel.setLayout(new GridLayout());
         if(addPane){
+            dispatherTabelPanel.add(dispatcherTableScrollPane);
+        }else{
+            dispatherTabelPanel.removeAll();
             dispatherTabelPanel.add(dispatcherTableScrollPane);
         }
 
@@ -444,7 +427,8 @@ public class NodeGUI implements GUICallback {
             processorTabelPanel.add(processorTableScrollPane);
         }else{
             processorTableScrollPane = new JScrollPane(table);
-            processorTableScrollPane.repaint();
+            processorTabelPanel.removeAll();
+            processorTabelPanel.add(processorTableScrollPane);
         }
     }
 
@@ -463,7 +447,7 @@ public class NodeGUI implements GUICallback {
     }
 
     @Override
-    public void newEnginesRecieved(String from) {
+    public void newEnginesRecieved(String from,int queryCount) {
 //        if(runningMode==1){
 //            if(dispatcher!=null) {
 //                drawDispatcherTable(dispatcher.getQueries());
@@ -474,7 +458,11 @@ public class NodeGUI implements GUICallback {
                 drawProcessorTable(node.getQueries());
             }
         }
-        setStatusLabel("New Engines received from "+from,60);
+        if(Environment.getInstance().getNodeId().equals(from)) {
+            setStatusLabel("Engines sent", 60);
+        }else if(queryCount!=0){
+            setStatusLabel("New engines received from "+from+" new queries count:"+queryCount , 60);
+        }
     }
 
     @Override
@@ -484,6 +472,7 @@ public class NodeGUI implements GUICallback {
 
     @Override
     public void dynamicCompleted() {
+        System.out.println(dispatcher.getQueries().size());
         if(runningMode==1) {
             if (dispatcher != null) {
                 drawDispatcherTable(dispatcher.getQueries());
