@@ -283,7 +283,7 @@ public class EngineHandler {
     private void dynamicAddQuery(Query query,int n) throws Exception {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
-        System.out.println("query "+n+"is about to resore");
+        System.out.println("query "+n+"is about to restore");
       //  cepEngine.restoreEngine();
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
@@ -338,8 +338,10 @@ public class EngineHandler {
 
     private void removeQueries(Query query,CEPEngine cEPEngine){
         queryEngineMap.remove(query.getQueryId());
+        System.out.println("my query list size before removedd = "+myQueryList.size());
         myQueryList.remove(query);
-
+        System.out.println("Query "+query.getQueryId()+" is removed");
+        System.out.println("my query list size after removedd = "+myQueryList.size());
         List<StreamDefinition> inputStreams=query.getInputStreamDefinitionsList();
 
         for(StreamDefinition streamDefinition:inputStreams){
@@ -434,5 +436,9 @@ public class EngineHandler {
 
     public EventRateStore getEventRateStore() {
         return eventRateStore;
+    }
+
+    public List<Query> getMyQueryList() {
+        return myQueryList;
     }
 }

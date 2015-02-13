@@ -204,8 +204,10 @@ public class Node implements EnvironmentChangedCallback{
         if(queries!=null){
             System.out.println("\n"+queries.size()+" engines received");
             engineHandler.addNewQueries(queries);
-            guiCallback.newEnginesRecieved(from);
+            this.queries.addAll(queries);
+            guiCallback.newEnginesRecieved(from,queries.size());
         }
+        guiCallback.newEnginesRecieved(from,0);
     }
 
     @Override
@@ -214,7 +216,7 @@ public class Node implements EnvironmentChangedCallback{
     }
 
     public List<Query> getQueries() {
-        return queries;
+        return engineHandler.getMyQueryList();
     }
 
     public UtilizationUpdater getUtilizationUpdater() {
