@@ -11,11 +11,12 @@ import java.util.List;
 public class QueryTest extends TestCase {
     Query query;
     List<StreamDefinition> defs;
+    StreamDefinition sd;
     public void setUp() throws Exception {
         super.setUp();
         defs = new ArrayList<StreamDefinition>();
 
-        StreamDefinition sd =new StreamDefinition("fire",null);
+        sd =new StreamDefinition("fire",null);
         sd.addAttribute("location", StreamDefinition.Type.STRING);
         sd.addAttribute("temperature", StreamDefinition.Type.DOUBLE);
         sd.addAttribute("casualties", StreamDefinition.Type.BOOLEAN);
@@ -25,7 +26,8 @@ public class QueryTest extends TestCase {
     }
 
     public void testGetQuery() throws Exception {
-            assertEquals(query.getQuery(),"TEST QUERY");
+
+        assertEquals(query.getQuery(),"TEST QUERY");
     }
 
     public void testSetQuery() throws Exception {
@@ -46,42 +48,22 @@ public class QueryTest extends TestCase {
     }
 
     public void testAddInputStreamDefinition() throws Exception {
-
+        assertEquals(1,query.getInputStreamDefinitionsList().size());
+        assertEquals(sd,query.getInputStreamDefinitionsList().get(0));
     }
 
     public void testGetOutputStreamDefinition() throws Exception {
-
+        assertEquals(sd,query.getOutputStreamDefinition());
     }
 
     public void testSetOutputStreamDefinition() throws Exception {
-
+        query.setOutputStreamDefinition(sd);
+        assertEquals(sd,query.getOutputStreamDefinition());
     }
 
     public void testGetQueryId() throws Exception {
-
+        query.setQueryId("0001");
+        assertEquals("0001",query.getQueryId());
     }
 
-    public void testSetQueryId() throws Exception {
-
-    }
-
-    public void testGetEngineId() throws Exception {
-
-    }
-
-    public void testSetEngineId() throws Exception {
-
-    }
-
-    public void testEquals() throws Exception {
-
-    }
-
-    public void testGetCost() throws Exception {
-
-    }
-
-    public void testSetCost() throws Exception {
-
-    }
 }
