@@ -87,6 +87,34 @@ public class DistributionEval {
         System.out.println("mean : " + mean);
         System.out.println("stdDev : " + stdDev);
         System.out.println("Coefficient of var : " + varCoef);
+
+        //calculate event duplication
+        Map<String,Set<String>> eventMap = new TreeMap<String, Set<String>>();
+        for(Query q: dist.getQueryAllocation().keySet() )
+        {
+            String targetNode = dist.getQueryAllocation().get(q);
+
+            for(StreamDefinition def: q.getInputStreamDefinitionsList())
+            {
+                if(!eventMap.containsKey(def.getStreamId()))
+                {
+                    eventMap.put(def.getStreamId(),new HashSet<String>());
+                }
+                eventMap.get(def.getStreamId()).add(targetNode);
+            }
+        }
+
+        stat = new DescriptiveStatistics();
+        for(Set<String> nodes : eventMap.values())
+        {
+            stat.addValue(nodes.size());
+        }
+
+        double avg = stat.getMean();
+
+        System.out.println();
+        System.out.println("Avg. event duplication " + avg);
+
     }
 
     public List<String> generateNodeList(int count,boolean dispatcher)
