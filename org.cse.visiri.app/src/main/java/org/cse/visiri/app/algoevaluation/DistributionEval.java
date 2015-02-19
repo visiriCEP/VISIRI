@@ -24,7 +24,12 @@ import org.cse.visiri.util.QueryDistribution;
 import org.cse.visiri.util.StreamDefinition;
 import org.cse.visiri.util.costmodelcalc.CostModelCalculator;
 import org.cse.visiri.util.costmodelcalc.FastSiddhiCostModelCalculator;
+import org.cse.visiri.util.costmodelcalc.SiddhiCostModelCalculator;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -33,7 +38,7 @@ public class DistributionEval {
     final String DISP_PREFIX = "20.1.";
     final String NODE_PREFIX = "10.1.";
 
-    public void EvaluateDistribution(QueryDistribution dist)
+    public void EvaluateDistribution(QueryDistribution dist,String algoname)
     {
         Map<String,Integer> allInfo = new TreeMap<String, Integer>();
         Map<String,Integer> nodeInfo = new TreeMap<String, Integer>();
@@ -87,6 +92,50 @@ public class DistributionEval {
         System.out.println("mean : " + mean);
         System.out.println("stdDev : " + stdDev);
         System.out.println("Coefficient of var : " + varCoef);
+
+        //calculate event duplication
+        Map<String,Set<String>> eventMap = new TreeMap<String, Set<String>>();
+        for(Query q: dist.getQueryAllocation().keySet() )
+        {
+            String targetNode = dist.getQueryAllocation().get(q);
+
+            for(StreamDefinition def: q.getInputStreamDefinitionsList())
+            {
+                if(!eventMap.containsKey(def.getStreamId()))
+                {
+                    eventMap.put(def.getStreamId(),new HashSet<String>());
+                }
+                eventMap.get(def.getStreamId()).add(targetNode);
+            }
+        }
+
+        stat = new DescriptiveStatistics();
+        for(Set<String> nodes : eventMap.values())
+        {
+            stat.addValue(nodes.size());
+        }
+
+        double avg = stat.getMean();
+
+        System.out.println();
+        System.out.println("Avg. event duplication " + avg);
+
+
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_algoeval.txt", true)));
+            out.println(stdDev);
+            out.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_eventDup.txt", true)));
+            out.println(avg);
+            out.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public List<String> generateNodeList(int count,boolean dispatcher)
@@ -108,7 +157,7 @@ public class DistributionEval {
         int seed = 999;
         double complexity= 4.1;
 
-        int inputDefCount = 500, outputDefCount = 50;
+        int inputDefCount = 1000, outputDefCount = 500;
         FilteredQueryGenerator qg = new FilteredQueryGenerator(seed,complexity);
 
         List<Integer> queryCounts = Arrays.asList(1000,5000,10000);
@@ -117,12 +166,12 @@ public class DistributionEval {
         algos.put("SCTXPF",new SCTXPFDistributionAlgo());
         algos.put("SCTXPF+", new SCTXPFPlusDistributionAlgo());
 
-        List<Integer> nodeCounts = Arrays.asList(4,8,12);
+        List<Integer> nodeCounts = Arrays.asList(4,8,12,16);
 
 
         List<StreamDefinition> inDef,outDef;
-        inDef= qg.generateDefinitions(inputDefCount,3,6);
-        outDef = qg.generateDefinitions(inputDefCount,1,3);
+        inDef= qg.generateDefinitions(inputDefCount,3,5);
+        outDef = qg.generateDefinitions(outputDefCount,1,3);
         List<Query> queries;
 
         for(int queryCount : queryCounts) {
@@ -146,8 +195,37 @@ public class DistributionEval {
             System.out.println(" - done!");
 
             System.out.println( "************ " + queryCount +" queries ***********");
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_algoeval.txt", true)));
+                out.println("\n*************\nQuery count : " +queryCount);
+                out.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_eventDup.txt", true)));
+                out.println("\n*************\nQuery count : " +queryCount);
+                out.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
             for (int nodeCount : nodeCounts) {
                 System.out.println("-----------" + nodeCount + " nodes --------------");
+                try {
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_algoeval.txt", true)));
+                    out.println("\nNode count : " +nodeCount);
+                    out.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                try {
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("VISIRI_eventDup.txt", true)));
+                    out.println("\nNode count : " +nodeCount);
+                    out.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
                 for (String algoName : algos.keySet()) {
                     QueryDistributionAlgo algo = algos.get(algoName);
 
@@ -162,7 +240,7 @@ public class DistributionEval {
 
                     System.out.println("-- " + algoName + " --");
 
-                    EvaluateDistribution(dist);
+                    EvaluateDistribution(dist,algoName);
                     System.out.println();
                 }
             }
