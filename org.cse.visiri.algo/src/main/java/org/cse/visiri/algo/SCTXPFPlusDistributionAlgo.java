@@ -33,7 +33,7 @@ and considers event types instead of used event attributes
 **/
 public class SCTXPFPlusDistributionAlgo extends QueryDistributionAlgo {
 
-    public final double costVariability = 500;
+    public final double costVariability = 400;
     public final double queryVariability = 80;
     public final double utilizationThreshold = 10;
 
