@@ -103,7 +103,6 @@ public class Agent extends Thread {
 
     public void run(){
         System.out.println("Agent started . . .");
-        while(agentEnabled){
 
         while(true){
             updateEventRate();
@@ -152,11 +151,6 @@ public class Agent extends Thread {
 
                 for (Query query : queries) {
                     System.out.println(query.getQueryId());
-
-//                    for(StreamDefinition streamDefinition : query.getInputStreamDefinitionsList()){
-//                        environment.getInstance().getBufferingEventList().add(streamDefinition.getStreamId());
-//                        System.out.println("Buffering list "+streamDefinition.getStreamId());
-//                    }
 
                 }
 

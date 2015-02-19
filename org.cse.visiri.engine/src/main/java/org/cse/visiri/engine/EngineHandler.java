@@ -75,27 +75,7 @@ public class EngineHandler {
             streamDefinitionList.add(streamDefinitionMap.get(streamId));
         }
 
-
-//        eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
-//
-//            private ExecutorService pool = Executors.newFixedThreadPool(30);
-//            @Override
-//            public void receive(final Event event) {
-//                pool.submit(
-//                        new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                List<CEPEngine> cepEngineList=eventEngineMap.get(event.getStreamId());
-//                                for(int i=0;i<cepEngineList.size();i++){
-//                                   cepEngineList.get(i).sendEvent(event);
-//                                }
-//                            }
-//                        }
-//                );
-//
-//            }
-//        },identifier);
-
+    // Event server creating
         eventServer=new EventServer(eventServerConfig,streamDefinitionList,new StreamCallback() {
 
            @Override
@@ -119,7 +99,7 @@ public class EngineHandler {
                 } catch (Exception e) {
                     System.err.println("Error : Unable to start EventServer");
                 }
-                // Insert some method call here.
+
             }
         });
         t.start();
@@ -127,6 +107,7 @@ public class EngineHandler {
 
     }
 
+    //private method for releasing the blocking queue and send events
     private void sendFromBlockingQueueStarts(){
 
         Thread t=new Thread(new Runnable() {
@@ -150,6 +131,7 @@ public class EngineHandler {
         });
         t.start();
     }
+
 
     public TransferbleEngine getTransferableEngines(){
         //1. get transferable queries from TransferableQueries class
@@ -212,6 +194,7 @@ public class EngineHandler {
 
     }
 
+    //siddhi engine is added to buffereing list
     private void addToBufferingList(SiddhiCEPEngine siddhiCEPEngine){
 
         List<String> bufferingList=Environment.getInstance().getBufferingEventList();
@@ -226,13 +209,13 @@ public class EngineHandler {
     }
 
     public void stop(){
-
     }
 
     public void sendEvents(){
 
     }
 
+    //method to add query to the Engine handler
     public void addQuery(Query query){
 
        CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
@@ -300,7 +283,7 @@ public class EngineHandler {
     private void dynamicAddQuery(Query query,int n) throws Exception {
 
         CEPEngine cepEngine=CEPFactory.createEngine(query.getEngineId(), query,outputEventReceiver);
-        System.out.println("query "+n+"is about to resore");
+        System.out.println("query "+n+"is about to restore");
       //  cepEngine.restoreEngine();
         queryEngineMap.put(query.getQueryId(),cepEngine);
 
@@ -355,8 +338,10 @@ public class EngineHandler {
 
     private void removeQueries(Query query,CEPEngine cEPEngine){
         queryEngineMap.remove(query.getQueryId());
+        System.out.println("my query list size before removedd = "+myQueryList.size());
         myQueryList.remove(query);
-
+        System.out.println("Query "+query.getQueryId()+" is removed");
+        System.out.println("my query list size after removedd = "+myQueryList.size());
         List<StreamDefinition> inputStreams=query.getInputStreamDefinitionsList();
 
         for(StreamDefinition streamDefinition:inputStreams){
@@ -451,5 +436,9 @@ public class EngineHandler {
 
     public EventRateStore getEventRateStore() {
         return eventRateStore;
+    }
+
+    public List<Query> getMyQueryList() {
+        return myQueryList;
     }
 }

@@ -25,10 +25,7 @@ import org.cse.visiri.util.Configuration;
 import org.cse.visiri.util.Query;
 import org.cse.visiri.util.StreamDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class Dispatcher implements EnvironmentChangedCallback {
@@ -37,6 +34,7 @@ public class Dispatcher implements EnvironmentChangedCallback {
     private UtilizationUpdater utilizationUpdater;
     boolean started;
     private Map<String,List<Query>> changedQueries;
+    private List<Query> changedQueryClone;
     private GUICallback guiCallback;
 
     public void initialize()
@@ -163,7 +161,14 @@ public class Dispatcher implements EnvironmentChangedCallback {
     @Override
     public void newEnginesRecieved(String senderId) {
         removeStreamDefinitions(senderId);
-        changedQueries=Environment.getInstance().getChangedQueries();
+        Map<String, List<Query>> tempchangedQueries = Environment.getInstance().getChangedQueries();
+        changedQueries=new HashMap<String, List<Query>>();
+
+        for(String ip : tempchangedQueries.keySet()){
+            changedQueries.put(ip,tempchangedQueries.get(ip));
+        }
+
+        System.out.println("Changed queries size : "+changedQueries.size());
     }
 
     @Override
@@ -177,9 +182,10 @@ public class Dispatcher implements EnvironmentChangedCallback {
                 List<Query> queryList=changedQueries.get(nodeId);
                 for(Query query:queryList){
                     engineHandler.dynamicUpdateOutputEventReceiver(nodeId,query);
+                    queries.add(query);
+                    Environment.getInstance().getNodeQueryMap().get(nodeId).add(query);
                 }
             }
-
 
         }else{
             System.err.println("Changed queries are null");

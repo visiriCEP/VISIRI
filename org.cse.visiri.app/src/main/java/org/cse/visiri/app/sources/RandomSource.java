@@ -28,12 +28,13 @@ public class RandomSource {
 
     public void start() throws  Exception
     {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the dispathcer Ip :");
-        String sinkIp=sc.nextLine();
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Enter the dispathcer Ip :");
+//        String sinkIp=sc.nextLine();
 
-        cl = new EventClient(sinkIp+":7211",getDefinitions());
-        //new EventClient("localhost:7211",getDefinitions());
+//        cl = new EventClient(sinkIp+":7211",getDefinitions());
+        cl=new EventClient("localhost:7211",getDefinitions());
+
         //7211
     }
 
@@ -85,9 +86,9 @@ public class RandomSource {
             StreamDefinition def = defs.get(defIdx);
             Event ev = generateEvent(def);
             cl.sendEvent(ev);
-            if(i%10==0){
-                Thread.sleep(1);
-            }
+//            if(i%2==0){
+//                Thread.sleep(1);
+//            }
             if(i % freq == 0)
             {
                 System.out.println("Sent " + i);
